@@ -168,3 +168,5 @@ Compare runs with the same label scheme, for example `base_20rows`,
    `lab/EXTERNAL-PATTERNS.md`, `lab/TRAILER-PIPELINE.md`,
    `lab/EXPERIMENT-BACKLOG.md`. Research only. No Home, cache, or trailer
    change.
+5. Compute research: `lab/COMPUTE-RESEARCH.md`. Reported Home-freeze
+   numbers are not re-measured there. No production change.
