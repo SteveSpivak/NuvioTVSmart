@@ -1,16 +1,16 @@
 # Forensic test results
 
 Recorded by `node lab/forensic/run-all.mjs` on Node v22.22.3.
-Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `3e3fee1ad58a1dd4d2e082ed19fe5c20ed352251`.
+Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `0f4de7a9c14cbab9374c46ba310b3b30384a484c`.
 No live Supabase, Trakt, or TV call. Verdicts come from the modules imported in this worktree.
 
 ## Commands
 
-- `node lab/forensic/exit-policy.test.mjs` exit 0 in 45ms
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 7553ms
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 7710ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 260ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 232ms
+- `node lab/forensic/exit-policy.test.mjs` exit 0 in 35ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 8027ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 7869ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 249ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 327ms
 - Repeated each suite once. Verdict signatures matched: **yes**.
 - `tests/` is absent and gitignored. `npm test` was not run. Existing plugin tests: **BLOCKED**.
 - Full `npm run build` / webOS package: **NOT_RUN**. The suites imported the current modules, which is the practical parse check for this pass.
@@ -19,15 +19,15 @@ No live Supabase, Trakt, or TV call. Verdicts come from the modules imported in 
 
 | Verdict | Count |
 | --- | --- |
-| PASS | 48 |
-| FAIL | 1 |
-| EXPECTED_FAIL | 1 |
+| PASS | 49 |
+| FAIL | 0 |
+| EXPECTED_FAIL | 0 |
 | BLOCKED | 0 |
 | NOT_RUN | 1 |
 
 Suite cases: 50. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
 
-Runner mode: `regression`. Exit decision: 0 (regression-ok). Strict regression, treating every FAIL as required, would exit 1. Investigate exit 0 does not pass the expected failures.
+Runner mode: `regression`. Exit decision: 0 (regression-ok). Strict regression, treating every FAIL as required, would exit 0. Investigate exit 0 does not pass the expected failures.
 Node v22.22.3. FORENSIC_MODE=regression. FORENSIC_STRICT=0.
 
 ## Tooling
@@ -37,8 +37,6 @@ Node v22.22.3. FORENSIC_MODE=regression. FORENSIC_STRICT=0.
 - `npm run build` was not run. Status: **NOT_RUN**.
 
 ## Reproduced failures
-
-- **missing-video-id-does-not-autoplay** (youtube): youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.
 
 ## What the passes established
 
@@ -61,7 +59,7 @@ Node v22.22.3. FORENSIC_MODE=regression. FORENSIC_STRICT=0.
 
 1. Reader fix: missing, null, blank, or non-positive duration does not scale a legacy position. A positive duration `<= 28800` still scales as a seconds pair. The writer still sends `position` and `duration` in milliseconds. `position_ms` is not added, because the published push RPC drops it.
 2. Applied: the 7000ms load timer and the uncontrollable `loading:false` / `currentTime:0` state add `is-unconfirmed` and do not call `onReady`. `is-active` still requires `firstFrame` or `currentTime > 0` while not paused. CSS keeps the unconfirmed surface visible.
-3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.
+3. Applied: `docs/youtube-proxy.html` no longer defaults a missing `v` to `qBg39HCJiTU`. A missing or invalid id posts `error` and does not load `iframe_api`, construct `YT.Player`, or insert a direct embed.
 4. Unchanged policy, documented in `lab/forensic/SYNC-POLICY-PROPOSAL.md`: equal-`updatedAt` remote wins, 1500ms and 15000ms debounce, teardown cancels the pending push, Trakt skips Nuvio Sync, empty remote does not replace local.
 
 ## Not verifiable here
@@ -1011,22 +1009,137 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ### missing-video-id-does-not-autoplay
 
-- Verdict: **FAIL**
-- Expectation: expected
-- Classification: reproduced-defect
-- youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- A missing, blank, short, or spaced v does not load iframe_api, construct YT.Player, or insert a direct embed. The page posts error. An explicit qBg39HCJiTU still starts, so the old default is not banned.
 
 ```json
 {
-  "expected": "No YT.Player and no playVideo when v is absent.",
+  "expected": "No YT.Player, iframe_api, or direct embed unless v is 11 url-safe characters.",
   "actual": {
-    "videoId": "qBg39HCJiTU",
-    "state": 1
+    "missing": {
+      "players": 0,
+      "apiScripts": 0,
+      "frames": 0,
+      "types": [
+        "error",
+        "error"
+      ],
+      "messages": [
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        },
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        }
+      ]
+    },
+    "blank": {
+      "players": 0,
+      "apiScripts": 0,
+      "frames": 0,
+      "types": [
+        "error",
+        "error"
+      ],
+      "messages": [
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        },
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        }
+      ]
+    },
+    "shortId": {
+      "players": 0,
+      "apiScripts": 0,
+      "frames": 0,
+      "types": [
+        "error",
+        "error"
+      ],
+      "messages": [
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "abcdefghij",
+          "reason": "missing-video-id"
+        },
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "abcdefghij",
+          "reason": "missing-video-id"
+        }
+      ]
+    },
+    "spaced": {
+      "players": 0,
+      "apiScripts": 0,
+      "frames": 0,
+      "types": [
+        "error",
+        "error"
+      ],
+      "messages": [
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "abc defghij",
+          "reason": "missing-video-id"
+        },
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "abc defghij",
+          "reason": "missing-video-id"
+        }
+      ]
+    },
+    "directMissing": {
+      "players": 0,
+      "apiScripts": 0,
+      "frames": 0,
+      "types": [
+        "error",
+        "error"
+      ],
+      "messages": [
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        },
+        {
+          "source": "nuvio-youtube-proxy",
+          "type": "error",
+          "videoId": "",
+          "reason": "missing-video-id"
+        }
+      ]
+    },
+    "explicitVideoId": "qBg39HCJiTU"
   },
   "callChain": [
     "docs/youtube-proxy.html query parse",
-    "videoId = params.v || default",
-    "onReady playVideo"
+    "isPlayableVideoId",
+    "postToParent error",
+    "return before YT.Player and iframe_api"
   ]
 }
 ```
@@ -1210,7 +1323,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
   "missing": null,
   "blank": null,
   "emptyUrl": "",
-  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-u6lqba"
+  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-e9inxr"
 }
 ```
 

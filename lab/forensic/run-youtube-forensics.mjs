@@ -335,26 +335,67 @@ async function main() {
   }
 
   {
-    const proxy = bootProxy("");
-    proxy.context.onYouTubeIframeAPIReady();
-    const player = proxy.players[0];
-    player.options.events.onReady({ target: player });
-    const playedDefault = player.options.videoId === "qBg39HCJiTU" && player.state === 1;
+    function proxyStarted(search) {
+      const proxy = bootProxy(search);
+      const scripts = proxy.document.head.children.filter((node) => node.tagName === "SCRIPT");
+      const frames = (proxy.document.body?.children || []).filter((node) => node.tagName === "IFRAME");
+      const apiReady =
+        typeof proxy.context.onYouTubeIframeAPIReady === "function"
+          ? proxy.context.onYouTubeIframeAPIReady()
+          : null;
+      return {
+        players: proxy.players.length,
+        apiScripts: scripts.filter((node) => String(node.src || "").includes("iframe_api")).length,
+        frames: frames.length,
+        types: proxy.types(),
+        messages: proxy.messages,
+        apiReady
+      };
+    }
+    const missing = proxyStarted("");
+    const blank = proxyStarted("?v=");
+    const shortId = proxyStarted("?v=abcdefghij");
+    const spaced = proxyStarted("?v=abc%20defghij");
+    const directMissing = proxyStarted("?direct=1");
+    const explicitDefault = bootProxy("?v=qBg39HCJiTU");
+    explicitDefault.context.onYouTubeIframeAPIReady();
+    const explicitPlayer = explicitDefault.players[0];
+    const rejected = [missing, blank, shortId, spaced, directMissing];
+    const noPlayer = rejected.every(
+      (entry) =>
+        entry.players === 0 &&
+        entry.apiScripts === 0 &&
+        entry.frames === 0 &&
+        entry.types.includes("error") &&
+        !entry.types.includes("ready") &&
+        !entry.types.includes("firstFrame")
+    );
+    const explicitStillPlays =
+      explicitPlayer?.options?.videoId === "qBg39HCJiTU" && explicitDefault.players.length === 1;
+    const ok = noPlayer && explicitStillPlays;
     cases.push(
       caseResult(
         "missing-video-id-does-not-autoplay",
-        playedDefault ? "FAIL" : "PASS",
-        playedDefault ? "reproduced-defect" : "verified-behavior",
-        playedDefault
-          ? "youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player."
-          : "A missing v parameter did not start playback.",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "A missing, blank, short, or spaced v does not load iframe_api, construct YT.Player, or insert a direct embed. The page posts error. An explicit qBg39HCJiTU still starts, so the old default is not banned."
+          : "A missing or invalid v still started a player, or an explicit id was rejected.",
         {
-          expected: "No YT.Player and no playVideo when v is absent.",
-          actual: { videoId: player?.options?.videoId || null, state: player?.state },
+          expected: "No YT.Player, iframe_api, or direct embed unless v is 11 url-safe characters.",
+          actual: {
+            missing,
+            blank,
+            shortId,
+            spaced,
+            directMissing,
+            explicitVideoId: explicitPlayer?.options?.videoId || null
+          },
           callChain: [
             "docs/youtube-proxy.html query parse",
-            "videoId = params.v || default",
-            "onReady playVideo"
+            "isPlayableVideoId",
+            "postToParent error",
+            "return before YT.Player and iframe_api"
           ]
         }
       )

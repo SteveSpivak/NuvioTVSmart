@@ -222,7 +222,7 @@ const body = [
   "",
   "1. Reader fix: missing, null, blank, or non-positive duration does not scale a legacy position. A positive duration `<= 28800` still scales as a seconds pair. The writer still sends `position` and `duration` in milliseconds. `position_ms` is not added, because the published push RPC drops it.",
   "2. Applied: the 7000ms load timer and the uncontrollable `loading:false` / `currentTime:0` state add `is-unconfirmed` and do not call `onReady`. `is-active` still requires `firstFrame` or `currentTime > 0` while not paused. CSS keeps the unconfirmed surface visible.",
-  "3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.",
+  "3. Applied: `docs/youtube-proxy.html` no longer defaults a missing `v` to `qBg39HCJiTU`. A missing or invalid id posts `error` and does not load `iframe_api`, construct `YT.Player`, or insert a direct embed.",
   "4. Unchanged policy, documented in `lab/forensic/SYNC-POLICY-PROPOSAL.md`: equal-`updatedAt` remote wins, 1500ms and 15000ms debounce, teardown cancels the pending push, Trakt skips Nuvio Sync, empty remote does not replace local.",
   "",
   "## Not verifiable here",

@@ -94,19 +94,134 @@
     {
       "id": "missing-video-id-does-not-autoplay",
       "track": "youtube",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A missing, blank, short, or spaced v does not load iframe_api, construct YT.Player, or insert a direct embed. The page posts error. An explicit qBg39HCJiTU still starts, so the old default is not banned.",
       "evidence": {
-        "expected": "No YT.Player and no playVideo when v is absent.",
+        "expected": "No YT.Player, iframe_api, or direct embed unless v is 11 url-safe characters.",
         "actual": {
-          "videoId": "qBg39HCJiTU",
-          "state": 1
+          "missing": {
+            "players": 0,
+            "apiScripts": 0,
+            "frames": 0,
+            "types": [
+              "error",
+              "error"
+            ],
+            "messages": [
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              },
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              }
+            ]
+          },
+          "blank": {
+            "players": 0,
+            "apiScripts": 0,
+            "frames": 0,
+            "types": [
+              "error",
+              "error"
+            ],
+            "messages": [
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              },
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              }
+            ]
+          },
+          "shortId": {
+            "players": 0,
+            "apiScripts": 0,
+            "frames": 0,
+            "types": [
+              "error",
+              "error"
+            ],
+            "messages": [
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "abcdefghij",
+                "reason": "missing-video-id"
+              },
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "abcdefghij",
+                "reason": "missing-video-id"
+              }
+            ]
+          },
+          "spaced": {
+            "players": 0,
+            "apiScripts": 0,
+            "frames": 0,
+            "types": [
+              "error",
+              "error"
+            ],
+            "messages": [
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "abc defghij",
+                "reason": "missing-video-id"
+              },
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "abc defghij",
+                "reason": "missing-video-id"
+              }
+            ]
+          },
+          "directMissing": {
+            "players": 0,
+            "apiScripts": 0,
+            "frames": 0,
+            "types": [
+              "error",
+              "error"
+            ],
+            "messages": [
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              },
+              {
+                "source": "nuvio-youtube-proxy",
+                "type": "error",
+                "videoId": "",
+                "reason": "missing-video-id"
+              }
+            ]
+          },
+          "explicitVideoId": "qBg39HCJiTU"
         },
         "callChain": [
           "docs/youtube-proxy.html query parse",
-          "videoId = params.v || default",
-          "onReady playVideo"
+          "isPlayableVideoId",
+          "postToParent error",
+          "return before YT.Player and iframe_api"
         ]
       }
     },
@@ -260,7 +375,7 @@
         "missing": null,
         "blank": null,
         "emptyUrl": "",
-        "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-h84oss"
+        "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-m34hdf"
       }
     },
     {
@@ -277,8 +392,7 @@
     }
   ],
   "counts": {
-    "PASS": 17,
-    "FAIL": 1,
+    "PASS": 18,
     "NOT_RUN": 1
   }
 }

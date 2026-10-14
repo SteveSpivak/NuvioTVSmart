@@ -1,6 +1,4 @@
 {
-  "ids": [
-    "missing-video-id-does-not-autoplay"
-  ],
-  "note": "Remaining required defect after the Home readiness fix. A missing v still defaults to qBg39HCJiTU. Remove this id in the same change that fixes it."
+  "ids": [],
+  "note": "No allowlisted forensic failures. Regression exits nonzero on any FAIL, a repeat mismatch, or zero discovered cases. tv-first-rendered-frame stays NOT_RUN until a physical TV records a composited frame."
 }
