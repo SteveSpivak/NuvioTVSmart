@@ -21,3 +21,18 @@ export function shouldRenderWatchedTitleChange(previousTitleIds, nextTitleIds) {
   }
   return false;
 }
+
+// Lab experiment "watchedKeepProjected": reloading Continue Watching on Back reset the
+// set to the base watched list, dropping the titles the projection had added, so the
+// next projection always looked changed and forced a full Home render. Keep the
+// projected members; the projection that follows still removes unwatched titles.
+export function mergeBaseWatchedTitleIds(currentTitleIds, baseTitleIds) {
+  if (!labFixEnabled("watchedKeepProjected") || !(currentTitleIds instanceof Set) || !currentTitleIds.size) {
+    return baseTitleIds;
+  }
+  const merged = new Set(currentTitleIds);
+  for (const id of baseTitleIds) {
+    merged.add(id);
+  }
+  return merged;
+}

@@ -1,4 +1,5 @@
 import * as internals from "./homeScreenContext.js";
+import { mergeBaseWatchedTitleIds } from "./homeWatchedRenderSkip.js";
 
 export function startHomeContinueWatchingLoad(context) {
   const {
@@ -72,7 +73,7 @@ export function startHomeContinueWatchingLoad(context) {
       this.allProgress = Array.isArray(allProgress) ? allProgress : [];
       this.continueWatching = Array.isArray(continueWatching) ? continueWatching : [];
       this.watchedItems = await watchedItemsPromise;
-      this.watchedTitleIds = buildWatchedTitleIdSet(this.watchedItems);
+      this.watchedTitleIds = mergeBaseWatchedTitleIds(this.watchedTitleIds, buildWatchedTitleIdSet(this.watchedItems));
       void this.refreshWatchedTitleState({ token });
       if (!isCurrentHomeContinueWatchingLoad()) {
         return;

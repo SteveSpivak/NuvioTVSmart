@@ -38,3 +38,23 @@ assert.match(
 );
 
 console.log("watched skip render: 4 cases passed");
+
+// Lab switch "watchedKeepProjected": the Continue Watching reload on Back reset the set to the base watched list,
+// dropping the titles the projection had added (MEASURED on the TV: 2842 -> 2818 -> 2842 on every Back), so the
+// projection always looked "changed". Keep the projected members until the projection runs again.
+const { mergeBaseWatchedTitleIds } = await import("../../js/ui/screens/home/homeWatchedRenderSkip.js");
+const projected = new Set(["tt1", "tmdb:2", "trakt:3"]);
+const base = new Set(["tt1", "tmdb:2"]);
+const merged = mergeBaseWatchedTitleIds(projected, base);
+assert.deepEqual([...merged].sort(), ["tmdb:2", "trakt:3", "tt1"]);
+assert.equal(shouldRenderWatchedTitleChange(merged, new Set(projected)), false);
+// New base member (watched elsewhere) is added immediately.
+assert.ok(mergeBaseWatchedTitleIds(projected, new Set(["tt9"])).has("tt9"));
+// No previous set: base as is.
+assert.equal(mergeBaseWatchedTitleIds(null, base), base);
+localStorage.setItem("nuvioLabOff", "watchedKeepProjected");
+assert.equal(mergeBaseWatchedTitleIds(projected, base), base);
+localStorage.removeItem("nuvioLabOff");
+const cwLoad = fs.readFileSync(new URL("../../js/ui/screens/home/homeContinueWatchingLoad.js", import.meta.url), "utf8");
+assert.match(cwLoad, /this\.watchedTitleIds = mergeBaseWatchedTitleIds\(this\.watchedTitleIds, buildWatchedTitleIdSet\(this\.watchedItems\)\);/);
+console.log("watched keep projected: 5 cases passed");
