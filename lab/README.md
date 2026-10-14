@@ -170,3 +170,6 @@ Compare runs with the same label scheme, for example `base_20rows`,
    change.
 5. Compute research: `lab/COMPUTE-RESEARCH.md`. Reported Home-freeze
    numbers are not re-measured there. No production change.
+6. YouTube player and Continue Watching sync research:
+   `lab/YOUTUBE-CW-RESEARCH.md`. The in-tree player is the official iframe
+   proxy. A separate ad-free TV app is unknown. Tests are designed, not run.
