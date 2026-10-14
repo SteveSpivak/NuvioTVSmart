@@ -172,4 +172,6 @@ Compare runs with the same label scheme, for example `base_20rows`,
    numbers are not re-measured there. No production change.
 6. YouTube player and Continue Watching sync research:
    `lab/YOUTUBE-CW-RESEARCH.md`. The in-tree player is the official iframe
-   proxy. A separate ad-free TV app is unknown. Tests are designed, not run.
+   proxy. A separate ad-free TV app is unknown.
+7. Executed forensic tests: `lab/forensic/RESULTS.md`. Run
+   `node lab/forensic/run-all.mjs`. No production sync or trailer change.

@@ -4,10 +4,11 @@ Date: 2026-10-14. Target: LG `65UR78006LL`, webOS 8.4, Chromium 94.
 Branch: `arena/0ffafbca-nuvio-perf-lab`. No production change, no TV test,
 no account change, no storage clear.
 
-This note reconstructs what the source actually does. It does not execute
-the tests it designs. An iframe `load` is not playback. Nothing here
-recommends bypassing YouTube's player, ads, authentication, or access
-controls, or copying an Android media engine into webOS JavaScript.
+This note reconstructs what the source actually does. The cases it designed
+were later executed in `lab/forensic/` against the real modules and a mock
+cloud. See `lab/forensic/RESULTS.md`. An iframe `load` is not playback.
+Nothing here recommends bypassing YouTube's player, ads, authentication, or
+access controls, or copying an Android media engine into webOS JavaScript.
 
 ## Phase 0 — which player
 

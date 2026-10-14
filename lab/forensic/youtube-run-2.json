@@ -1,0 +1,232 @@
+{
+  "suite": "youtube",
+  "node": "v22.22.3",
+  "cases": [
+    {
+      "id": "proxy-document-before-api-ready",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Running the proxy document injects the official iframe_api script. Before onYouTubeIframeAPIReady, no player exists and no ready or firstFrame message is posted.",
+      "evidence": {
+        "script": "https://www.youtube.com/iframe_api?_cb=1700000000000-9",
+        "players": 0,
+        "messages": []
+      }
+    },
+    {
+      "id": "api-ready-and-playing-at-zero-are-not-first-frame",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "onReady posts ready and calls playVideo. currentTime is still 0, so firstFrame is not posted. API ready is not a decoded frame.",
+      "evidence": {
+        "types": ["ready", "state"],
+        "state": 1,
+        "currentTime": 0
+      }
+    },
+    {
+      "id": "buffering-is-not-first-frame",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "playerState 3 (buffering) does not emit firstFrame.",
+      "evidence": {
+        "types": ["state"]
+      }
+    },
+    {
+      "id": "first-frame-once-when-playing-past-zero",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "The state poll emits firstFrame once when playerState is playing and currentTime > 0. A later poll does not emit it again.",
+      "evidence": {
+        "firstFrames": 1,
+        "sample": {
+          "source": "nuvio-youtube-proxy",
+          "type": "firstFrame",
+          "videoId": "abcdefghijk",
+          "currentTime": 0.4
+        }
+      }
+    },
+    {
+      "id": "watchdog-4500-direct-embed",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "If onReady has not fired, the 4500ms watchdog destroys the API player and inserts a direct youtube.com/embed iframe. That is a fallback document, not a firstFrame.",
+      "evidence": {
+        "before": false,
+        "src": "https://www.youtube.com/embed/abcdefghijk?autoplay=1&mute=0&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3&widget_referrer=https%3A%2F%2Fnuvio.local%2Fyoutube-proxy.html%3Fv%3Dabcdefghijk",
+        "firstFrame": false
+      }
+    },
+    {
+      "id": "direct-param-skips-api",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "direct=1 skips iframe_api and inserts the embed iframe immediately. No YT.Player is constructed.",
+      "evidence": {
+        "src": "https://www.youtube.com/embed/abcdefghijk?autoplay=1&mute=0&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&modestbranding=1&cc_load_policy=0&iv_load_policy=3&widget_referrer=https%3A%2F%2Fnuvio.local%2Fyoutube-proxy.html%3Fdirect%3D1%26v%3Dabcdefghijk"
+      }
+    },
+    {
+      "id": "stale-command-source-ignored",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Proxy commands are accepted only from window.parent with source nuvio-detail-trailer. A foreign source or a non-parent window does not pause.",
+      "evidence": {
+        "ignored": true,
+        "wrongSource": true,
+        "accepted": true
+      }
+    },
+    {
+      "id": "missing-video-id-does-not-autoplay",
+      "track": "youtube",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.",
+      "evidence": {
+        "expected": "No YT.Player and no playVideo when v is absent.",
+        "actual": {
+          "videoId": "qBg39HCJiTU",
+          "state": 1
+        },
+        "callChain": [
+          "docs/youtube-proxy.html query parse",
+          "videoId = params.v || default",
+          "onReady playVideo"
+        ]
+      }
+    },
+    {
+      "id": "home-load-is-not-immediate-ready",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Home does not mark the trailer active on iframe load, nor at 6999ms. The load event only arms a timer.",
+      "evidence": {
+        "beforeLoad": false,
+        "beforeFallback": false,
+        "revealed": 1
+      }
+    },
+    {
+      "id": "home-7s-load-fallback-is-not-playback",
+      "track": "youtube",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "7000ms after iframe load, Home adds is-active and calls onReady with no firstFrame and no currentTime. Iframe load plus a timer is treated as trailer readiness.",
+      "evidence": {
+        "expected": "is-active only after a first-frame signal.",
+        "actual": {
+          "afterFallback": true,
+          "revealed": 1,
+          "currentTime": 0
+        },
+        "callChain": [
+          "homeScreenMethods-13-mount-trailer-layer.js frame load listener",
+          "setTimeout(reveal, 7000)",
+          "container.classList.add(is-active)"
+        ]
+      }
+    },
+    {
+      "id": "home-first-frame-reveals-after-150",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Home ignores a firstFrame from the wrong window or the wrong source. A matching firstFrame reveals 150ms later, not immediately.",
+      "evidence": {
+        "foreignIgnored": true,
+        "wrongSourceIgnored": true,
+        "beforeDelay": true,
+        "afterDelay": true,
+        "revealed": 1
+      }
+    },
+    {
+      "id": "home-direct-embed-state-is-not-first-frame",
+      "track": "youtube",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "Home reveals 1200ms after a controllable:false, loading:false state with currentTime 0. That is the direct-embed load signal, not a frame.",
+      "evidence": {
+        "expected": "No is-active without currentTime > 0 or firstFrame.",
+        "actual": {
+          "before": false,
+          "after": true
+        },
+        "callChain": [
+          "docs/youtube-proxy.html direct embed load posts loading:false currentTime:0",
+          "homeScreenMethods-13 controllable === false && loading === false",
+          "reveal(1200)"
+        ]
+      }
+    },
+    {
+      "id": "home-clear-removes-timer-listener-and-frame",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "clearTrailerLayer removes the message listener, clears the 7s timer, blanks the iframe, and does not reveal after the abandoned timer.",
+      "evidence": {
+        "listenersBefore": 1,
+        "listenersAfter": 0,
+        "revealed": 0,
+        "src": ""
+      }
+    },
+    {
+      "id": "rapid-home-details-back-cleans-up",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Details rejects a foreign window and a stale video id, accepts a matching firstFrame, and the real cleanup removes the listener. Home clear blanks its iframe. No further firstFrame is applied.",
+      "evidence": {
+        "rejectedForeign": true,
+        "rejectedStaleId": true,
+        "accepted": true,
+        "afterBack": true,
+        "cleanupThrew": false,
+        "listeners": 0
+      }
+    },
+    {
+      "id": "missing-metadata-does-not-mount-player",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "resolveTrailerSource and buildYoutubeEmbedUrl produce no embed when metadata has no video id. Home does not mount an iframe for an empty embedUrl. This is separate from the proxy page's own default id.",
+      "evidence": {
+        "missing": null,
+        "blank": null,
+        "emptyUrl": "",
+        "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-2dn8i0"
+      }
+    },
+    {
+      "id": "tv-first-rendered-frame",
+      "track": "youtube",
+      "verdict": "NOT_RUN",
+      "classification": "not-run",
+      "summary": "A virtual document cannot prove the first composited frame on the LG 65UR78006LL. firstFrame remains a player-API signal, not a TV frame.",
+      "evidence": {
+        "device": "65UR78006LL",
+        "webos": "8.4",
+        "chromium": "94"
+      }
+    }
+  ],
+  "counts": {
+    "PASS": 12,
+    "FAIL": 3,
+    "NOT_RUN": 1
+  }
+}

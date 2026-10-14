@@ -1,0 +1,534 @@
+{
+  "suite": "sync",
+  "node": "v22.22.3",
+  "cases": [
+    {
+      "id": "same-account-profile-roundtrip",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Same account and profile: A saved locally, push after 1.5s, B pull restored the same position.",
+      "evidence": {
+        "beforePush": 0,
+        "pulled": {
+          "contentId": "tt1000001",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 120000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000001000,
+          "title": ""
+        },
+        "rpc": [
+          "sync_push_watch_progress",
+          "sync_pull_profile_settings_blob",
+          "sync_push_profile_settings_blob"
+        ]
+      }
+    },
+    {
+      "id": "different-account-isolated",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A different account pulled an empty snapshot and did not see account A's row.",
+      "evidence": {
+        "pulled": {
+          "items": [],
+          "status": "ok",
+          "changedHomeInputs": false,
+          "hadUnsynced": false
+        }
+      }
+    },
+    {
+      "id": "different-profile-isolated",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Same account, profile 2 did not receive profile 1 progress.",
+      "evidence": {
+        "pulled": {
+          "items": [],
+          "status": "ok",
+          "changedHomeInputs": false,
+          "hadUnsynced": false
+        },
+        "local": []
+      }
+    },
+    {
+      "id": "local-save-before-push",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "saveProgress writes localStorage before the debounced cloud push.",
+      "evidence": {
+        "local": [
+          {
+            "contentId": "tt1000004",
+            "profileId": "1",
+            "source": "nuvio_sync",
+            "positionMs": 170000,
+            "durationMs": 7200000,
+            "updatedAt": 1700000004000,
+            "title": "tt1000004"
+          }
+        ],
+        "cloudRows": 0,
+        "rpc": []
+      }
+    },
+    {
+      "id": "debounce-1500",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Unconstrained push fired at 1500ms, not at 1499ms.",
+      "evidence": {
+        "early": 0,
+        "late": 1
+      }
+    },
+    {
+      "id": "constrained-debounce-15000",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "performance-constrained body class delayed the push to 15s.",
+      "evidence": {
+        "early": 0,
+        "late": 1
+      }
+    },
+    {
+      "id": "termination-before-push",
+      "track": "sync",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.",
+      "evidence": {
+        "expected": "Local save is durable to the mock cloud even if teardown happens 500ms later.",
+        "actual": {
+          "localKept": true,
+          "pushes": 0,
+          "cloudRows": 0
+        },
+        "callChain": [
+          "player/repository saveProgress",
+          "queueWatchProgressCloudSync setTimeout 1500",
+          "notifySessionTeardownHandlers",
+          "stopWatchProgressCloudSync increments generation and clears the timer"
+        ]
+      }
+    },
+    {
+      "id": "failed-push-retry-backoff",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A failed push is not retried until 120s have passed for the same signature. The later retry committed.",
+      "evidence": {
+        "first": {
+          "ok": false
+        },
+        "second": {
+          "ok": false
+        },
+        "duringBackoff": {
+          "ok": false
+        },
+        "afterBackoff": {
+          "ok": true
+        },
+        "pushes": 2
+      }
+    },
+    {
+      "id": "independent-changes-both-kept",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Upserts of different keys from two clients both remain. The mock follows the client contract that a push is not a full replace.",
+      "evidence": {
+        "rows": ["tt1000009", "tt1000010"],
+        "divergence": "none after both pushes"
+      }
+    },
+    {
+      "id": "conflict-newer-local-wins",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Both sides changed from the baseline. B's newer updatedAt kept B's position on pull.",
+      "evidence": {
+        "item": {
+          "contentId": "tt1000011",
+          "profileId": "1",
+          "source": "nuvio_sync",
+          "positionMs": 300000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000030000,
+          "title": "tt1000011"
+        }
+      }
+    },
+    {
+      "id": "conflict-equal-timestamp-remote-wins",
+      "track": "sync",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.",
+      "evidence": {
+        "expected": "A tie should not silently drop the local write, or the winner should be explicit and stable across clients.",
+        "actual": {
+          "contentId": "tt1000012",
+          "profileId": "1",
+          "source": "local",
+          "positionMs": 220000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000040000,
+          "title": "tt1000012"
+        },
+        "callChain": [
+          "WatchProgressSyncService.pull",
+          "mergeProgressItems",
+          "localChanged && remoteChanged",
+          "winner = local.updatedAt > remote.updatedAt ? local : remote"
+        ]
+      }
+    },
+    {
+      "id": "pending-delete-then-resave",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A re-save while delete was in flight was pushed again after the delete. The newer local row is back in the mock cloud.",
+      "evidence": {
+        "rows": [
+          {
+            "content_id": "tt1000013",
+            "content_type": "movie",
+            "video_id": "tt1000013",
+            "season": null,
+            "episode": null,
+            "position": 250000,
+            "duration": 7200000,
+            "last_watched": 1700000050000,
+            "progress_key": "tt1000013",
+            "origin_client_id": "nuvio-web-client-a"
+          }
+        ],
+        "local": {
+          "contentId": "tt1000013",
+          "profileId": "1",
+          "source": "nuvio_sync",
+          "positionMs": 250000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000050000,
+          "title": "tt1000013"
+        },
+        "rpc": [
+          "sync_push_watch_progress",
+          "sync_pull_profile_settings_blob",
+          "sync_push_profile_settings_blob",
+          "sync_delete_watch_progress",
+          "sync_push_watch_progress"
+        ]
+      }
+    },
+    {
+      "id": "empty-remote-keeps-local",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "An empty remote snapshot did not replace the nonempty local store and did not schedule an empty push.",
+      "evidence": {
+        "pulledStatus": "ok",
+        "local": {
+          "contentId": "tt1000014",
+          "profileId": "1",
+          "source": "nuvio_sync",
+          "positionMs": 155000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000014000,
+          "title": "tt1000014"
+        },
+        "pushes": 0
+      }
+    },
+    {
+      "id": "stale-snapshot-after-pull",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Pull replaced the progress store but left homeContinueWatchingDisplaySnapshot unchanged. Home can still render the stale card until it rewrites the snapshot.",
+      "evidence": {
+        "scopeKey": "1:nuvio_sync",
+        "snapshot": [
+          {
+            "contentId": "tt-old",
+            "title": "Stale card",
+            "contentType": "movie"
+          }
+        ],
+        "store": [
+          {
+            "contentId": "tt1000015",
+            "profileId": "1",
+            "source": "local",
+            "positionMs": 180000,
+            "durationMs": 7200000,
+            "updatedAt": 1700000015000,
+            "title": ""
+          }
+        ],
+        "pullStatus": "ok"
+      }
+    },
+    {
+      "id": "home-writer-reconciles-snapshot",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "The real Home snapshot writer replaces the stale card when Home reconcile runs. Pull itself does not.",
+      "evidence": {
+        "fresh": [
+          {
+            "contentId": "tt1000016",
+            "title": "Fresh card",
+            "contentType": "movie"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trakt-source-skips-nuvio-cloud",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A Trakt-selected authenticated install skips Supabase watch-progress pull. It does not show the other install's Nuvio Sync row. Divergence starts at shouldUseSupabaseWatchProgressSync.",
+      "evidence": {
+        "pulled": {
+          "items": [],
+          "status": "skipped",
+          "changedHomeInputs": false,
+          "hadUnsynced": false
+        },
+        "watching": [],
+        "firstDivergence": "B.pull status skipped while cloud still holds A's row"
+      }
+    },
+    {
+      "id": "trakt-filter-drops-local-source-row",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Switching the same install to Trakt hides a tt-id row whose source does not start with trakt. Cloud push is a separate skip.",
+      "evidence": {
+        "before": [
+          {
+            "contentId": "tt1000018",
+            "profileId": "1",
+            "source": "nuvio_sync",
+            "positionMs": 165000,
+            "durationMs": 7200000,
+            "updatedAt": 1700000018000,
+            "title": "tt1000018"
+          }
+        ],
+        "after": []
+      }
+    },
+    {
+      "id": "profile-switch-queued-push-keeps-profile",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "The debounced push kept the profile id captured at save time. Switching the active profile did not retarget it.",
+      "evidence": {
+        "profile1": 1,
+        "profile2": 0
+      }
+    },
+    {
+      "id": "profile-switch-inflight-pull-writes-original",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "pull() resolved the profile id before the RPC. A later profile switch did not write that response into profile 2.",
+      "evidence": {
+        "profile1": {
+          "contentId": "tt1000020",
+          "profileId": "1",
+          "source": "local",
+          "positionMs": 190000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000020000,
+          "title": ""
+        },
+        "profile2": []
+      }
+    },
+    {
+      "id": "older-generation-skips-home-notify",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Stopping StartupSyncService during an in-flight watch-state pull suppresses the Home notification. The progress store is still replaced by the late response.",
+      "evidence": {
+        "completed": false,
+        "notes": [],
+        "stored": {
+          "contentId": "tt1000021",
+          "profileId": "1",
+          "source": "local",
+          "positionMs": 210000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000021000,
+          "title": ""
+        }
+      }
+    },
+    {
+      "id": "foreground-resume-leaves-snapshot-until-rewrite",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Foreground watch-state scheduling does not itself rewrite the Home display snapshot. The stale card remains until Home calls writeContinueWatchingDisplaySnapshot.",
+      "evidence": {
+        "scheduled": true,
+        "snapshot": [
+          {
+            "contentId": "tt-stale-resume",
+            "title": "Before resume",
+            "contentType": "movie"
+          }
+        ],
+        "storeHasFresh": true,
+        "notes": 1,
+        "rpc": ["sync_pull_watched_items", "sync_pull_library", "sync_pull_watch_progress"]
+      }
+    },
+    {
+      "id": "player-flush-saves-before-cloud",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "player flushProgress saved the local row immediately and the cloud row appeared only after the debounce.",
+      "evidence": {
+        "flushed": true,
+        "local": {
+          "contentId": "tt1000023",
+          "profileId": "1",
+          "source": "nuvio_sync",
+          "positionMs": 125000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000000000,
+          "title": "Player"
+        },
+        "before": 0,
+        "after": [
+          {
+            "content_id": "tt1000023",
+            "content_type": "movie",
+            "video_id": "tt1000023",
+            "season": null,
+            "episode": null,
+            "position": 125000,
+            "duration": 7200000,
+            "last_watched": 1700000000000,
+            "progress_key": "tt1000023",
+            "origin_client_id": "nuvio-web-client-a"
+          }
+        ]
+      }
+    },
+    {
+      "id": "short-position-duration-zero-roundtrip",
+      "track": "sync",
+      "verdict": "FAIL",
+      "classification": "reproduced-defect",
+      "summary": "Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.",
+      "evidence": {
+        "expected": {
+          "positionMs": 10000,
+          "durationMs": 0
+        },
+        "actual": {
+          "contentId": "short-clip",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 10000000,
+          "durationMs": 0,
+          "updatedAt": 1700000024000,
+          "title": ""
+        },
+        "callChain": [
+          "watchProgressRepository.saveProgress",
+          "WatchProgressSyncService.push",
+          "buildRemoteProgressEntries position/duration without _ms suffix",
+          "mapProgressRow normalizeAmbiguousRemoteTime"
+        ]
+      }
+    },
+    {
+      "id": "empty-push-does-not-wipe-cloud",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "B had no local rows. push() returned success and did not send an empty payload, so A's cloud row remained.",
+      "evidence": {
+        "pushed": {
+          "ok": true
+        },
+        "rows": 1,
+        "rpc": []
+      }
+    },
+    {
+      "id": "installation-ids-differ",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Two installs minted different client ids. The id is sent on push and is not the merge key.",
+      "evidence": {
+        "a": "nuvio-web-client-a",
+        "b": "nuvio-web-client-b",
+        "origin": "nuvio-web-client-a"
+      }
+    },
+    {
+      "id": "double-save-one-push",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A second save inside the debounce replaced the timer. One push carried the later position.",
+      "evidence": {
+        "early": 0,
+        "pushes": [
+          {
+            "clientName": "A",
+            "name": "sync_push_watch_progress",
+            "account": "account-a",
+            "profile": "1",
+            "origin": "nuvio-web-client-a",
+            "entries": [
+              {
+                "key": "tt1000026",
+                "position": 180000,
+                "duration": 7200000,
+                "lastWatched": 1700000027500
+              }
+            ],
+            "keys": []
+          }
+        ]
+      }
+    }
+  ],
+  "counts": {
+    "PASS": 23,
+    "FAIL": 3
+  }
+}
