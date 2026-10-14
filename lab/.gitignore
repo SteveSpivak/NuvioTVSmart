@@ -1,0 +1,4 @@
+# Raw profiles and traces are large; reports (*.txt) and summaries are kept.
+results/**/*.cpuprofile
+results/**/trace_*.json
+emu/.chromium/

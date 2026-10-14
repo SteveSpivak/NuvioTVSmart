@@ -1,0 +1,68 @@
+TRACE A1_w500 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 22543 ms events 50365
+-- thread CrRendererMain (4107, 4107)  busy 10365 ms
+       2516 ms  x1348   RunTask
+       1874 ms  x299    CompositeLayers
+       1689 ms  x434    FunctionCall
+       1421 ms  x329    UpdateLayerTree
+        830 ms  x42     HitTest
+        672 ms  x379    UpdateLayoutTree
+        393 ms  x178    RunMicrotasks
+        264 ms  x67     Layout
+        183 ms  x329    Paint
+        166 ms  x18729  UpdateLayer
+         78 ms  x598    IntersectionObserverController::computeIntersections
+         50 ms  x397    EventDispatch
+         41 ms  x84     ParseHTML
+         37 ms  x159    TimerFire
+         35 ms  x347    PaintImage
+         24 ms  x35     V8.GC_SCAVENGER_SCAVENGE_PARALLEL
+-- thread Compositor (4107, 4123)  busy 4229 ms
+       4229 ms  x5497   RunTask
+-- thread Chrome_InProcGpuThread (2714, 2320)  busy 8612 ms
+       5014 ms  x4203   RunTask
+       3598 ms  x1273   GPUTask
+-- thread CompositorTileWorker1 (4107, 4126)  busy 4785 ms
+       2571 ms  x93     Decode Image
+       1959 ms  x3260   RasterTask
+        141 ms  x98     ImageDecodeTask
+         96 ms  x131    ImageUploadTask
+         17 ms  x93     Decode LazyPixelRef
+-- thread VizCompositorThread (2714, 2378)  busy 1316 ms
+       1316 ms  x3177   RunTask
+-- thread CrBrowserMain (2714, 2714)  busy 169 ms
+        159 ms  x1001   RunTask
+         10 ms  x76     LatencyInfo.Flow
+-- thread Chrome_ChildIOThread (4107, 4118)  busy 57 ms
+         57 ms  x640    RunTask
+-- thread Chrome_ChildIOThread (2714, 2321)  busy 80 ms
+         80 ms  x472    RunTask
+-- thread CompositorTileWorkerBackground (4107, 4127)  busy 1331 ms
+       1262 ms  x40     Decode Image
+         63 ms  x41     ImageDecodeTask
+          6 ms  x40     Decode LazyPixelRef
+-- thread ThreadPoolForegroundWorker (4107, 5235)  busy 120 ms
+        105 ms  x3      Decode Image
+          6 ms  x3      ImageDecodeTask
+-- thread ThreadPoolForegroundWorker (4107, 5248)  busy 67 ms
+         59 ms  x1      Decode Image
+-- 20 longest single main-thread events
+       172 ms  CompositeLayers      {"frameSeqId": 56305, "layerTreeId": 1}
+       158 ms  CompositeLayers      {"frameSeqId": 57162, "layerTreeId": 1}
+       158 ms  CompositeLayers      {"frameSeqId": 56969, "layerTreeId": 1}
+       156 ms  CompositeLayers      {"frameSeqId": 56572, "layerTreeId": 1}
+       145 ms  CompositeLayers      {"frameSeqId": 57063, "layerTreeId": 1}
+       144 ms  CompositeLayers      {"frameSeqId": 57114, "layerTreeId": 1}
+       137 ms  CompositeLayers      {"frameSeqId": 56482, "layerTreeId": 1}
+       134 ms  CompositeLayers      {"frameSeqId": 57211, "layerTreeId": 1}
+       133 ms  CompositeLayers      {"frameSeqId": 56432, "layerTreeId": 1}
+       132 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3867}}
+       113 ms  CompositeLayers      {"frameSeqId": 56385, "layerTreeId": 1}
+       103 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3802}}
+        90 ms  FunctionCall         {"data": {"columnNumber": 827839, "frame": "4B0655F0C823588CC6FB6B0013C47D1A", "functionName": "", "lineNumber": 1, "scriptId": "16", "url": "file:///
+        87 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3809}}
+        78 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3849}}
+        75 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3787}}
+        73 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3769}}
+        72 ms  FunctionCall         {"data": {"columnNumber": 827839, "frame": "4B0655F0C823588CC6FB6B0013C47D1A", "functionName": "", "lineNumber": 1, "scriptId": "16", "url": "file:///
+        71 ms  CompositeLayers      {"frameSeqId": 56339, "layerTreeId": 1}
+        70 ms  FireAnimationFrame   {"data": {"frame": "4B0655F0C823588CC6FB6B0013C47D1A", "id": 3775}}

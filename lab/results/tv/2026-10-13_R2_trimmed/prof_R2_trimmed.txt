@@ -1,0 +1,72 @@
+RUN R2_trimmed  seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600  presses 38  wall 20478 ms  sampled 20504 ms
+-- browser metrics, delta over the run
+  ScriptDuration               1344 ms
+  LayoutDuration                 78 ms
+  RecalcStyleDuration          1304 ms
+  TaskDuration                 8056 ms
+  LayoutCount                       0 ->           63
+  RecalcStyleCount                  0 ->          604
+  JSHeapUsedSize             15656312 ->     15847404
+  Nodes                         47680 ->        49100
+  JSEventListeners                283 ->          317
+-- frames: 1033  avg fps 49.1  median 17 ms  p90 33 ms  p99 83 ms  max 200 ms
+   frames over 50 ms: 19  over 100 ms: 3  over 200 ms: 0  time in frames over 50 ms: 1767 ms
+-- long tasks: 18  total 1213 ms  worst 120 ms
+-- top self time
+     12622 ms  61.6%  (idle)                                       :0:0
+      6093 ms  29.7%  (program)                                    :0:0
+       300 ms   1.5%  focus                                        :0:0
+       172 ms   0.8%  getBoundingClientRect                        :0:0
+        93 ms   0.5%  d                                            app.bundle.js:1:405
+        88 ms   0.4%  tick                                         :1:78
+        87 ms   0.4%  querySelectorAll                             :0:0
+        78 ms   0.4%  kx                                           app.bundle.js:1:712171
+        76 ms   0.4%  requestAnimationFrame                        :0:0
+        51 ms   0.3%  tr                                           app.bundle.js:1:50979
+        40 ms   0.2%  querySelector                                :0:0
+        34 ms   0.2%  (anonymous)                                  app.bundle.js:1:852782
+        32 ms   0.2%  applyHeroToDom                               app.bundle.js:1:786600
+        29 ms   0.1%  s                                            app.bundle.js:1:205
+        28 ms   0.1%  stringify                                    core-js.bundle.js:1:60789
+        28 ms   0.1%  canonicalizeUrl                              app.bundle.js:1:378344
+        26 ms   0.1%  setAttribute                                 :0:0
+        26 ms   0.1%  (garbage collector)                          :0:0
+        25 ms   0.1%  parse                                        core-js.bundle.js:1:58405
+        24 ms   0.1%  setTimeout                                   :0:0
+        20 ms   0.1%  o                                            app.bundle.js:1:289
+        18 ms   0.1%  (anonymous)                                  app.bundle.js:1:926721
+        17 ms   0.1%  refreshPendingHomeTrailerCleanup             app.bundle.js:1:839725
+        15 ms   0.1%  mx                                           app.bundle.js:1:709505
+        15 ms   0.1%  setProperty                                  :0:0
+        15 ms   0.1%  lx                                           app.bundle.js:1:704485
+        15 ms   0.1%  Xa                                           app.bundle.js:1:106256
+        14 ms   0.1%  cloneNode                                    :0:0
+-- top inclusive time (app functions)
+       563 ms   2.7%  handleKey                                    app.bundle.js:1:3138679
+       546 ms   2.7%  onKeyDown                                    app.bundle.js:1:947438
+       542 ms   2.6%  handleHomeDpad                               app.bundle.js:1:880499
+       527 ms   2.6%  focusNode                                    app.bundle.js:1:876042
+       304 ms   1.5%  focusWithoutAutoScroll                       app.bundle.js:1:793031
+       303 ms   1.5%  BN                                           app.bundle.js:1:658218
+       267 ms   1.3%  applyHeroToDom                               app.bundle.js:1:786600
+       221 ms   1.1%  dx                                           app.bundle.js:1:706077
+       207 ms   1.0%  A                                            app.bundle.js:1:827020
+       192 ms   0.9%  Tx                                           app.bundle.js:1:712034
+       125 ms   0.6%  get                                          app.bundle.js:1:309501
+       114 ms   0.6%  getForProfile                                app.bundle.js:1:309247
+       109 ms   0.5%  hydrateHomeLazyImages                        app.bundle.js:1:925813
+       104 ms   0.5%  get                                          app.bundle.js:1:38277
+       104 ms   0.5%  Nm                                           app.bundle.js:1:307394
+       102 ms   0.5%  sx                                           app.bundle.js:1:704696
+        93 ms   0.5%  d                                            app.bundle.js:1:405
+        83 ms   0.4%  kx                                           app.bundle.js:1:712171
+        78 ms   0.4%  applyModernHeroDescriptionBounds             app.bundle.js:1:852549
+        78 ms   0.4%  scheduleHomeTruncationUpdate                 app.bundle.js:1:850679
+        76 ms   0.4%  scheduleFocusedPosterFlow                    app.bundle.js:1:854190
+        71 ms   0.3%  handleKeyUp                                  app.bundle.js:1:3139428
+        69 ms   0.3%  Cm                                           app.bundle.js:1:307284
+        67 ms   0.3%  refreshPendingHomeTrailerCleanup             app.bundle.js:1:839725
+        67 ms   0.3%  lx                                           app.bundle.js:1:704485
+        65 ms   0.3%  getNodeHeroSource                            app.bundle.js:1:794663
+        65 ms   0.3%  getInstalledAddons                           app.bundle.js:1:387386
+        62 ms   0.3%  scheduleModernHeroUpdate                     app.bundle.js:1:826145

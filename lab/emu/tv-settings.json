@@ -1,0 +1,85 @@
+{
+  "layoutPreferences": {
+    "__profileScoped": true,
+    "version": 1,
+    "profiles": {
+      "1": {
+        "hasChosenLayout": true,
+        "homeLayout": "modern",
+        "continueWatchingCardStyle": "card",
+        "heroSectionEnabled": true,
+        "discoverLocation": "in_search",
+        "heroCatalogKeys": [],
+        "posterLabelsEnabled": true,
+        "catalogAddonNameEnabled": true,
+        "catalogTypeSuffixEnabled": true,
+        "modernLandscapePostersEnabled": false,
+        "modernHeroFullScreenBackdropEnabled": true,
+        "classicFocusGradientEnabled": false,
+        "focusedPosterBackdropExpandEnabled": true,
+        "focusedPosterBackdropExpandDelaySeconds": 3,
+        "focusedPosterBackdropTrailerEnabled": false,
+        "focusedPosterBackdropTrailerMuted": true,
+        "focusedPosterBackdropTrailerPlaybackTarget": "hero_media",
+        "posterCardWidthDp": 126,
+        "posterCardCornerRadiusDp": 12,
+        "fastHorizontalNavigationEnabled": false,
+        "cardDepthEnabled": true,
+        "cardDepthEdgeStrength": 28,
+        "cardDepthSheenStrength": 10,
+        "cardDepthEdgeCoverage": 0,
+        "cardDepthPostersEnabled": true,
+        "cardDepthContinueWatchingEnabled": true,
+        "cardDepthEpisodeCardsEnabled": true,
+        "cardDepthCastEnabled": true,
+        "cardDepthTrailersEnabled": true,
+        "detailPageTrailerButtonEnabled": true,
+        "preferExternalMetaAddonDetail": true,
+        "blurUnwatchedEpisodes": false,
+        "collapseSidebar": true,
+        "modernSidebar": false,
+        "modernSidebarBlur": false,
+        "hideUnreleasedContent": false,
+        "showFullReleaseDate": true,
+        "useEpisodeThumbnailsInCw": true,
+        "blurContinueWatchingNextUp": false,
+        "continueWatchingEnabled": true,
+        "showUnairedNextUp": true,
+        "nextUpFromFurthestEpisode": true,
+        "continueWatchingSortMode": "default",
+        "homeImdbRatingsVisibility": "SHOW_ALL",
+        "detailImdbRatingsVisibility": "SHOW_ALL",
+        "searchDiscoverEnabled": true
+      }
+    }
+  },
+  "themeSettings": {
+    "__profileScoped": true,
+    "version": 1,
+    "profiles": {
+      "1": {
+        "mode": "dark",
+        "themeName": "EMERALD",
+        "accentColor": "#43a047",
+        "fontFamily": "INTER",
+        "language": null,
+        "amoledMode": false,
+        "amoledSurfacesMode": false,
+        "settingsUiStyle": "ZEN",
+        "customThemeColors": "#B75AFF,#EC70A9,#FFB37A"
+      }
+    }
+  },
+  "experienceMode": {
+    "__profileScoped": true,
+    "version": 1,
+    "profiles": {
+      "1": {
+        "mode": "ADVANCED",
+        "addonSetupSkipped": false
+      }
+    }
+  },
+  "tvPerfMode": "reduced",
+  "_source": "Read from the LG 65UR78006LL TV on 2026-10-14 (Nuvio 1.2.5-lg1). No account data."
+}

@@ -1,0 +1,14 @@
+{
+  "device": "tv",
+  "when": "2026-10-14T12:19:08.284Z",
+  "rounds": 5,
+  "medianMs": { "js": 595, "json": 252, "dom": 2749, "style": 5009 },
+  "info": {
+    "ua": "Mozilla/5.0 (Web0S; Linux/SmartTV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.128 Safari/537.36 WebAppManager",
+    "cores": 4,
+    "mem": 1,
+    "vw": 1920,
+    "vh": 1080,
+    "dpr": 2
+  }
+}
