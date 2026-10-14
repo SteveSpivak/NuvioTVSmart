@@ -72,7 +72,8 @@ export function applyTmdbDiscoverFilters(params, filters = {}, mediaType = "movi
   setTmdbDiscoverParam(params, isTv ? "first_air_date.gte" : "primary_release_date.gte", filters.releaseDateGte);
   setTmdbDiscoverParam(params, isTv ? "first_air_date.lte" : "primary_release_date.lte", filters.releaseDateLte);
   setTmdbDiscoverParam(params, "vote_average.gte", filters.voteAverageGte);
-  setTmdbDiscoverParam(params, "vote_average.lte", filters.voteAverageLte);
+  // A rating cap of 0 is "unset" (null is stored as 0); sending it matches no titles.
+  setTmdbDiscoverParam(params, "vote_average.lte", Number(filters.voteAverageLte) > 0 ? filters.voteAverageLte : null);
   setTmdbDiscoverParam(params, "vote_count.gte", filters.voteCountGte);
   setTmdbDiscoverParam(params, "with_original_language", filters.withOriginalLanguage);
   setTmdbDiscoverParam(params, "with_origin_country", filters.withOriginCountry);
