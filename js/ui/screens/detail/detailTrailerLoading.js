@@ -20,7 +20,7 @@ function renderTrailerLoadingIdentity(meta = {}, backdropUrl = "") {
   const backdrop = String(backdropUrl || "").trim();
   return `
               <div class="detail-trailer-loading-identity-layer">
-                <div class="player-loading-backdrop"${backdrop ? ` style="background-image:url('${backdrop.replace(/'/g, "%27")}')"` : ""}></div>
+                <div class="player-loading-backdrop"${backdrop ? ` style="background-image:url('${escapeMarkup(backdrop.replace(/'/g, "%27"))}')"` : ""}></div>
                 <div class="player-loading-gradient"></div>
                 <div class="player-loading-center">
                   <div class="player-loading-identity${logoUrl ? " has-logo" : ""}">
