@@ -1,0 +1,5 @@
+device=emu throttle= when=2026-10-14T14:00:28Z
+MODE: {"constrained":true,"stored":"\"reduced\"","rows":20}
+saved rowWindow_20_B2 wallMs 18680 presses 38
+saved rowWindow_20_B2 wallMs 18570 presses 38 events 34234
+LAYERS: {"layers":15,"drawing":13,"megapixels":12,"approxMB":46,"biggest":["1920x1080","1920x1080","5677x347","5296x347","5296x347","2024x347"]}

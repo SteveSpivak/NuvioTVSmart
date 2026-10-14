@@ -1,0 +1,63 @@
+TRACE rowWindow_83_B2 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18790 ms events 34628
+-- thread CrRendererMain (7640, 7640)  busy 1889 ms
+        625 ms  x420    UpdateLayoutTree
+        366 ms  x424    FunctionCall
+        214 ms  x1889   RunTask
+        133 ms  x290    CompositeLayers
+        124 ms  x336    UpdateLayerTree
+         77 ms  x117    Layout
+         74 ms  x418    Paint
+         71 ms  x223    RunMicrotasks
+         20 ms  x168    ParseHTML
+         15 ms  x2074   PaintImage
+         14 ms  x2      BlinkGC.AtomicPauseSweepAndCompact
+         11 ms  x4      BlinkGC.LazySweepInIdle
+         11 ms  x38     V8.GC_MC_INCREMENTAL
+         10 ms  x6      V8.GC_MC_MARK_WEAK_CLOSURE_EPHEMERON_MARKING
+         10 ms  x548    EventDispatch
+         10 ms  x148    TimerFire
+-- thread Compositor (7640, 7649)  busy 876 ms
+        876 ms  x6260   RunTask
+-- thread CompositorTileWorker1 (7640, 7651)  busy 1521 ms
+       1490 ms  x4695   RasterTask
+         31 ms  x731    ImageDecodeTask
+-- thread VizCompositorThread (7603, 7653)  busy 5068 ms
+       5068 ms  x2795   RunTask
+-- thread CompositorTileWorkerBackground (7640, 7652)  busy 902 ms
+        764 ms  x990    RasterTask
+        138 ms  x928    ImageDecodeTask
+-- thread ThreadPoolForegroundWorker (7640, 7647)  busy 173 ms
+         72 ms  x29     ImageDecodeTask
+         66 ms  x29     Decode Image
+         20 ms  x8      V8.GC_MC_BACKGROUND_MARKING
+          5 ms  x5      BlinkGC.ConcurrentMarkingStep
+-- thread ThreadPoolForegroundWorker (7640, 7645)  busy 176 ms
+         67 ms  x28     ImageDecodeTask
+         65 ms  x28     Decode Image
+         32 ms  x5      V8.GC_MC_BACKGROUND_MARKING
+          5 ms  x1      BlinkGC.ConcurrentSweepingStep
+-- thread ThreadPoolForegroundWorker (7640, 7643)  busy 52 ms
+         26 ms  x7      V8.GC_MC_BACKGROUND_MARKING
+          6 ms  x2      Decode Image
+          5 ms  x5      V8.GC_BACKGROUND_UNMAPPER
+-- 20 longest single main-thread events
+        64 ms  EventDispatch        {"data": {"type": "keydown"}}
+        64 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        59 ms  EventDispatch        {"data": {"type": "keydown"}}
+        59 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        59 ms  EventDispatch        {"data": {"type": "keydown"}}
+        58 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        51 ms  EventDispatch        {"data": {"type": "keydown"}}
+        51 ms  EventDispatch        {"data": {"type": "keydown"}}
+        51 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        51 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        50 ms  EventDispatch        {"data": {"type": "keydown"}}
+        50 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        48 ms  EventDispatch        {"data": {"type": "keydown"}}
+        48 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        44 ms  EventDispatch        {"data": {"type": "keydown"}}
+        43 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "66", "url":
+        38 ms  UpdateLayoutTree     {"beginData": {"frame": "AA9843306E8C95443E85A87DFAC60CF3"}, "elementCount": 1245}
+        35 ms  FireAnimationFrame   {"data": {"frame": "AA9843306E8C95443E85A87DFAC60CF3", "id": 1262}}
+        30 ms  EventDispatch        {"data": {"type": "keydown"}}
+        30 ms  EventDispatch        {"data": {"type": "keydown"}}

@@ -1,0 +1,57 @@
+TRACE rowWindow_20_B1 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18686 ms events 34549
+-- thread CrRendererMain (6834, 6834)  busy 1692 ms
+        524 ms  x429    UpdateLayoutTree
+        332 ms  x424    FunctionCall
+        250 ms  x1903   RunTask
+        126 ms  x289    CompositeLayers
+         91 ms  x335    UpdateLayerTree
+         80 ms  x119    Layout
+         68 ms  x421    Paint
+         56 ms  x224    RunMicrotasks
+         19 ms  x168    ParseHTML
+         16 ms  x1      V8.GC_MC_INCREMENTAL_START
+         15 ms  x2109   PaintImage
+         10 ms  x552    EventDispatch
+         10 ms  x148    TimerFire
+          9 ms  x34     HitTest
+          8 ms  x1856   UpdateLayer
+          8 ms  x13     V8.GC_SCAVENGER
+-- thread Compositor (6834, 6849)  busy 747 ms
+        747 ms  x6319   RunTask
+-- thread CompositorTileWorker1 (6834, 6851)  busy 1482 ms
+       1428 ms  x4793   RasterTask
+         54 ms  x699    ImageDecodeTask
+-- thread VizCompositorThread (6803, 6854)  busy 4793 ms
+       4793 ms  x2826   RunTask
+-- thread CompositorTileWorkerBackground (6834, 6852)  busy 972 ms
+        801 ms  x934    RasterTask
+        170 ms  x935    ImageDecodeTask
+-- thread ThreadPoolForegroundWorker (6834, 6844)  busy 259 ms
+        123 ms  x56     ImageDecodeTask
+        114 ms  x56     Decode Image
+         17 ms  x6      V8.GC_MC_BACKGROUND_MARKING
+-- thread ThreadPoolForegroundWorker (6834, 6842)  busy 121 ms
+         53 ms  x20     Decode Image
+         45 ms  x20     ImageDecodeTask
+         16 ms  x5      V8.GC_MC_BACKGROUND_MARKING
+-- 20 longest single main-thread events
+        56 ms  EventDispatch        {"data": {"type": "keydown"}}
+        56 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        49 ms  EventDispatch        {"data": {"type": "keydown"}}
+        49 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        49 ms  EventDispatch        {"data": {"type": "keydown"}}
+        49 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        47 ms  EventDispatch        {"data": {"type": "keydown"}}
+        47 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        45 ms  EventDispatch        {"data": {"type": "keydown"}}
+        44 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        41 ms  EventDispatch        {"data": {"type": "keydown"}}
+        41 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        39 ms  EventDispatch        {"data": {"type": "keydown"}}
+        39 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        37 ms  EventDispatch        {"data": {"type": "keydown"}}
+        37 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "49", "url":
+        28 ms  TimerFire            {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "timerId": 755}}
+        28 ms  FunctionCall         {"data": {"columnNumber": 973577, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "", "lineNumber": 1, "scriptId": "49", "url": "http://1
+        26 ms  UpdateLayoutTree     {"beginData": {"frame": "6FEFED4957FB5406C96CB4124786E2C5"}, "elementCount": 1176}
+        25 ms  EventDispatch        {"data": {"type": "keydown"}}

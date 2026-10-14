@@ -1,6 +1,7 @@
 import { ensureHeroMdbListRatings } from "./homeHeroMdbListLoad.js";
 import * as internals from "./homeScreenContext.js";
 import { hasMountedHomeDom, updateHomeDom } from "./homeDomUpdate.js";
+import { isLabRowWindowEnabled, stampLabRowWindowSlot } from "./homeRowWindow.js";
 
 export function createHomeScreenMethods23() {
   const {
@@ -202,8 +203,23 @@ export function createHomeScreenMethods23() {
           shouldDeferRowImages: shouldDeferHomeRowImages,
           watchedTitleIds: this.watchedTitleIds,
           escapeHtml,
-          escapeAttribute
+          escapeAttribute,
+          rowWindowEnabled: isLabRowWindowEnabled(),
+          rowWindowSlotHeight: Number(this.labRowWindowSlotHeight || 0)
         });
+        if (isLabRowWindowEnabled()) {
+          this.labRowWindowContext = {
+            rowItemLimit,
+            showPosterLabels,
+            showCatalogTypeSuffix,
+            preferLandscapePosters: modernLandscapePostersEnabled,
+            shouldDeferRowImages: shouldDeferHomeRowImages,
+            watchedTitleIds: this.watchedTitleIds,
+            createPosterCardMarkup,
+            formatCatalogRowTitle,
+            escapeHtml
+          };
+        }
         this.catalogSeeAllMap = modernLayoutPayload.catalogSeeAllMap;
         mainContentMarkup = modernLayoutPayload.markup;
       } else {
@@ -342,6 +358,9 @@ export function createHomeScreenMethods23() {
       this.scheduleModernSidebarPillAutoCollapse();
 
       this.buildNavigationModel();
+      if (isLabRowWindowEnabled() && this.layoutMode === "modern") {
+        stampLabRowWindowSlot(this);
+      }
       this.bindHomeViewportEvents();
       this.setupContinueWatchingProgressiveRendering();
       if (this.layoutMode === "modern") {

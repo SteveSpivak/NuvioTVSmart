@@ -23,6 +23,126 @@ export const MODERN_HOME_CONSTANTS = {
   verticalFastScrollMaxFrameMs: 48
 };
 
+export const LAB_ROW_WINDOW_RADIUS = 2;
+
+function catalogRowItems(rowData) {
+  const items = Array.isArray(rowData?.result?.data?.items) ? rowData.result.data.items : [];
+  return items.length ? items : rowData?.loadingItems || [];
+}
+
+export function visibleCatalogIndexForKey(rows = [], focusedRowKey = "") {
+  const wanted = String(focusedRowKey || "");
+  if (!wanted) {
+    return 0;
+  }
+  let visible = 0;
+  for (let index = 0; index < rows.length; index += 1) {
+    const rowData = rows[index];
+    if (!catalogRowItems(rowData).length) {
+      continue;
+    }
+    const rowKey = String(rowData?.homeCatalogKey || buildModernRowKey(rowData));
+    if (rowKey === wanted) {
+      return visible;
+    }
+    visible += 1;
+  }
+  return 0;
+}
+
+export function buildModernCatalogPlaceholderMarkup({
+  rowKey = "",
+  rowIndex = 0,
+  rowTitle = "",
+  heightPx = 0,
+  escapeHtml
+} = {}) {
+  const escape = typeof escapeHtml === "function" ? escapeHtml : (value) => String(value ?? "");
+  const height = Number(heightPx);
+  const style =
+    Number.isFinite(height) && height > 0 ? ` style="height:${Math.round(height)}px"` : "";
+  return `
+      <section class="home-row home-modern-row home-row-window-placeholder" data-row-key="${escape(rowKey)}" data-row-index="${escape(rowIndex)}" data-window-placeholder="1"${style}>
+        <div class="home-row-head">
+          <h2 class="home-row-title">${escape(rowTitle)}</h2>
+        </div>
+      </section>
+    `;
+}
+
+export function buildModernCatalogSectionMarkup(
+  rowData,
+  rowIndex,
+  {
+    rowItemLimit = 15,
+    focusedRowKey = "",
+    focusedItemIndex = -1,
+    expandFocusedPoster = false,
+    showPosterLabels = true,
+    showCatalogTypeSuffix = true,
+    preferLandscapePosters = false,
+    shouldDeferRowImages,
+    watchedTitleIds = null,
+    createPosterCardMarkup,
+    formatCatalogRowTitle,
+    escapeHtml
+  } = {}
+) {
+  const rowItems = catalogRowItems(rowData);
+  if (
+    !rowItems.length ||
+    typeof createPosterCardMarkup !== "function" ||
+    typeof escapeHtml !== "function"
+  ) {
+    return "";
+  }
+  const isCollectionRow = rowData?.rowKind === "collection";
+  const rowKey = String(rowData?.homeCatalogKey || buildModernRowKey(rowData));
+  const maxItems = Math.max(1, Number(rowItemLimit || 15));
+  const focusedItemLimit =
+    focusedRowKey === rowKey && Number.isFinite(focusedItemIndex)
+      ? Math.max(0, Number(focusedItemIndex)) + 1
+      : 0;
+  const visibleItems = isCollectionRow
+    ? rowItems
+    : rowItems.slice(0, Math.max(maxItems, focusedItemLimit));
+  const rowTitle = isCollectionRow
+    ? String(rowData.collectionTitle || rowData.collection?.title || "Collection")
+    : formatCatalogRowTitle(rowData.catalogName, rowData.type, showCatalogTypeSuffix);
+  const deferRowImages =
+    typeof shouldDeferRowImages === "function"
+      ? shouldDeferRowImages(rowIndex, rowKey, focusedRowKey)
+      : false;
+  const cardsMarkup = visibleItems
+    .map((item, itemIndex) =>
+      createPosterCardMarkup(
+        item,
+        rowIndex,
+        itemIndex,
+        rowData.type,
+        rowData,
+        showPosterLabels,
+        "modern",
+        expandFocusedPoster && focusedRowKey === rowKey && focusedItemIndex === itemIndex,
+        preferLandscapePosters,
+        deferRowImages,
+        watchedTitleIds
+      )
+    )
+    .join("");
+
+  return `
+      <section class="home-row home-modern-row home-row-enter" data-row-key="${escapeHtml(rowKey)}" data-row-index="${rowIndex}">
+        <div class="home-row-head">
+          <h2 class="home-row-title">${escapeHtml(rowTitle)}</h2>
+        </div>
+        <div class="home-track" data-track-row-key="${escapeHtml(rowKey)}">
+          ${cardsMarkup}
+        </div>
+      </section>
+    `;
+}
+
 export function renderModernHomeLayout({
   rows = [],
   heroItem = null,
@@ -52,10 +172,14 @@ export function renderModernHomeLayout({
   shouldDeferRowImages,
   watchedTitleIds = null,
   escapeHtml,
-  escapeAttribute
+  escapeAttribute,
+  rowWindowEnabled = false,
+  rowWindowSlotHeight = 0
 } = {}) {
   const catalogSeeAllMap = new Map();
   const sectionsMarkup = [];
+  const focusedVisibleIndex = rowWindowEnabled ? visibleCatalogIndexForKey(rows, focusedRowKey) : 0;
+  let visibleCatalogIndex = 0;
 
   rows.forEach((rowData, rowIndex) => {
     const isCollectionRow = rowData?.rowKind === "collection";
@@ -85,49 +209,43 @@ export function renderModernHomeLayout({
       });
     }
 
-    const maxItems = Math.max(1, Number(rowItemLimit || 15));
-    const focusedItemLimit =
-      focusedRowKey === rowKey && Number.isFinite(focusedItemIndex)
-        ? Math.max(0, Number(focusedItemIndex)) + 1
-        : 0;
-    const visibleItems = isCollectionRow
-      ? rowItems
-      : rowItems.slice(0, Math.max(maxItems, focusedItemLimit));
-    const rowTitle = isCollectionRow
-      ? String(rowData.collectionTitle || rowData.collection?.title || "Collection")
-      : formatCatalogRowTitle(rowData.catalogName, rowData.type, showCatalogTypeSuffix);
-    const deferRowImages =
-      typeof shouldDeferRowImages === "function"
-        ? shouldDeferRowImages(rowIndex, rowKey, focusedRowKey)
-        : false;
-    const cardsMarkup = visibleItems
-      .map((item, itemIndex) =>
-        createPosterCardMarkup(
-          item,
+    const sectionVisibleIndex = visibleCatalogIndex;
+    visibleCatalogIndex += 1;
+    const outsideWindow =
+      rowWindowEnabled &&
+      Math.abs(sectionVisibleIndex - focusedVisibleIndex) > LAB_ROW_WINDOW_RADIUS;
+    if (outsideWindow) {
+      const rowTitle = isCollectionRow
+        ? String(rowData.collectionTitle || rowData.collection?.title || "Collection")
+        : formatCatalogRowTitle(rowData.catalogName, rowData.type, showCatalogTypeSuffix);
+      sectionsMarkup.push(
+        buildModernCatalogPlaceholderMarkup({
+          rowKey,
           rowIndex,
-          itemIndex,
-          rowData.type,
-          rowData,
-          showPosterLabels,
-          "modern",
-          expandFocusedPoster && focusedRowKey === rowKey && focusedItemIndex === itemIndex,
-          preferLandscapePosters,
-          deferRowImages,
-          watchedTitleIds
-        )
-      )
-      .join("");
+          rowTitle,
+          heightPx: rowWindowSlotHeight,
+          escapeHtml
+        })
+      );
+      return;
+    }
 
-    sectionsMarkup.push(`
-      <section class="home-row home-modern-row home-row-enter" data-row-key="${escapeHtml(rowKey)}" data-row-index="${rowIndex}">
-        <div class="home-row-head">
-          <h2 class="home-row-title">${escapeHtml(rowTitle)}</h2>
-        </div>
-        <div class="home-track" data-track-row-key="${escapeHtml(rowKey)}">
-          ${cardsMarkup}
-        </div>
-      </section>
-    `);
+    sectionsMarkup.push(
+      buildModernCatalogSectionMarkup(rowData, rowIndex, {
+        rowItemLimit,
+        focusedRowKey,
+        focusedItemIndex,
+        expandFocusedPoster,
+        showPosterLabels,
+        showCatalogTypeSuffix,
+        preferLandscapePosters,
+        shouldDeferRowImages,
+        watchedTitleIds,
+        createPosterCardMarkup,
+        formatCatalogRowTitle,
+        escapeHtml
+      })
+    );
   });
 
   return {

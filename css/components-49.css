@@ -423,3 +423,12 @@
   padding-left: calc(var(--home-content-start) + var(--modern-track-peek-extension));
   padding-right: var(--home-track-end);
 }
+
+/* Lab row window placeholders. Same slot height, no track, so translateZ(0) does not promote an empty row. */
+.home-screen-shell.home-layout-modern .home-row-window-placeholder {
+  height: var(
+    --home-row-window-slot,
+    calc(var(--home-modern-portrait-poster-height, 342px) + 56px)
+  );
+  overflow: hidden;
+}

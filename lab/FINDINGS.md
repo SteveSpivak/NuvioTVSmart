@@ -54,13 +54,13 @@ Suggested throttle is the middle ratio, 6.8. Later runs used that throttle.
 
 ## Causes, ranked
 
-| Rank | Cause                                         | Evidence                                                                                                                                                                                                                       | Label                                                                     | Fix                                                                                             |
-| ---- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 1    | Too many Home rows stay in the page           | Television: 83 rows about 37 to 38 frames per second and 5.9 to 6.7 seconds of stall time; 20 real rows about 49 frames per second and 1.2 seconds. Hiding extra rows with `display: none` barely moved frame rate (about 40). | MEASURED, read from `lab/results/tv` and `lab/README.md` this session     | Remove off-screen rows from the document. Not implemented. `content-visibility` stays rejected. |
-| 2    | `translateZ(0)` on every `.home-track`        | Television L4 versus L5: unpromoting cut layer memory 170 to 8 megabytes but frame rate 46.5 to 41.8, compositing 1285 to 2847 milliseconds, paint 323 to 895.                                                                 | MEASURED. REJECTED as a speed fix. Do not try a third layer-only variant. | Keep promotion on mounted rows. Remove off-screen rows instead.                                 |
-| 3    | Full effects do more compositing work per key | Emulator main thread busy 894 milliseconds reduced versus 3650 milliseconds full, same 38 keys. Frame rate 57.9 versus 57.7.                                                                                                   | SYNTHETIC. Television full mode NOT_RUN.                                  | Do not ship a motion change from this alone. Measure full versus reduced on the television.     |
-| 4    | First pass while posters load                 | Laboratory record: worst frame about 1 second, cold Home about 45 seconds. This session did not retime the television. Emulator ready time was 8.0 to 10.6 seconds and is not that number.                                     | MEASURED only as stated in `lab/README.md`. Startup retime NOT_RUN.       | Bound the first catalog batch and image decode. Already partly done for reduced mode.           |
-| 5    | Live page holds far more nodes than Home      | Laboratory record: 135 thousand to 247 thousand nodes, Home about 10 thousand. Guest emulator Home had about 3.4 thousand elements. The extra nodes were not reproduced.                                                       | MEASURED as stated in the laboratory record. Cause UNKNOWN.               | Do not guess a fix.                                                                             |
+| Rank | Cause                                         | Evidence                                                                                                                                                                                                                       | Label                                                                     | Fix                                                                                                                 |
+| ---- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 1    | Too many Home rows stay in the page           | Television: 83 rows about 37 to 38 frames per second and 5.9 to 6.7 seconds of stall time; 20 real rows about 49 frames per second and 1.2 seconds. Hiding extra rows with `display: none` barely moved frame rate (about 40). | MEASURED, read from `lab/results/tv` and `lab/README.md` this session     | Row window is implemented behind `labRowWindow`, default off. Emulator frame rate did not rise. Television NOT_RUN. |
+| 2    | `translateZ(0)` on every `.home-track`        | Television L4 versus L5: unpromoting cut layer memory 170 to 8 megabytes but frame rate 46.5 to 41.8, compositing 1285 to 2847 milliseconds, paint 323 to 895.                                                                 | MEASURED. REJECTED as a speed fix. Do not try a third layer-only variant. | Keep promotion on mounted rows. Remove off-screen rows instead.                                                     |
+| 3    | Full effects do more compositing work per key | Emulator main thread busy 894 milliseconds reduced versus 3650 milliseconds full, same 38 keys. Frame rate 57.9 versus 57.7.                                                                                                   | SYNTHETIC. Television full mode NOT_RUN.                                  | Do not ship a motion change from this alone. Measure full versus reduced on the television.                         |
+| 4    | First pass while posters load                 | Laboratory record: worst frame about 1 second, cold Home about 45 seconds. This session did not retime the television. Emulator ready time was 8.0 to 10.6 seconds and is not that number.                                     | MEASURED only as stated in `lab/README.md`. Startup retime NOT_RUN.       | Bound the first catalog batch and image decode. Already partly done for reduced mode.                               |
+| 5    | Live page holds far more nodes than Home      | Laboratory record: 135 thousand to 247 thousand nodes, Home about 10 thousand. Guest emulator Home had about 3.4 thousand elements. The extra nodes were not reproduced.                                                       | MEASURED as stated in the laboratory record. Cause UNKNOWN.               | Do not guess a fix.                                                                                                 |
 
 Rejected earlier, still rejected: `content-visibility: auto` on rows, smaller `w342` posters, and drawing at 1080p (it already does).
 
@@ -102,6 +102,18 @@ Card depth is a static edge and sheen, not the scrolling cost. One backdrop expa
 
 ## Question 2. Home architecture
 
+### Map before row windowing
+
+VERIFIED by reading the code. Not a trace. Line numbers are the files after the windowing edit.
+
+- **Rows are built from catalog data already in memory.** `renderModernHomeLayout` walks `rows` at `js/ui/screens/home/modernHomeLayout.js:184`. Each catalog with items becomes a `<section class="home-modern-row">` and a `.home-track` of poster cards, joined into `.home-modern-catalogs` at line 290. `this.rows` is not cleared when the DOM changes. Continue Watching is a separate section above that list.
+- **Up and Down use a DOM node list, not the catalog array.** `buildNavigationModel` at `js/ui/screens/home/homeScreenMethods-18-focus-node.js:105` keeps a row only if its track has `.home-content-card.focusable` nodes. `handleHomeDpad` at `js/ui/screens/home/homeScreenMethods-19-handle-home-dpad.js:121-123` moves one row, after `ensureLabRowWindowForMove` when the switch is on. `resolvePreferredNodeForRow` (`js/ui/screens/home/homeScreenMethods-05-apply-hero-to-dom.js:259-267`) restores the last column for that row key, or column 0. A placeholder with no card is omitted from `nav.rows`, so Down stops unless the destination row is mounted before that read.
+- **Left and Right scroll the current track.** Same d-pad file, lines 92-117. `ensureTrackHorizontalVisibility` writes `scrollLeft` at `js/ui/screens/home/homeScreenMethods-17-end-modern-vertical-fast-scroll.js:221`. The focused row must stay mounted or that track node is gone.
+- **Details return is a row key plus item identity, not a live node.** Enter calls `openDetailFromNode` at `js/ui/screens/home/homeScreenMethods-27-enrich-continue-watching.js:236`, which stores `rememberReturnFocusForNode` (`js/ui/screens/home/homeScreenMethods-01-get-route-state-key.js:140-152`): `rowKey`, `itemIndex`, `itemIdentity`, and `trackStates`. Back render reads that state at `js/ui/screens/home/homeScreenMethods-23-render.js:58` and lines 176-193, then `restoreModernFocusState` at `js/ui/screens/home/homeScreenMethods-02-restore-modern-focus-state.js:29-48` looks up cards with `getNavigationRowNodes`. The return row must already be real cards in that render, or restore fails.
+- **Hero reads the focused card's dataset, then catalog memory.** `scheduleModernHeroUpdate` (`js/ui/screens/home/homeScreenMethods-10-schedule-modern-hero-update.js:7-11`) calls `getNodeHeroSource` (`js/ui/screens/home/homeScreenMethods-05-apply-hero-to-dom.js:323-340`), which indexes `this.rows[data-row-index].result.data.items[data-item-index]`. `applyHeroToDom` at line 29 writes the hero node. The hero sits outside the catalog list. It does not need every row mounted. It does need the focused card's `data-row-index` and `data-item-index`.
+- **Sidebar is a separate focus list.** `buildNavigationModel` collects `.home-sidebar .focusable` at `js/ui/screens/home/homeScreenMethods-18-focus-node.js:80-83`. Left from column 0 focuses that list (`js/ui/screens/home/homeScreenMethods-19-handle-home-dpad.js:100-109`). Television settings have `modernSidebar: false`. Sidebar markup does not come from catalog rows. Windowing must not remove the focused card on Left, or `lastMainFocus` (`js/ui/screens/home/homeScreenMethods-15-schedule-focused-poster-flow.js:213`) points at a detached node.
+- **Layer reason, already measured.** `.home-track` sets `transform: translateZ(0)` at `css/components-14.css:70`. That is why each mounted track is its own wide layer. Unpromoting those tracks is rejected (television update above). The window removes card DOM and keeps `translateZ(0)` only on mounted tracks.
+
 **The row cost is a compositing layer per track, not JavaScript.** `.home-track` sets `transform: translateZ(0)` in `css/components-14.css`. Scrolling uses `scrollLeft`, not a script transform. The class `webos-unpromoted-home-tracks` already sets `transform: none` for modern tracks, but `js/app.js` only added that class for Chromium 87 and older. The television is Chromium 94, so every track stayed promoted.
 
 Live toggle on the reduced 20-row page, same session, SYNTHETIC and causal:
@@ -117,7 +129,46 @@ Restoring the class brought the 49 layers back. The built cutoff change (`<= 94`
 
 `content-visibility` stays rejected. Television trace `B_cvOn` versus `A_cvOff`: compositing on the main thread about 3909 versus 1902 milliseconds, frame rate 36.4 versus 37.6. MEASURED, read this session.
 
-Hiding rows is not enough either. `T_23rows` used `display: none` and stayed near 40 frames per second. Real 20-row trim (`R2_trimmed`) reached 49. A virtualization fix has to remove off-screen rows from the document, not hide them. Not implemented. Implementing it without a television run would be a large navigation risk.
+Hiding rows is not enough either. `T_23rows` used `display: none` and stayed near 40 frames per second. Real 20-row trim (`R2_trimmed`) reached 49. A virtualization fix has to remove off-screen rows from the document, not hide them.
+
+### Experiment: row window, 2026-10-14
+
+**Not a speed fix on this emulator.** The window cut layers and nodes. Paint, compositing, and raster rose. Frame rate did not rise. The switch stays off. Television measurement NOT_RUN.
+
+`perf/row-window` cannot be created in this session. The change is on `arena/0ffafbca-nuvio-perf-lab`.
+
+What it does, VERIFIED in code: `localStorage.getItem("labRowWindow")==="1"` is read once, in `js/ui/screens/home/homeRowWindow.js`, and then cached. Default is off. Radius is 2. Catalog objects stay in `this.rows`. Rows outside the band are same-height placeholders with no `.home-track`, so they do not get `translateZ(0)`. Before Up or Down, `ensureLabRowWindowForMove` rebuilds the destination row. The idea is Stremio's visible-catalog window ([useVisibleCatalogs.ts](https://github.com/Stremio/stremio-web/blob/development/src/common/useVisibleCatalogs.ts)), not their code. That file loads a data range. It does not prove they remove row DOM.
+
+Break checks, switch on, 20 synthetic rows, HeadlessChrome 92, throttle 6.8. None skipped.
+
+| Check                                                                | Result |
+| -------------------------------------------------------------------- | ------ |
+| Down through rows 0-19 and back to 0, focus stayed on a card         | ✅     |
+| Right then Left on row 2: `scrollLeft` 0 to 1012 to 253, same row    | ✅     |
+| Enter on Lab Row 15 (`lab14`, card `lab:14:0`), Back, same card      | ✅     |
+| Hero title changed from Title 15.1 to Title 16.1 after the next Down | ✅     |
+
+Measures are SYNTHETIC. HeadlessChrome 92.0.4512.0, user agent spoofed to Chrome 94, CPU throttle 6.8, effects Reduced, default 38-key suite, 38 presses, not aborted. Order was A, B, A, B. A is switch off. B is switch on. Each run is a reload, because the switch is read once at page start. These are not warm-within-session pairs. Emulator frame rate is not television speed.
+
+| Run               | Rows | Switch | Frames per second | Frames over 50 ms | CompositeLayers | Paint | Tile worker busy | Layers | Megapixels | Layer memory | End nodes |
+| ----------------- | ---- | ------ | ----------------- | ----------------- | --------------- | ----- | ---------------- | ------ | ---------- | ------------ | --------- |
+| `rowWindow_20_A1` | 20   | off    | 56.6              | 9                 | 63 ms           | 30 ms | 868 ms           | 49     | 45         | 173 MB       | 23287     |
+| `rowWindow_20_B1` | 20   | on     | 55.2              | 10                | 126 ms          | 68 ms | 1482 ms          | 15     | 12         | 46 MB        | 8330      |
+| `rowWindow_20_A2` | 20   | off    | 56.5              | 9                 | 68 ms           | 32 ms | 982 ms           | 49     | 45         | 173 MB       | 23205     |
+| `rowWindow_20_B2` | 20   | on     | 55.1              | 7                 | 148 ms          | 62 ms | 1415 ms          | 15     | 12         | 46 MB        | 10600     |
+| `rowWindow_83_A1` | 83   | off    | 58.4              | 0                 | 72 ms           | 31 ms | 857 ms           | 175    | 150        | 573 MB       | 75398     |
+| `rowWindow_83_B1` | 83   | on     | 55.6              | 10                | 123 ms          | 63 ms | 1389 ms          | 15     | 12         | 46 MB        | 21428     |
+| `rowWindow_83_A2` | 83   | off    | 57.3              | 0                 | 68 ms           | 33 ms | 945 ms           | 175    | 150        | 573 MB       | 74590     |
+| `rowWindow_83_B2` | 83   | on     | 55.9              | 8                 | 133 ms          | 74 ms | 1521 ms          | 15     | 12         | 46 MB        | 21822     |
+
+How to read it:
+
+- Layers and nodes fell together. Paint did not. At 20 rows, `focusNode` in the profile rose from about 105 milliseconds off to about 360-380 milliseconds on. Rebuilding a row on Down is the new cost.
+- The 38-key suite only moves eight rows. It still keeps every off-screen row mounted when the switch is off, and only the band when it is on. A longer scroll was NOT_RUN.
+- `rowWindow_83_A1` started the node counter at 403314. That start is not a steady Home count. The end counts are the ones in the table.
+- This browser has no 250 megabyte graphics cap. The 83-row off case estimated 573 megabytes of layer memory. Whether that cap is why the television is slow at 83 rows is SPECULATIVE. Do not turn the switch on from these numbers.
+
+Experiments B through F (render lifecycle, cold start, images, animations, sources) are NOT_STARTED. Not part of this change.
 
 ## Question 3. Startup
 

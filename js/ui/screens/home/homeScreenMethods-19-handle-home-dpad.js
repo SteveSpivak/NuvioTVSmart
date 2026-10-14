@@ -1,4 +1,5 @@
 import * as internals from "./homeScreenContext.js";
+import { ensureLabRowWindowForMove } from "./homeRowWindow.js";
 
 export function createHomeScreenMethods19() {
   const { getLegacySidebarSelectedNode, getModernSidebarSelectedNode, getDirectionFromKeyCode } = internals;
@@ -119,12 +120,16 @@ export function createHomeScreenMethods19() {
 
       if (direction === "up" || direction === "down") {
         const delta = direction === "up" ? -1 : 1;
-        const targetRow = row + delta;
-        const targetRowNodes = nav.rows[targetRow] || null;
+        ensureLabRowWindowForMove(this, current, delta);
+        const live = this.getCurrentFocusedNode() || current;
+        const liveRow = Number(live?.dataset?.navRow || 0);
+        const liveCol = Number(live?.dataset?.navCol || 0);
+        const targetRow = liveRow + delta;
+        const targetRowNodes = this.navModel?.rows?.[targetRow] || null;
         if (!targetRowNodes || !targetRowNodes.length) {
           return true;
         }
-        const target = this.resolvePreferredNodeForRow(targetRowNodes, col);
+        const target = this.resolvePreferredNodeForRow(targetRowNodes, liveCol);
         return this.focusNode(current, target, direction, inputMeta) || true;
       }
 

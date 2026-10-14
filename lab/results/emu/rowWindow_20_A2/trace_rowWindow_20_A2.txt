@@ -1,0 +1,48 @@
+TRACE rowWindow_20_A2 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18068 ms events 29857
+-- thread CrRendererMain (6834, 6834)  busy 930 ms
+        233 ms  x1466   RunTask
+        221 ms  x414    FunctionCall
+        120 ms  x329    UpdateLayerTree
+        106 ms  x364    UpdateLayoutTree
+         68 ms  x283    CompositeLayers
+         33 ms  x32     HitTest
+         32 ms  x257    Paint
+         27 ms  x198    RunMicrotasks
+         26 ms  x54     Layout
+         10 ms  x151    TimerFire
+         10 ms  x4267   UpdateLayer
+          9 ms  x394    EventDispatch
+          7 ms  x307    PaintImage
+          7 ms  x38     EvaluateScript
+          7 ms  x566    IntersectionObserverController::computeIntersections
+          5 ms  x88     ParseHTML
+-- thread Compositor (6834, 6849)  busy 836 ms
+        836 ms  x6006   RunTask
+-- thread CompositorTileWorker1 (6834, 6851)  busy 982 ms
+        975 ms  x3887   RasterTask
+          7 ms  x215    ImageDecodeTask
+-- thread VizCompositorThread (6803, 6854)  busy 4759 ms
+       4759 ms  x2907   RunTask
+-- thread CompositorTileWorkerBackground (6834, 6852)  busy 150 ms
+        148 ms  x234    RasterTask
+-- 20 longest single main-thread events
+        10 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1288}}
+         9 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1206}}
+         7 ms  FunctionCall         {"data": {"columnNumber": 837388, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "", "lineNumber": 1, "scriptId": "63", "url": "http://1
+         7 ms  FunctionCall         {"data": {"columnNumber": 837388, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "", "lineNumber": 1, "scriptId": "63", "url": "http://1
+         7 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1216}}
+         7 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1226}}
+         7 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1211}}
+         7 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1268}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1293}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1231}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1298}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1303}}
+         5 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1278}}
+         5 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1221}}
+         5 ms  CompositeLayers      {"layerTreeId": 1}
+         5 ms  FunctionCall         {"data": {"columnNumber": 837388, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "", "lineNumber": 1, "scriptId": "63", "url": "http://1
+         5 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1273}}
+         5 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1236}}
+         5 ms  FunctionCall         {"data": {"columnNumber": 837388, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "", "lineNumber": 1, "scriptId": "63", "url": "http://1
+         5 ms  FireAnimationFrame   {"data": {"frame": "6FEFED4957FB5406C96CB4124786E2C5", "id": 1283}}

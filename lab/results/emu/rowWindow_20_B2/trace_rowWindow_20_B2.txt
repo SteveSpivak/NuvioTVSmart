@@ -1,0 +1,56 @@
+TRACE rowWindow_20_B2 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18570 ms events 34234
+-- thread CrRendererMain (6834, 6834)  busy 1520 ms
+        456 ms  x424    UpdateLayoutTree
+        310 ms  x420    FunctionCall
+        188 ms  x1854   RunTask
+        148 ms  x287    CompositeLayers
+         86 ms  x333    UpdateLayerTree
+         66 ms  x118    Layout
+         65 ms  x224    RunMicrotasks
+         62 ms  x418    Paint
+         27 ms  x168    ParseHTML
+         14 ms  x2076   PaintImage
+         10 ms  x552    EventDispatch
+         10 ms  x1      V8.GC_MC_INCREMENTAL_START
+         10 ms  x32     HitTest
+          9 ms  x574    IntersectionObserverController::computeIntersections
+          8 ms  x146    TimerFire
+          8 ms  x1855   UpdateLayer
+-- thread Compositor (6834, 6849)  busy 721 ms
+        721 ms  x6312   RunTask
+-- thread CompositorTileWorker1 (6834, 6851)  busy 1415 ms
+       1386 ms  x4815   RasterTask
+         29 ms  x720    ImageDecodeTask
+-- thread VizCompositorThread (6803, 6854)  busy 4430 ms
+       4430 ms  x2788   RunTask
+-- thread CompositorTileWorkerBackground (6834, 6852)  busy 824 ms
+        693 ms  x953    RasterTask
+        131 ms  x911    ImageDecodeTask
+-- thread ThreadPoolForegroundWorker (6834, 6842)  busy 144 ms
+         72 ms  x34     ImageDecodeTask
+         67 ms  x34     Decode Image
+-- thread ThreadPoolForegroundWorker (6834, 6839)  busy 111 ms
+         51 ms  x23     Decode Image
+         47 ms  x23     ImageDecodeTask
+         10 ms  x3      V8.GC_MC_BACKGROUND_MARKING
+-- 20 longest single main-thread events
+        45 ms  EventDispatch        {"data": {"type": "keydown"}}
+        45 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        44 ms  EventDispatch        {"data": {"type": "keydown"}}
+        44 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        42 ms  EventDispatch        {"data": {"type": "keydown"}}
+        42 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        41 ms  EventDispatch        {"data": {"type": "keydown"}}
+        41 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        40 ms  EventDispatch        {"data": {"type": "keydown"}}
+        40 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        39 ms  EventDispatch        {"data": {"type": "keydown"}}
+        39 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        32 ms  EventDispatch        {"data": {"type": "keydown"}}
+        31 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        25 ms  EventDispatch        {"data": {"type": "keydown"}}
+        25 ms  EventDispatch        {"data": {"type": "keydown"}}
+        25 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        25 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "6FEFED4957FB5406C96CB4124786E2C5", "functionName": "handleKey", "lineNumber": 1, "scriptId": "78", "url":
+        23 ms  EventDispatch        {"data": {"type": "keydown"}}
+        23 ms  EventDispatch        {"data": {"type": "keydown"}}

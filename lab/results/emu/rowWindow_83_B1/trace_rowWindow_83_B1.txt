@@ -1,0 +1,56 @@
+TRACE rowWindow_83_B1 seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18780 ms events 33339
+-- thread CrRendererMain (7640, 7640)  busy 1649 ms
+        623 ms  x425    UpdateLayoutTree
+        326 ms  x422    FunctionCall
+        190 ms  x1813   RunTask
+        123 ms  x288    CompositeLayers
+         92 ms  x334    UpdateLayerTree
+         72 ms  x115    Layout
+         63 ms  x412    Paint
+         38 ms  x221    RunMicrotasks
+         20 ms  x168    ParseHTML
+         13 ms  x2036   PaintImage
+          9 ms  x147    TimerFire
+          9 ms  x33     HitTest
+          9 ms  x548    EventDispatch
+          8 ms  x1802   UpdateLayer
+          7 ms  x1      V8.GC_MC_INCREMENTAL_START
+          6 ms  x38     EvaluateScript
+-- thread Compositor (7640, 7649)  busy 729 ms
+        729 ms  x6265   RunTask
+-- thread CompositorTileWorker1 (7640, 7651)  busy 1389 ms
+       1359 ms  x4695   RasterTask
+         30 ms  x738    ImageDecodeTask
+-- thread VizCompositorThread (7603, 7653)  busy 4638 ms
+       4638 ms  x2790   RunTask
+-- thread CompositorTileWorkerBackground (7640, 7652)  busy 718 ms
+        632 ms  x930    RasterTask
+         86 ms  x815    ImageDecodeTask
+-- thread ThreadPoolForegroundWorker (7640, 7645)  busy 111 ms
+         50 ms  x19     ImageDecodeTask
+         48 ms  x19     Decode Image
+-- thread ThreadPoolForegroundWorker (7640, 7643)  busy 99 ms
+         42 ms  x15     Decode Image
+         38 ms  x15     ImageDecodeTask
+         10 ms  x6      V8.GC_MC_BACKGROUND_MARKING
+-- 20 longest single main-thread events
+        72 ms  EventDispatch        {"data": {"type": "keydown"}}
+        72 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        57 ms  EventDispatch        {"data": {"type": "keydown"}}
+        57 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        55 ms  EventDispatch        {"data": {"type": "keydown"}}
+        55 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        53 ms  EventDispatch        {"data": {"type": "keydown"}}
+        53 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        51 ms  EventDispatch        {"data": {"type": "keydown"}}
+        51 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        51 ms  EventDispatch        {"data": {"type": "keydown"}}
+        51 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        49 ms  EventDispatch        {"data": {"type": "keydown"}}
+        49 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        45 ms  EventDispatch        {"data": {"type": "keydown"}}
+        45 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        35 ms  EventDispatch        {"data": {"type": "keydown"}}
+        35 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
+        33 ms  EventDispatch        {"data": {"type": "keydown"}}
+        33 ms  FunctionCall         {"data": {"columnNumber": 3161878, "frame": "AA9843306E8C95443E85A87DFAC60CF3", "functionName": "handleKey", "lineNumber": 1, "scriptId": "37", "url":
