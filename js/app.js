@@ -174,12 +174,16 @@ function applyPerformanceMode() {
   const constrained = tvRuntime.isPerformanceConstrained || isLowEndDevice();
   const webOsMajorVersion = Platform.isWebOS() ? Number(Platform.getWebOsMajorVersion() || 0) : 0;
   const legacyWebOs = Platform.isWebOS() && tvRuntime.isLegacyTvRuntime;
-  // Chromium 87 webOS also stalls when every Modern Home track is promoted
-  // to a compositor layer. Keep this separate from API and motion policies.
+  // Chromium 87 webOS stalls when every Modern Home track is promoted to a
+  // compositor layer. The 2026-10-13 TV runs on Chromium 94 still show that
+  // shape (256 layers, about 140-150 megapixels with 83 rows). Extend the
+  // existing unpromote class through Chromium 94. This is not
+  // content-visibility, which was measured and rejected. Newer than 94 is
+  // untested. Keep this separate from API and motion policies.
   const unpromotedHomeTracks =
     Platform.isWebOS() &&
     tvRuntime.chromiumMajorVersion > 0 &&
-    tvRuntime.chromiumMajorVersion <= 87;
+    tvRuntime.chromiumMajorVersion <= 94;
   const legacyWebOs38 = Platform.isWebOS() && webOsMajorVersion > 0 && webOsMajorVersion <= 3;
   // Keep the Tizen class as a platform-layout fallback; performance gating is
   // handled exclusively by the runtime profile above.
