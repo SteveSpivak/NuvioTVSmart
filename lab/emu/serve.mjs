@@ -4,6 +4,7 @@
 //   /addon/catalog/<type>/<id>.json ITEMS synthetic titles per catalog
 //   /img/poster/<n>.jpg             500x750 JPEG (same size TMDB "w500" posters have)
 //   /img/backdrop/<n>.jpg           1280x720 JPEG
+//   TRAILER_YT=<YouTube id>         optional: every title gets this trailer (default none)
 // No real titles, accounts or keys. Every response can be delayed by LATENCY_MS to mimic the TV's network.
 import http from "node:http";
 import fs from "node:fs";
@@ -16,6 +17,7 @@ const PORT = +(process.env.PORT || 8090);
 const ROWS = +(process.env.ROWS || 20);
 const ITEMS = +(process.env.ITEMS || 40);
 const LATENCY_MS = +(process.env.LATENCY_MS || 150);
+const TRAILER_YT = process.env.TRAILER_YT || "";
 const ASSETS = path.join(HERE, "assets");
 const posters = fs
   .readdirSync(path.join(ASSETS, "posters"))
@@ -70,7 +72,8 @@ function metas(catId) {
       description: "Synthetic item for performance testing. ".repeat(3),
       releaseInfo: String(1990 + (n % 35)),
       imdbRating: (5 + (n % 50) / 10).toFixed(1),
-      genres: ["Drama", "Action", "Comedy"].slice(0, 1 + (n % 3))
+      genres: ["Drama", "Action", "Comedy"].slice(0, 1 + (n % 3)),
+      ...(TRAILER_YT ? { trailers: [{ source: TRAILER_YT, type: "Trailer" }] } : {})
     };
   });
 }

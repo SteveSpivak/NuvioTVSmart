@@ -7,12 +7,20 @@ import { labFixEnabled } from "../../../core/labSwitch.js";
 // startup. The warm layer sits right after the real layer and takes its place
 // on play, because moving an iframe in the DOM would reload it.
 const TRAILER_WARM_DELAY_MS = 1000;
+// Lab experiment "trailerIntent": on the TV the warm player runs on the app's
+// own thread and slows scrolling, so warm it only once focus rests on the
+// Trailer button instead of on every Details open.
+const TRAILER_INTENT_DELAY_MS = 600;
+const TRAILER_BUTTON_SELECTOR = '[data-action="toggleTrailer"]';
 
 export function createMetaDetailsScreenMethods19() {
   const { t, escapeHtml, buildInlineYoutubePlayerUrl } = internals;
 
   return {
     scheduleTrailerWarm() {
+      if (labFixEnabled("trailerIntent")) {
+        return;
+      }
       if (this.trailerWarmTimer) {
         clearTimeout(this.trailerWarmTimer);
       }
@@ -20,6 +28,24 @@ export function createMetaDetailsScreenMethods19() {
         this.trailerWarmTimer = null;
         this.warmTrailerPlayer();
       }, TRAILER_WARM_DELAY_MS);
+    },
+    // Called on every focus move inside Details. A warm player already made is
+    // kept until Details closes, because removing it costs about a second.
+    noteTrailerFocus(target) {
+      if (!labFixEnabled("trailerIntent")) {
+        return;
+      }
+      if (this.trailerWarmTimer) {
+        clearTimeout(this.trailerWarmTimer);
+        this.trailerWarmTimer = null;
+      }
+      if (!target?.matches?.(TRAILER_BUTTON_SELECTOR)) {
+        return;
+      }
+      this.trailerWarmTimer = setTimeout(() => {
+        this.trailerWarmTimer = null;
+        this.warmTrailerPlayer();
+      }, TRAILER_INTENT_DELAY_MS);
     },
     warmTrailerPlayer() {
       const ytId = String(this.trailerSource?.ytId || "").trim();

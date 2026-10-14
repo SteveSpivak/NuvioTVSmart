@@ -288,6 +288,7 @@ export function createMetaDetailsScreenMethods16() {
         if (!(target instanceof HTMLElement) || !this.container?.contains(target)) {
           return;
         }
+        this.noteTrailerFocus(target);
         if (!this.isTrailerPlaying) {
           if (target.matches('.series-detail-actions [data-action="playDefault"]')) {
             this.restartTrailerAutoplayTimer();
