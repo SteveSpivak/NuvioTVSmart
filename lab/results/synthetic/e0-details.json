@@ -1,0 +1,59 @@
+{
+ "sessionId": "e0-synthetic",
+ "label": "SYNTHETIC",
+ "synthetic": true,
+ "clock": "performance.now",
+ "markers": {
+  "visibleMs": 180,
+  "usableMs": 420,
+  "metadataReadyMs": 420,
+  "firstArtworkMs": 700,
+  "enrichmentCompleteMs": 1100,
+  "firstSelectableSourceMs": 1600,
+  "trailerReadyMs": 2000,
+  "contentMs": 9000,
+  "settledMs": 9000
+ },
+ "requests": [
+  {
+   "sessionId": "e0-synthetic",
+   "provider": "tmdb",
+   "category": "movie",
+   "role": "unknown",
+   "initiator": "fetch",
+   "startMs": 200,
+   "endMs": 340,
+   "ttfbMs": 60,
+   "status": null,
+   "cache": "network",
+   "failed": false,
+   "incomplete": false
+  },
+  {
+   "sessionId": "e0-synthetic",
+   "provider": "trakt",
+   "category": "comments",
+   "role": "optional-candidate",
+   "initiator": "fetch",
+   "startMs": 800,
+   "endMs": 1400,
+   "ttfbMs": 100,
+   "status": null,
+   "cache": "memory-or-disk",
+   "failed": false,
+   "incomplete": false
+  }
+ ],
+ "longTasks": [
+  {
+   "startMs": 420,
+   "durationMs": 180
+  }
+ ],
+ "jsonParseMs": null,
+ "normalizeMs": null,
+ "timingSupport": "unsupported",
+ "note": "settledMs is the last text or element-count change. It is not usable, metadata, artwork, enrichment, source, or trailer readiness.",
+ "verdict": "PASS",
+ "reason": "redacted-waterfall"
+}

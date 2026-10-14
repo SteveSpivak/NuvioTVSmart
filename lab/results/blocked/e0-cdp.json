@@ -1,0 +1,11 @@
+{
+ "sessionId": "e0-d2bcb52f",
+ "label": "BLOCKED",
+ "synthetic": false,
+ "verdict": "INCOMPLETE",
+ "reason": "cdp-unavailable",
+ "cdpUrlHost": "configured-endpoint",
+ "error": "ECONNREFUSED",
+ "emulator": "CHROME is unset and no Chromium binary is on PATH. lab/emu/start.mjs cannot start. This is not a TV measurement.",
+ "note": "No television or emulator CDP endpoint answered. This is not a TV measurement."
+}
