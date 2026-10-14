@@ -1,0 +1,7 @@
+{
+ "label": "BLOCKED",
+ "verdict": "INCOMPLETE",
+ "reason": "cdp-unavailable",
+ "error": "ECONNREFUSED",
+ "note": "Profiler.enable and Tracing.start were not run. No TV stack was measured. Historical long-task sums are not a floor."
+}

@@ -1,0 +1,7 @@
+{
+ "label": "BLOCKED",
+ "verdict": "INCOMPLETE",
+ "reason": "cdp-unavailable",
+ "error": "ECONNREFUSED",
+ "note": "Tracing.start was not run. No TV timeline was measured."
+}

@@ -1,0 +1,148 @@
+{
+ "label": "SYNTHETIC",
+ "verdict": "PASS",
+ "reason": "correlated",
+ "checks": [
+  {
+   "id": "yield-not-required",
+   "ok": true
+  },
+  {
+   "id": "unsupported-is-incomplete",
+   "ok": true
+  },
+  {
+   "id": "self-versus-inclusive",
+   "ok": true
+  },
+  {
+   "id": "absent-function-not-invented",
+   "ok": true
+  },
+  {
+   "id": "empty-profile-incomplete",
+   "ok": true
+  },
+  {
+   "id": "partial-trace-incomplete",
+   "ok": true
+  },
+  {
+   "id": "malformed-trace-invalid",
+   "ok": true
+  },
+  {
+   "id": "unordered-trace-invalid",
+   "ok": true
+  },
+  {
+   "id": "navigation-invalid",
+   "ok": true
+  },
+  {
+   "id": "redaction",
+   "ok": true
+  },
+  {
+   "id": "correlation-not-floor",
+   "ok": true
+  },
+  {
+   "id": "missing-baseline-incomplete",
+   "ok": true
+  },
+  {
+   "id": "synthetic-capture-pass",
+   "ok": true
+  }
+ ],
+ "summary": {
+  "verdict": "PASS",
+  "reason": "profile-parsed",
+  "functions": [
+   {
+    "functionName": "getTitleWatchedItems",
+    "selfUs": 1250,
+    "inclusiveUs": 1750
+   },
+   {
+    "functionName": "normalizeMetadata",
+    "selfUs": 500,
+    "inclusiveUs": 500
+   },
+   {
+    "functionName": "(root)",
+    "selfUs": 0,
+    "inclusiveUs": 1750
+   }
+  ],
+  "interesting": [
+   {
+    "functionName": "getTitleWatchedItems",
+    "present": true,
+    "selfUs": 1250,
+    "inclusiveUs": 1750
+   },
+   {
+    "functionName": "refreshContinueWatchingReleaseState",
+    "present": false,
+    "selfUs": null,
+    "inclusiveUs": null
+   },
+   {
+    "functionName": "openDetail",
+    "present": false,
+    "selfUs": null,
+    "inclusiveUs": null
+   },
+   {
+    "functionName": "enrichMeta",
+    "present": false,
+    "selfUs": null,
+    "inclusiveUs": null
+   },
+   {
+    "functionName": "normalizeMetadata",
+    "present": true,
+    "selfUs": 500,
+    "inclusiveUs": 500
+   },
+   {
+    "functionName": "discoverSources",
+    "present": false,
+    "selfUs": null,
+    "inclusiveUs": null
+   }
+  ]
+ },
+ "correlation": {
+  "clock": "performance.now",
+  "longTaskDurationMs": 40,
+  "userVisibleMs": 180,
+  "usableMs": 420,
+  "settledMs": 9000,
+  "overlaps": [
+   {
+    "startMs": 100,
+    "durationMs": 40,
+    "overlappingRequests": [
+     {
+      "provider": "tmdb",
+      "category": "movie",
+      "startMs": 90,
+      "endMs": 150
+     }
+    ]
+   }
+  ],
+  "note": "Long-task duration is CPU overlap, not user-visible latency, and not a floor."
+ },
+ "comparison": {
+  "verdict": "PASS",
+  "reason": "profiled-compared",
+  "visibleDeltaMs": 20,
+  "settledDeltaMs": 100,
+  "note": "A profile changes timing. Do not trust stacks without this comparison."
+ },
+ "note": "These stacks are fixture samples. They are not the historical 13s Home freeze, 6s watched match, or 2.2s addon-settings cost, and they are not a TV measurement."
+}
