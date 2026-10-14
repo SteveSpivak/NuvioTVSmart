@@ -42,3 +42,27 @@ export function watchedItemsShareIdentity(left = {}, right = {}) {
   const rightIds = watchedItemIdentityValues(right);
   return Array.from(watchedItemIdentityValues(left)).some((id) => rightIds.has(id));
 }
+
+/**
+ * Union of the identities of many items. Matching an item against this set gives the same
+ * answer as calling watchedItemsShareIdentity against each of them, in one pass.
+ */
+export function watchedIdentityIndex(items = []) {
+  const index = new Set();
+  (Array.isArray(items) ? items : []).forEach((item) =>
+    watchedItemIdentityValues(item).forEach((id) => index.add(id))
+  );
+  return index;
+}
+
+export function watchedItemHasIdentityIn(item = {}, identities = new Set()) {
+  if (!identities.size) {
+    return false;
+  }
+  for (const id of watchedItemIdentityValues(item)) {
+    if (identities.has(id)) {
+      return true;
+    }
+  }
+  return false;
+}

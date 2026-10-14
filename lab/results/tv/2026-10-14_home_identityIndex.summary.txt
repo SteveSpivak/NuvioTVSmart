@@ -1,0 +1,14 @@
+block	fix	cards	nodes	longTasks	longTaskMs	worstLongTaskMs	getTitleWatchedItemsMs
+1A	on	323	3125	52	20611	1170	598
+2B	off	216	1865	40	13672	1143	513
+3B	off	247	2234	45	14975	1144	573
+4A	on	216	1865	39	13333	1163	532
+5A	on	201	1802	47	12659	965	474
+6B	off	186	1638	48	12373	1024	379
+7B	off	186	1637	52	12820	1231	371
+8A	on	201	1693	44	12628	1132	481
+
+median (n)	fix on	fix off
+longTaskMs	12996 (4)	13246 (4)
+worstLongTaskMs	1148 (4)	1144 (4)
+getTitleWatchedItemsMs	506 (4)	446 (4)

@@ -1,0 +1,119 @@
+{
+ "order": "CDCD",
+ "dwellMs": 5000,
+ "results": [
+  {
+   "visibleMs": 656,
+   "contentMs": 3434,
+   "settledMs": 5553,
+   "lastRequestEndMs": 5488,
+   "requests": 17,
+   "images": 4,
+   "requestHosts": {
+    "api.trakt.tv": 15,
+    "v3-cinemeta.strem.io": 1,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 4,
+   "longTaskMs": 592,
+   "worstLongTaskMs": 377,
+   "kind": "cold",
+   "metrics": {
+    "TaskDuration": 2886,
+    "ScriptDuration": 253,
+    "RecalcStyleDuration": 133,
+    "LayoutDuration": 48,
+    "LayoutCount": 12,
+    "RecalcStyleCount": 25,
+    "Nodes": 734,
+    "JSHeapUsedSize": 7901888,
+    "NodesAfter": 103816
+   }
+  },
+  {
+   "visibleMs": 1186,
+   "contentMs": 2521,
+   "settledMs": 2521,
+   "lastRequestEndMs": 2388,
+   "requests": 5,
+   "images": 1,
+   "requestHosts": {
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 6,
+   "longTaskMs": 1130,
+   "worstLongTaskMs": 668,
+   "kind": "dwell",
+   "metrics": {
+    "TaskDuration": 2321,
+    "ScriptDuration": 313,
+    "RecalcStyleDuration": 110,
+    "LayoutDuration": 111,
+    "LayoutCount": 12,
+    "RecalcStyleCount": 21,
+    "Nodes": 761,
+    "JSHeapUsedSize": 6620052,
+    "NodesAfter": 111837
+   }
+  },
+  {
+   "visibleMs": 1567,
+   "contentMs": 2248,
+   "settledMs": 5702,
+   "lastRequestEndMs": 5623,
+   "requests": 6,
+   "images": 2,
+   "requestHosts": {
+    "catalog.nuvio.tv": 1,
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 7,
+   "longTaskMs": 1290,
+   "worstLongTaskMs": 749,
+   "kind": "cold",
+   "metrics": {
+    "TaskDuration": 2710,
+    "ScriptDuration": 299,
+    "RecalcStyleDuration": 129,
+    "LayoutDuration": 73,
+    "LayoutCount": 11,
+    "RecalcStyleCount": 25,
+    "Nodes": 983,
+    "JSHeapUsedSize": 3914268,
+    "NodesAfter": 119688
+   }
+  },
+  {
+   "visibleMs": 1123,
+   "contentMs": 2309,
+   "settledMs": 2309,
+   "lastRequestEndMs": 2196,
+   "requests": 5,
+   "images": 1,
+   "requestHosts": {
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 6,
+   "longTaskMs": 1200,
+   "worstLongTaskMs": 702,
+   "kind": "dwell",
+   "metrics": {
+    "TaskDuration": 2135,
+    "ScriptDuration": 266,
+    "RecalcStyleDuration": 109,
+    "LayoutDuration": 60,
+    "LayoutCount": 11,
+    "RecalcStyleCount": 17,
+    "Nodes": 739,
+    "JSHeapUsedSize": 6564988,
+    "NodesAfter": 122262
+   }
+  }
+ ]
+}

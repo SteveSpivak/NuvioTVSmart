@@ -1,0 +1,68 @@
+4 opens, busy (not idle) CPU sampled: 9491 ms, 2373 ms per open
+-- per open: script / style / layout ms (browser metrics), long tasks ms, settled ms
+  cold  script 253  style 133 (25x)  layout 48 (12x)  task 2886  long 592  settled 5553  nodes +734 -> 103816
+  dwell script 313  style 110 (21x)  layout 111 (12x)  task 2321  long 1130  settled 2521  nodes +761 -> 111837
+  cold  script 299  style 129 (25x)  layout 73 (11x)  task 2710  long 1290  settled 5702  nodes +983 -> 119688
+  dwell script 266  style 109 (17x)  layout 60 (11x)  task 2135  long 1200  settled 2309  nodes +739 -> 122262
+-- top self time
+      802 ms/open  33.8%  (program)                                        :0
+      341 ms/open  14.4%  dy                                               app.bundle.js:1
+      176 ms/open   7.4%  uy                                               app.bundle.js:1
+      147 ms/open   6.2%  getAll                                           app.bundle.js:1
+      123 ms/open   5.2%  (anonymous)                                      :3
+      118 ms/open   5.0%  (anonymous)                                      app.bundle.js:1
+       96 ms/open   4.0%  (garbage collector)                              :0
+       88 ms/open   3.7%  i.detailScrollHandler                            app.bundle.js:1
+       58 ms/open   2.4%  oy                                               app.bundle.js:1
+       32 ms/open   1.3%  parse                                            core-js.bundle.js:1
+       27 ms/open   1.2%  Hy                                               app.bundle.js:1
+       26 ms/open   1.1%  focus                                            :0
+       23 ms/open   1.0%  n0                                               app.bundle.js:1
+       22 ms/open   0.9%  _renderDetailSectionsNow                         app.bundle.js:1
+       21 ms/open   0.9%  fetch                                            :0
+       19 ms/open   0.8%  stringify                                        core-js.bundle.js:1
+       18 ms/open   0.8%  d                                                app.bundle.js:1
+       15 ms/open   0.6%  get                                              app.bundle.js:1
+       14 ms/open   0.6%  cy                                               app.bundle.js:1
+       13 ms/open   0.5%  enrichMeta                                       app.bundle.js:1
+       12 ms/open   0.5%  canonicalizeUrl                                  app.bundle.js:1
+       10 ms/open   0.4%  buildEpisodeState                                app.bundle.js:1
+        8 ms/open   0.3%  renderMovieLayout                                app.bundle.js:1
+        7 ms/open   0.3%  o                                                app.bundle.js:1
+        7 ms/open   0.3%  s                                                app.bundle.js:1
+-- top inclusive time (app functions)
+      576 ms/open  24.3%  uy                                               app.bundle.js:1
+      534 ms/open  22.5%  getAll                                           app.bundle.js:1
+      365 ms/open  15.4%  dy                                               app.bundle.js:1
+      310 ms/open  13.1%  Hy                                               app.bundle.js:1
+      251 ms/open  10.6%  cy                                               app.bundle.js:1
+      247 ms/open  10.4%  buildEpisodeState                                app.bundle.js:1
+      218 ms/open   9.2%  loadDetail                                       app.bundle.js:1
+      188 ms/open   7.9%  _renderDetailSectionsNow                         app.bundle.js:1
+      103 ms/open   4.3%  bindDetailChrome                                 app.bundle.js:1
+       88 ms/open   3.7%  i.detailScrollHandler                            app.bundle.js:1
+       86 ms/open   3.6%  get                                              app.bundle.js:1
+       65 ms/open   2.7%  isWatched                                        app.bundle.js:1
+       58 ms/open   2.4%  oy                                               app.bundle.js:1
+       45 ms/open   1.9%  renderMovieHeroMarkup                            app.bundle.js:1
+       44 ms/open   1.9%  getForProfile                                    app.bundle.js:1
+       44 ms/open   1.9%  renderHeroSection                                app.bundle.js:1
+       44 ms/open   1.8%  render                                           app.bundle.js:1
+       44 ms/open   1.8%  renderMovieLayout                                app.bundle.js:1
+       38 ms/open   1.6%  Nm                                               app.bundle.js:1
+       33 ms/open   1.4%  fetchTraktCommentsPage                           app.bundle.js:1
+       32 ms/open   1.3%  parse                                            core-js.bundle.js:1
+       31 ms/open   1.3%  renderHeroMetaRows                               app.bundle.js:1
+       29 ms/open   1.2%  getRecent                                        app.bundle.js:1
+       24 ms/open   1.0%  resolveDirectMetaType                            app.bundle.js:1
+       24 ms/open   1.0%  getInstalledAddons                               app.bundle.js:1
+       24 ms/open   1.0%  getMeta                                          app.bundle.js:1
+       23 ms/open   1.0%  readProfileScopedValue                           app.bundle.js:1
+       23 ms/open   1.0%  getActiveProfileId                               app.bundle.js:1
+       23 ms/open   1.0%  n0                                               app.bundle.js:1
+       23 ms/open   1.0%  Cm                                               app.bundle.js:1
+       23 ms/open   1.0%  setInitialFocus                                  app.bundle.js:1
+       21 ms/open   0.9%  readProfileScopedEnvelope                        app.bundle.js:1
+       21 ms/open   0.9%  stringify                                        core-js.bundle.js:1
+       20 ms/open   0.9%  getAddonEnabledStates                            app.bundle.js:1
+       19 ms/open   0.8%  isAddonEnabled                                   app.bundle.js:1

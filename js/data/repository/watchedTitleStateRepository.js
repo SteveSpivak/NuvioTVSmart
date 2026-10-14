@@ -3,8 +3,14 @@ import { TraktAuthService } from "./traktAuthService.js";
 import { metaRepository } from "./metaRepository.js";
 import { watchedItemsRepository } from "./watchedItemsRepository.js";
 import { getReleasedMainEpisodes, isSeriesType } from "./watchedSeriesReconciliationService.js";
-import { watchedItemIdentityValues, watchedItemsShareIdentity } from "./watchedIdentity.js";
+import {
+  watchedIdentityIndex,
+  watchedItemHasIdentityIn,
+  watchedItemIdentityValues,
+  watchedItemsShareIdentity
+} from "./watchedIdentity.js";
 import { mapWithConcurrency } from "../../core/network/mapWithConcurrency.js";
+import { labFixEnabled } from "../../core/labSwitch.js";
 
 const META_TIMEOUT_MS = 2500;
 const META_CONCURRENCY = 2;
@@ -240,6 +246,11 @@ class WatchedTitleStateRepository {
         )
       );
 
+    // Comparing every watched root with every partial title rebuilt both identity sets per pair
+    // and froze Home for seconds on webOS. One union set gives the same answer per entry.
+    const partialIdentities = labFixEnabled("identityIndex")
+      ? watchedIdentityIndex(partialItems)
+      : null;
     const withoutKnownPartialRoots = base.filter((entry) => {
       if (
         entry?.season != null ||
@@ -247,6 +258,9 @@ class WatchedTitleStateRepository {
         !isSeriesType(entry?.contentType || entry?.type)
       ) {
         return true;
+      }
+      if (partialIdentities) {
+        return !watchedItemHasIdentityIn(entry, partialIdentities);
       }
       return !partialItems.some((catalogItem) => watchedItemsShareIdentity(entry, catalogItem));
     });

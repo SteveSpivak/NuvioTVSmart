@@ -243,3 +243,78 @@ CDP_URL=http://127.0.0.1:19998 DEVICE=tv lab/perf/run-suite.sh unpromote94_20row
 ## Next decision
 
 Measure `unpromote94_20rows` on the television before any more code. If frame rate does not improve, revert the cutoff. Row removal is the next idea only after that result.
+
+## 2026-10-14 update: Trakt watched-list reuse (`watchedMemo`), TV A/B
+
+Branch `perf/watched-remote-memo`, installed side by side as "Nuvio Lab" (`space.nuvio.lab`) and switched with
+localStorage `nuvioLabOff`. Runner `lab/perf/details_ab.mjs`, blocks A/B/B/A, opens cold/dwell/dwell/cold,
+CPU profile per open. Data: `lab/results/tv/2026-10-14r3_ab_watchedMemo_*`, summary in
+`2026-10-14r3_ab_watchedMemo.summary.txt`. All numbers MEASURED, medians, n = 4 per cell.
+
+| Cold opens                             | Fix on | Fix off |
+| -------------------------------------- | ------ | ------- |
+| Text content shown (ms)                | 3302   | 4740    |
+| Settled (ms)                           | 5524   | 5529    |
+| Worst long task (ms)                   | 386    | 1127    |
+| CPU in watched-identity functions (ms) | 472    | 868     |
+
+Dwell opens showed no difference. One open with the fix on froze for 13 s (block 4A, trial 2).
+
+Decision: **UNKNOWN**. The direction favours the fix on cold opens, but n is small and settle time did not move.
+Do not merge on this evidence.
+
+Findings from the profiles (MEASURED, cause VERIFIED in the profile call trees):
+
+1. The 13 s freeze was on Home, not in details: `getTitleWatchedItems` spent 6.0 s in
+   `watchedItemsShareIdentity` (5.1 s) after the reload refreshed the rows. It compares every row item with every
+   watched item and rebuilds identity strings and RegExps each time. The memo does not touch this path. The
+   blocked thread made the app read OK as a long press and open the card menu; `details.mjs` now closes it with Back.
+2. A cold open with the fix off spent 2.2 s in `getInstalledAddons`, mostly `readProfileScopedValue` and
+   `canonicalizeUrl`: addon settings are parsed from localStorage and normalized again on every metadata lookup.
+
+Next decision: an identity-key index for `getTitleWatchedItems` and `buildEpisodeState` (one Set lookup per item),
+which addresses finding 1 and the details cost together. Then a cache for the parsed addon state (finding 2).
+
+## 2026-10-14 update: watched identity index (`identityIndex`), TV A/B
+
+Branch `perf/watched-identity-index`, fix commit `7d58ca7` (built on the unmerged `watchedMemo` commit `8b7c46a`).
+Switch: localStorage `nuvioLabOff=identityIndex` turns the fix off. The index is built per call and never stored,
+so it needs no invalidation and holds no memory after the call.
+
+Correctness (SYNTHETIC, `lab/checks/watched-identity-index.test.mjs`): 4 of 4 pass. 20,000 seeded random cases give
+the same answer as pairwise matching; Home projection and details episode state are identical with the fix on and
+off. Home projection of 300 shows: 35.4 ms off, 3.9 ms on.
+
+Details opens, A/B/B/A x C/D/D/C (MEASURED, n = 8 per side, `2026-10-14_ab_identityIndex.summary.txt`):
+
+| Median                                 | Fix on | Fix off |
+| -------------------------------------- | ------ | ------- |
+| Watched-matching CPU, all opens        | 256 ms | 380 ms  |
+| Watched-matching CPU, after Home dwell | 370 ms | 2408 ms |
+| Worst long task                        | 483 ms | 677 ms  |
+| Freezes that opened the card menu      | 0      | 2       |
+
+Home reload, A/B/B/A/A/B/B/A, 30 s each, no keys (MEASURED, n = 4 per side,
+`2026-10-14_home_identityIndex.summary.txt`):
+
+| Median                               | Fix on   | Fix off  |
+| ------------------------------------ | -------- | -------- |
+| `getTitleWatchedItems` inclusive CPU | 506 ms   | 446 ms   |
+| Long tasks total                     | 12996 ms | 13246 ms |
+| Worst long task                      | 1148 ms  | 1144 ms  |
+
+Cards loaded in 30 s varied from 186 to 323 between blocks, so the totals are only roughly comparable.
+
+Reading:
+
+1. On a fresh Home load the matching costs about 0.5 s either way. The fix does not help there. (MEASURED)
+2. The 6 s Home cost and the card-menu freezes appear only after Home has been open and refreshed several times.
+   There the fix cuts watched-matching CPU about 6x. (MEASURED in details dwell opens; Home dwell NOT_RUN)
+3. Likely cause of that growth: `refreshWatchedTitleState` may append fully-watched markers to `this.watchedItems` on
+   every refresh, so the list grows. (INFERRED, not tested; separate hypothesis)
+
+Not run: profile switching, mark watched/unwatched on TV, D-pad latency, frame stalls, peak memory.
+
+Decision: **UNKNOWN**. Equivalent results and a clear win in the long-dwell state, but no win on a cold Home load
+and the root cause of the growth is untested. Do not merge. Next: test the marker-growth hypothesis on its own
+branch, then re-measure Home after dwell with this fix on and off.

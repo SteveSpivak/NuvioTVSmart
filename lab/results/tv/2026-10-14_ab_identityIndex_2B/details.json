@@ -1,0 +1,117 @@
+{
+ "order": "CDDC",
+ "dwellMs": 5000,
+ "results": [
+  {
+   "visibleMs": 1328,
+   "contentMs": 2717,
+   "settledMs": 6226,
+   "lastRequestEndMs": 8717,
+   "requests": 109,
+   "images": 2,
+   "requestHosts": {
+    "catalog.nuvio.tv": 54,
+    "izlemeli.github.io": 51,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 7,
+   "longTaskMs": 1636,
+   "worstLongTaskMs": 761,
+   "kind": "cold",
+   "metrics": {
+    "TaskDuration": 6613,
+    "ScriptDuration": 416,
+    "RecalcStyleDuration": 165,
+    "LayoutDuration": 210,
+    "LayoutCount": 10,
+    "RecalcStyleCount": 30,
+    "Nodes": 562,
+    "JSHeapUsedSize": -1672248,
+    "NodesAfter": 34925
+   }
+  },
+  {
+   "visibleMs": 1936,
+   "contentMs": 3311,
+   "settledMs": 3311,
+   "lastRequestEndMs": 2916,
+   "requests": 7,
+   "images": 1,
+   "requestHosts": {
+    "api.trakt.tv": 5,
+    "api.themoviedb.org": 2
+   },
+   "longTasks": 8,
+   "longTaskMs": 2109,
+   "worstLongTaskMs": 593,
+   "kind": "dwell",
+   "metrics": {
+    "TaskDuration": 3926,
+    "ScriptDuration": 602,
+    "RecalcStyleDuration": 158,
+    "LayoutDuration": 252,
+    "LayoutCount": 9,
+    "RecalcStyleCount": 27,
+    "Nodes": 1840,
+    "JSHeapUsedSize": -8890752,
+    "NodesAfter": 74212
+   }
+  },
+  {
+   "visibleMs": null,
+   "contentMs": null,
+   "settledMs": null,
+   "lastRequestEndMs": 7391,
+   "requests": 3,
+   "images": 0,
+   "requestHosts": {
+    "api.trakt.tv": 3
+   },
+   "longTasks": 13,
+   "longTaskMs": 10598,
+   "worstLongTaskMs": 997,
+   "kind": "dwell",
+   "metrics": {
+    "TaskDuration": 11714,
+    "ScriptDuration": 727,
+    "RecalcStyleDuration": 38,
+    "LayoutDuration": 25,
+    "LayoutCount": 5,
+    "RecalcStyleCount": 22,
+    "Nodes": 6498,
+    "JSHeapUsedSize": -10416376,
+    "NodesAfter": 108448
+   },
+   "longPressMenu": true
+  },
+  {
+   "visibleMs": 728,
+   "contentMs": 2493,
+   "settledMs": 5473,
+   "lastRequestEndMs": 5299,
+   "requests": 11,
+   "images": 1,
+   "requestHosts": {
+    "catalog.nuvio.tv": 1,
+    "api.trakt.tv": 8,
+    "api.themoviedb.org": 2
+   },
+   "longTasks": 10,
+   "longTaskMs": 1543,
+   "worstLongTaskMs": 556,
+   "kind": "cold",
+   "metrics": {
+    "TaskDuration": 2799,
+    "ScriptDuration": 525,
+    "RecalcStyleDuration": 222,
+    "LayoutDuration": 243,
+    "LayoutCount": 12,
+    "RecalcStyleCount": 63,
+    "Nodes": 2537,
+    "JSHeapUsedSize": 45688,
+    "NodesAfter": 111326
+   }
+  }
+ ]
+}
