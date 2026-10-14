@@ -4,6 +4,29 @@
 
 This session could not create `perf/<idea>` branches. The cutoff change is on `arena/0ffafbca-nuvio-perf-lab`. Agent skills were NOT_AVAILABLE.
 
+## Update 2026-10-14: television result for the unpromote idea
+
+**Rejected as a speed fix. On the television, unpromoting the Home tracks lowered warm frame rate (46.5 to 41.8) and roughly doubled compositing and paint time. It did cut layer memory from about 170 megabytes to 8.** MEASURED. Do not merge the `<= 94` cutoff from `arena/0ffafbca-nuvio-perf-lab`.
+
+Method: Nuvio 1.2.5-lg1 on the LG 65UR78006LL, 20 rows, effects Reduced, default 38-key suite. No install. The class `webos-unpromoted-home-tracks` was added to `<html>` and `<body>` on the live page through the debug port, then removed. That is what the cutoff change does at startup. Runs alternated with and without the class after the app was restarted.
+
+| Run (`lab/results/tv/`)    | Tracks promoted | Frames per second | Frames over 50 ms | Worst frame | Long tasks total | CompositeLayers | Paint      | Tile worker busy | Layers | Layer memory |
+| -------------------------- | --------------- | ----------------- | ----------------- | ----------- | ---------------- | --------------- | ---------- | ---------------- | ------ | ------------ |
+| `2026-10-14_L2_promoted`   | yes             | 32.0              | 66                | 600 ms      | 5464 ms          | 1400 ms         | 346 ms     | 3351 ms          | 67     | 168 MB       |
+| `2026-10-14_L3_unpromoted` | no              | 40.7              | 49                | 217 ms      | 2479 ms          | 2112 ms         | 925 ms     | 4510 ms          | 8      | 8 MB         |
+| `2026-10-14_L4_promoted`   | yes             | **46.5**          | **29**            | 283 ms      | **1911 ms**      | **1285 ms**     | **323 ms** | **2842 ms**      | 67     | 170 MB       |
+| `2026-10-14_L5_unpromoted` | no              | 41.8              | 45                | **200 ms**  | 2774 ms          | 2847 ms         | 895 ms     | 6114 ms          | 8      | **8 MB**     |
+
+How to read it:
+
+- Frame rate rose with every run as the app warmed up after a restart (32, 41, 46.5). Compare the two warm runs, L4 and L5.
+- Unpromoted wins only on worst frame and layer memory. It loses on frame rate, slow frames, compositing, paint and raster.
+- Same shape as the rejected `content-visibility` test: fewer layers, more paint. The emulator flagged this too (raster time rose, frame rate flat).
+- `2026-10-14_L1_promoted` (24.3 frames per second) ran right after a television restart and is not comparable.
+- Open: memory may still matter at 83 rows, where promoted layers exceeded the 250 megabyte cap. Not tested.
+
+Next idea: row windowing. Keep only rows near the focus in the document, as Stremio's visible-catalog window does. That removes layers and paint together, instead of trading one for the other.
+
 ## Setup
 
 | Step                                                                | Result                                                                 |

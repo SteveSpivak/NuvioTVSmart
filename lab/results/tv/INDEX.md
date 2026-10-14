@@ -16,3 +16,15 @@ Same 38-key sequence for every run except `home1`/`baseA` (early sequences).
 | R2_trimmed | 20 (real trim)                       | warmed up                          | best result                              |
 
 Caveat: 83-row runs started near row 15, 20-row runs at the top.
+
+## 2026-10-14 (Nuvio 1.2.5-lg1, 20 rows, effects "Reduced")
+
+Unpromote test: the class `webos-unpromoted-home-tracks` was toggled on the live page. Nothing was installed. Verdict is in `lab/FINDINGS.md`.
+
+| Run           | Tracks promoted | Notes                                    |
+| ------------- | --------------- | ---------------------------------------- |
+| L1_promoted   | yes             | right after a TV restart, not comparable |
+| L2_promoted   | yes             | cold after app restart                   |
+| L3_unpromoted | no              |                                          |
+| L4_promoted   | yes             | warm baseline                            |
+| L5_unpromoted | no              | warm, compare with L4                    |
