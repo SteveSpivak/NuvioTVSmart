@@ -1,0 +1,64 @@
+TRACE 2026-10-14_L4_promoted seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 20478 ms events 43939
+-- thread CrRendererMain (2709, 2709)  busy 7213 ms
+       1529 ms  x1769   RunTask
+       1285 ms  x408    CompositeLayers
+       1098 ms  x392    FunctionCall
+       1081 ms  x473    UpdateLayoutTree
+        755 ms  x427    UpdateLayerTree
+        323 ms  x613    Paint
+        274 ms  x38     HitTest
+        177 ms  x9772   UpdateLayer
+        163 ms  x249    RunMicrotasks
+        140 ms  x816    IntersectionObserverController::computeIntersections
+        127 ms  x64     Layout
+         59 ms  x390    EventDispatch
+         53 ms  x895    PaintImage
+         37 ms  x137    TimerFire
+         24 ms  x74     ParseHTML
+         21 ms  x112    FireAnimationFrame
+-- thread Compositor (2709, 2725)  busy 3635 ms
+       3635 ms  x6879   RunTask
+-- thread Chrome_InProcGpuThread (2758, 2546)  busy 9887 ms
+       6576 ms  x2933   RunTask
+       3311 ms  x732    GPUTask
+-- thread CompositorTileWorker1 (2709, 2728)  busy 2842 ms
+       2108 ms  x3515   RasterTask
+        649 ms  x27     Decode Image
+         43 ms  x30     ImageDecodeTask
+         38 ms  x43     ImageUploadTask
+-- thread VizCompositorThread (2758, 2575)  busy 1653 ms
+       1653 ms  x3488   RunTask
+-- thread CrBrowserMain (2758, 2758)  busy 190 ms
+        181 ms  x1170   RunTask
+          9 ms  x76     LatencyInfo.Flow
+-- thread Chrome_ChildIOThread (2709, 2721)  busy 72 ms
+         72 ms  x791    RunTask
+-- thread Chrome_ChildIOThread (2758, 2547)  busy 80 ms
+         80 ms  x587    RunTask
+-- thread ThreadPoolForegroundWorker (2709, 3132)  busy 873 ms
+        601 ms  x17     Decode Image
+        263 ms  x17     ImageDecodeTask
+-- thread CompositorTileWorkerBackground (2709, 2729)  busy 555 ms
+        532 ms  x13     Decode Image
+         19 ms  x13     ImageDecodeTask
+-- 20 longest single main-thread events
+       120 ms  FireAnimationFrame   {"data": {"frame": "C490634B2BDF6110137A00DDBC9A326E", "id": 3359}}
+        91 ms  CompositeLayers      {"frameSeqId": 16358, "layerTreeId": 1}
+        81 ms  CompositeLayers      {"frameSeqId": 16398, "layerTreeId": 1}
+        80 ms  FunctionCall         {"data": {"columnNumber": 827839, "frame": "C490634B2BDF6110137A00DDBC9A326E", "functionName": "", "lineNumber": 1, "scriptId": "16", "url": "file:///
+        74 ms  FireAnimationFrame   {"data": {"frame": "C490634B2BDF6110137A00DDBC9A326E", "id": 3353}}
+        71 ms  CompositeLayers      {"frameSeqId": 16804, "layerTreeId": 1}
+        67 ms  CompositeLayers      {"frameSeqId": 16845, "layerTreeId": 1}
+        62 ms  CompositeLayers      {"frameSeqId": 16275, "layerTreeId": 1}
+        62 ms  CompositeLayers      {"frameSeqId": 16922, "layerTreeId": 1}
+        62 ms  CompositeLayers      {"frameSeqId": 16882, "layerTreeId": 1}
+        61 ms  CompositeLayers      {"frameSeqId": 17045, "layerTreeId": 1}
+        59 ms  EventDispatch        {"data": {"type": "keydown"}}
+        59 ms  CompositeLayers      {"frameSeqId": 16195, "layerTreeId": 1}
+        59 ms  FunctionCall         {"data": {"columnNumber": 3140529, "frame": "C490634B2BDF6110137A00DDBC9A326E", "functionName": "handleKey", "lineNumber": 1, "scriptId": "16", "url":
+        58 ms  FunctionCall         {"data": {"columnNumber": 827839, "frame": "C490634B2BDF6110137A00DDBC9A326E", "functionName": "", "lineNumber": 1, "scriptId": "16", "url": "file:///
+        57 ms  CompositeLayers      {"frameSeqId": 16440, "layerTreeId": 1}
+        53 ms  CompositeLayers      {"frameSeqId": 16235, "layerTreeId": 1}
+        48 ms  CompositeLayers      {"frameSeqId": 16961, "layerTreeId": 1}
+        45 ms  CompositeLayers      {"frameSeqId": 17004, "layerTreeId": 1}
+        44 ms  FireAnimationFrame   {"data": {"frame": "C490634B2BDF6110137A00DDBC9A326E", "id": 3397}}

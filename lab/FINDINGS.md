@@ -1,8 +1,31 @@
 # Findings
 
-**Every Home row is forced onto its own wide compositing layer, and that switch is off for the television's Chromium 94.** A one-line cutoff change turns the existing unpromote path on. Emulator layer memory fell from about 173 megabytes to 8. Frame rate did not change here, so this is not a television speed claim until the owner measures it.
+**Unpromoting Home tracks is rejected as a speed fix.** On the television, warm frame rate fell from 46.5 to 41.8, and paint and compositing roughly doubled. The next idea is row windowing: keep only rows near the focus in the document, so layers and paint leave together.
 
 This session could not create `perf/<idea>` branches. The cutoff change is on `arena/0ffafbca-nuvio-perf-lab`. Agent skills were NOT_AVAILABLE.
+
+## Update 2026-10-14: television result for the unpromote idea
+
+**Rejected as a speed fix. On the television, unpromoting the Home tracks lowered warm frame rate (46.5 to 41.8) and roughly doubled compositing and paint time. It did cut layer memory from about 170 megabytes to 8.** MEASURED. Do not merge the `<= 94` cutoff from `arena/0ffafbca-nuvio-perf-lab`.
+
+Method: Nuvio 1.2.5-lg1 on the LG 65UR78006LL, 20 rows, effects Reduced, default 38-key suite. No install. The class `webos-unpromoted-home-tracks` was added to `<html>` and `<body>` on the live page through the debug port, then removed. That is what the cutoff change does at startup. Runs alternated with and without the class after the app was restarted.
+
+| Run (`lab/results/tv/`)    | Tracks promoted | Frames per second | Frames over 50 ms | Worst frame | Long tasks total | CompositeLayers | Paint      | Tile worker busy | Layers | Layer memory |
+| -------------------------- | --------------- | ----------------- | ----------------- | ----------- | ---------------- | --------------- | ---------- | ---------------- | ------ | ------------ |
+| `2026-10-14_L2_promoted`   | yes             | 32.0              | 66                | 600 ms      | 5464 ms          | 1400 ms         | 346 ms     | 3351 ms          | 67     | 168 MB       |
+| `2026-10-14_L3_unpromoted` | no              | 40.7              | 49                | 217 ms      | 2479 ms          | 2112 ms         | 925 ms     | 4510 ms          | 8      | 8 MB         |
+| `2026-10-14_L4_promoted`   | yes             | **46.5**          | **29**            | 283 ms      | **1911 ms**      | **1285 ms**     | **323 ms** | **2842 ms**      | 67     | 170 MB       |
+| `2026-10-14_L5_unpromoted` | no              | 41.8              | 45                | **200 ms**  | 2774 ms          | 2847 ms         | 895 ms     | 6114 ms          | 8      | **8 MB**     |
+
+How to read it:
+
+- Frame rate rose with every run as the app warmed up after a restart (32, 41, 46.5). Compare the two warm runs, L4 and L5.
+- Unpromoted wins only on worst frame and layer memory. It loses on frame rate, slow frames, compositing, paint and raster.
+- Same shape as the rejected `content-visibility` test: fewer layers, more paint. The emulator flagged this too (raster time rose, frame rate flat).
+- `2026-10-14_L1_promoted` (24.3 frames per second) ran right after a television restart and is not comparable.
+- Open: memory may still matter at 83 rows, where promoted layers exceeded the 250 megabyte cap. Not tested.
+
+Next idea: row windowing. Keep only rows near the focus in the document, as Stremio's visible-catalog window does. That removes layers and paint together, instead of trading one for the other.
 
 ## Setup
 
@@ -31,13 +54,13 @@ Suggested throttle is the middle ratio, 6.8. Later runs used that throttle.
 
 ## Causes, ranked
 
-| Rank | Cause                                                                                  | Evidence                                                                                                                                                                                                                       | Label                                                                          | Fix                                                                                             |
-| ---- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| 1    | Too many Home rows stay in the page                                                    | Television: 83 rows about 37 to 38 frames per second and 5.9 to 6.7 seconds of stall time; 20 real rows about 49 frames per second and 1.2 seconds. Hiding extra rows with `display: none` barely moved frame rate (about 40). | MEASURED, read from `lab/results/tv` and `lab/README.md` this session          | Remove off-screen rows from the document. Not implemented. `content-visibility` stays rejected. |
-| 2    | `translateZ(0)` on every `.home-track`, and the unpromote class stopped at Chromium 87 | Television record: 256 layers and about 140 to 150 megapixels at 83 rows. Emulator: 49 layers and 45 megapixels at 20 rows; removing the promotion dropped that to 8 layers and 2 megapixels.                                  | MEASURED for the television record. SYNTHETIC and VERIFIED for the layer drop. | Implemented: unpromote through Chromium 94. Television frame rate NOT_RUN.                      |
-| 3    | Full effects do more compositing work per key                                          | Emulator main thread busy 894 milliseconds reduced versus 3650 milliseconds full, same 38 keys. Frame rate 57.9 versus 57.7.                                                                                                   | SYNTHETIC. Television full mode NOT_RUN.                                       | Do not ship a motion change from this alone. Measure full versus reduced on the television.     |
-| 4    | First pass while posters load                                                          | Laboratory record: worst frame about 1 second, cold Home about 45 seconds. This session did not retime the television. Emulator ready time was 8.0 to 10.6 seconds and is not that number.                                     | MEASURED only as stated in `lab/README.md`. Startup retime NOT_RUN.            | Bound the first catalog batch and image decode. Already partly done for reduced mode.           |
-| 5    | Live page holds far more nodes than Home                                               | Laboratory record: 135 thousand to 247 thousand nodes, Home about 10 thousand. Guest emulator Home had about 3.4 thousand elements. The extra nodes were not reproduced.                                                       | MEASURED as stated in the laboratory record. Cause UNKNOWN.                    | Do not guess a fix.                                                                             |
+| Rank | Cause                                         | Evidence                                                                                                                                                                                                                       | Label                                                                     | Fix                                                                                             |
+| ---- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 1    | Too many Home rows stay in the page           | Television: 83 rows about 37 to 38 frames per second and 5.9 to 6.7 seconds of stall time; 20 real rows about 49 frames per second and 1.2 seconds. Hiding extra rows with `display: none` barely moved frame rate (about 40). | MEASURED, read from `lab/results/tv` and `lab/README.md` this session     | Remove off-screen rows from the document. Not implemented. `content-visibility` stays rejected. |
+| 2    | `translateZ(0)` on every `.home-track`        | Television L4 versus L5: unpromoting cut layer memory 170 to 8 megabytes but frame rate 46.5 to 41.8, compositing 1285 to 2847 milliseconds, paint 323 to 895.                                                                 | MEASURED. REJECTED as a speed fix. Do not try a third layer-only variant. | Keep promotion on mounted rows. Remove off-screen rows instead.                                 |
+| 3    | Full effects do more compositing work per key | Emulator main thread busy 894 milliseconds reduced versus 3650 milliseconds full, same 38 keys. Frame rate 57.9 versus 57.7.                                                                                                   | SYNTHETIC. Television full mode NOT_RUN.                                  | Do not ship a motion change from this alone. Measure full versus reduced on the television.     |
+| 4    | First pass while posters load                 | Laboratory record: worst frame about 1 second, cold Home about 45 seconds. This session did not retime the television. Emulator ready time was 8.0 to 10.6 seconds and is not that number.                                     | MEASURED only as stated in `lab/README.md`. Startup retime NOT_RUN.       | Bound the first catalog batch and image decode. Already partly done for reduced mode.           |
+| 5    | Live page holds far more nodes than Home      | Laboratory record: 135 thousand to 247 thousand nodes, Home about 10 thousand. Guest emulator Home had about 3.4 thousand elements. The extra nodes were not reproduced.                                                       | MEASURED as stated in the laboratory record. Cause UNKNOWN.               | Do not guess a fix.                                                                             |
 
 Rejected earlier, still rejected: `content-visibility: auto` on rows, smaller `w342` posters, and drawing at 1080p (it already does).
 

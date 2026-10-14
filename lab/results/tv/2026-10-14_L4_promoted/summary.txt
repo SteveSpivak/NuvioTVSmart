@@ -1,0 +1,5 @@
+device=tv throttle= when=2026-10-14T13:33:40Z
+MODE: {"constrained":true,"stored":"\"reduced\"","rows":20}
+saved 2026-10-14_L4_promoted wallMs 20724 presses 38
+saved 2026-10-14_L4_promoted wallMs 20478 presses 38 events 43939
+LAYERS: {"layers":67,"drawing":65,"megapixels":45,"approxMB":170,"biggest":["28145x259","7320x347","8210x259","1920x1080","1920x1080","4284x347"]}
