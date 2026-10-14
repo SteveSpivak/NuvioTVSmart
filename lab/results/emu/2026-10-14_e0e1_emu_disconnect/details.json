@@ -1,0 +1,19 @@
+{
+ "schema": "nuvio-lab/details/2",
+ "device": "emu",
+ "order": "CCCC",
+ "dwellMs": 2000,
+ "waitMs": 12000,
+ "profile": "1",
+ "stacks": "async",
+ "sampleUs": 1000,
+ "capabilities": {
+  "debuggerPausesResumed": 0,
+  "network": true,
+  "asyncStacks": true,
+  "throttle": 6.8,
+  "profiler": true
+ },
+ "aborted": "DevTools connection closed",
+ "results": []
+}
