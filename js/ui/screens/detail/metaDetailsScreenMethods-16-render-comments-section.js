@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
+import { scheduleCastEager } from "./detailCastEager.js";
 
 export function createMetaDetailsScreenMethods16() {
   const {
@@ -252,6 +253,7 @@ export function createMetaDetailsScreenMethods16() {
     },
     bindDetailChrome() {
       this.observeEpisodeThumbnails();
+      this.castEagerTimer = scheduleCastEager(this.container, this.castEagerTimer);
       const content = this.container?.querySelector(".series-detail-content");
       if (!content) {
         return;

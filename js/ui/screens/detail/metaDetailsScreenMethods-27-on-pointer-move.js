@@ -87,6 +87,10 @@ export function createMetaDetailsScreenMethods27() {
       this.detailLoadToken = (this.detailLoadToken || 0) + 1;
       this.cancelTraktCommentsRequest();
       this.discardWarmTrailer();
+      if (this.castEagerTimer) {
+        clearTimeout(this.castEagerTimer);
+        this.castEagerTimer = null;
+      }
       if (this.seasonSwitchTimer) {
         clearTimeout(this.seasonSwitchTimer);
         this.seasonSwitchTimer = null;
