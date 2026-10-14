@@ -1,8 +1,6 @@
 {
   "ids": [
-    "missing-video-id-does-not-autoplay",
-    "home-7s-load-fallback-is-not-playback",
-    "home-direct-embed-state-is-not-first-frame"
+    "missing-video-id-does-not-autoplay"
   ],
-  "note": "Remaining required defects after the progress-unit reader fix. Policy cases are PASS documentation, not an allowlist. Remove an id in the same change that fixes it."
+  "note": "Remaining required defect after the Home readiness fix. A missing v still defaults to qBg39HCJiTU. Remove this id in the same change that fixes it."
 }

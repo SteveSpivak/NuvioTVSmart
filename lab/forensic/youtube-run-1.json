@@ -21,7 +21,10 @@
       "classification": "verified-behavior",
       "summary": "onReady posts ready and calls playVideo. currentTime is still 0, so firstFrame is not posted. API ready is not a decoded frame.",
       "evidence": {
-        "types": ["ready", "state"],
+        "types": [
+          "ready",
+          "state"
+        ],
         "state": 1,
         "currentTime": 0
       }
@@ -33,7 +36,9 @@
       "classification": "verified-behavior",
       "summary": "playerState 3 (buffering) does not emit firstFrame.",
       "evidence": {
-        "types": ["state"]
+        "types": [
+          "state"
+        ]
       }
     },
     {
@@ -114,26 +119,31 @@
       "evidence": {
         "beforeLoad": false,
         "beforeFallback": false,
-        "revealed": 1
+        "revealed": 0
       }
     },
     {
       "id": "home-7s-load-fallback-is-not-playback",
       "track": "youtube",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "7000ms after iframe load, Home adds is-active and calls onReady with no firstFrame and no currentTime. Iframe load plus a timer is treated as trailer readiness.",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "7000ms after iframe load adds is-unconfirmed and does not add is-active or call onReady. The surface is visible without counting as confirmed playback.",
       "evidence": {
-        "expected": "is-active only after a first-frame signal.",
+        "expected": {
+          "isActive": false,
+          "onReadyCalls": 0,
+          "isUnconfirmed": true
+        },
         "actual": {
-          "afterFallback": true,
-          "revealed": 1,
+          "afterFallback": false,
+          "revealed": 0,
+          "unconfirmed": true,
           "currentTime": 0
         },
         "callChain": [
           "homeScreenMethods-13-mount-trailer-layer.js frame load listener",
-          "setTimeout(reveal, 7000)",
-          "container.classList.add(is-active)"
+          "setTimeout(showUnconfirmed, 7000)",
+          "container.classList.add(is-unconfirmed)"
         ]
       }
     },
@@ -154,20 +164,62 @@
     {
       "id": "home-direct-embed-state-is-not-first-frame",
       "track": "youtube",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "Home reveals 1200ms after a controllable:false, loading:false state with currentTime 0. That is the direct-embed load signal, not a frame.",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A controllable:false, loading:false state at currentTime 0 shows is-unconfirmed after 1200ms and does not call onReady. Direct embed remains visible without a first-frame claim.",
       "evidence": {
-        "expected": "No is-active without currentTime > 0 or firstFrame.",
+        "expected": {
+          "isActive": false,
+          "onReadyCalls": 0,
+          "isUnconfirmed": true
+        },
         "actual": {
           "before": false,
-          "after": true
+          "after": false,
+          "revealed": 0,
+          "unconfirmed": true
         },
         "callChain": [
           "docs/youtube-proxy.html direct embed load posts loading:false currentTime:0",
           "homeScreenMethods-13 controllable === false && loading === false",
-          "reveal(1200)"
+          "showUnconfirmed(1200)"
         ]
+      }
+    },
+    {
+      "id": "home-unconfirmed-timeout-still-confirms-first-frame",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "API ready, buffering, and playing at currentTime 0 do not confirm. The 7s timeout shows is-unconfirmed, and a later firstFrame still calls onReady and replaces that class with is-active.",
+      "evidence": {
+        "ignoredEarly": true,
+        "unconfirmed": true,
+        "confirmed": true,
+        "revealed": 1
+      }
+    },
+    {
+      "id": "home-error-clears-unconfirmed-without-blocking-later-frame",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "An error message removes the unconfirmed surface and does not call onReady. A later playing state with currentTime > 0 can still confirm.",
+      "evidence": {
+        "clearedError": true,
+        "laterFrame": true,
+        "revealed": 1
+      }
+    },
+    {
+      "id": "home-unconfirmed-css-is-visible",
+      "track": "youtube",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "is-unconfirmed has a hero opacity rule and an expanded poster display rule, so timeout recovery is not left at opacity 0. It does not use trailer-active.",
+      "evidence": {
+        "heroRule": true,
+        "posterRule": true
       }
     },
     {
@@ -208,7 +260,7 @@
         "missing": null,
         "blank": null,
         "emptyUrl": "",
-        "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-9pbmy6"
+        "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-h84oss"
       }
     },
     {
@@ -225,8 +277,8 @@
     }
   ],
   "counts": {
-    "PASS": 12,
-    "FAIL": 3,
+    "PASS": 17,
+    "FAIL": 1,
     "NOT_RUN": 1
   }
 }

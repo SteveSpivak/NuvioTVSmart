@@ -221,7 +221,7 @@ const body = [
   "## Corrections and unchanged policy",
   "",
   "1. Reader fix: missing, null, blank, or non-positive duration does not scale a legacy position. A positive duration `<= 28800` still scales as a seconds pair. The writer still sends `position` and `duration` in milliseconds. `position_ms` is not added, because the published push RPC drops it.",
-  "2. Do not reveal the Home trailer on the 7000ms iframe-load timer or the 1200ms uncontrollable `loading:false` state unless `firstFrame` or `currentTime > 0` has arrived. Keep those timers as a loading affordance, not `is-active`.",
+  "2. Applied: the 7000ms load timer and the uncontrollable `loading:false` / `currentTime:0` state add `is-unconfirmed` and do not call `onReady`. `is-active` still requires `firstFrame` or `currentTime > 0` while not paused. CSS keeps the unconfirmed surface visible.",
   "3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.",
   "4. Unchanged policy, documented in `lab/forensic/SYNC-POLICY-PROPOSAL.md`: equal-`updatedAt` remote wins, 1500ms and 15000ms debounce, teardown cancels the pending push, Trakt skips Nuvio Sync, empty remote does not replace local.",
   "",

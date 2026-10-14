@@ -19,7 +19,41 @@ export function createHomeScreenMethods13() {
         frame.referrerPolicy = "strict-origin-when-cross-origin";
         let revealTimer = 0;
         let fallbackTimer = 0;
+        let unconfirmedTimer = 0;
         let revealed = false;
+        const clearPendingTimers = () => {
+          if (revealTimer) {
+            clearTimeout(revealTimer);
+            revealTimer = 0;
+          }
+          if (fallbackTimer) {
+            clearTimeout(fallbackTimer);
+            fallbackTimer = 0;
+          }
+          if (unconfirmedTimer) {
+            clearTimeout(unconfirmedTimer);
+            unconfirmedTimer = 0;
+          }
+        };
+        const markUnconfirmed = () => {
+          if (revealed || !frame.isConnected || frame.parentElement !== container) {
+            return;
+          }
+          container.classList.add("is-unconfirmed");
+        };
+        const showUnconfirmed = (delayMs = 0) => {
+          if (revealed || unconfirmedTimer || container.classList.contains("is-unconfirmed")) {
+            return;
+          }
+          if (delayMs <= 0) {
+            markUnconfirmed();
+            return;
+          }
+          unconfirmedTimer = setTimeout(() => {
+            unconfirmedTimer = 0;
+            markUnconfirmed();
+          }, delayMs);
+        };
         const reveal = (delayMs = 0) => {
           if (revealed || revealTimer) {
             return;
@@ -30,10 +64,8 @@ export function createHomeScreenMethods13() {
               return;
             }
             revealed = true;
-            if (fallbackTimer) {
-              clearTimeout(fallbackTimer);
-              fallbackTimer = 0;
-            }
+            clearPendingTimers();
+            container.classList.remove("is-unconfirmed");
             container.classList.add("is-active");
             onReady?.();
           }, delayMs);
@@ -46,6 +78,11 @@ export function createHomeScreenMethods13() {
           if (!data || typeof data !== "object" || data.source !== "nuvio-youtube-proxy") {
             return;
           }
+          if (data.type === "error") {
+            clearPendingTimers();
+            container.classList.remove("is-unconfirmed");
+            return;
+          }
           if (data.type === "firstFrame") {
             reveal(150);
             return;
@@ -54,19 +91,12 @@ export function createHomeScreenMethods13() {
           if (state && Number(state.currentTime || 0) > 0 && state.paused === false) {
             reveal(150);
           } else if (state && state.controllable === false && state.loading === false) {
-            reveal(1200);
+            showUnconfirmed(1200);
           }
         };
         const cleanup = () => {
           window.removeEventListener("message", handleProxyMessage);
-          if (revealTimer) {
-            clearTimeout(revealTimer);
-            revealTimer = 0;
-          }
-          if (fallbackTimer) {
-            clearTimeout(fallbackTimer);
-            fallbackTimer = 0;
-          }
+          clearPendingTimers();
         };
         this.homeTrailerFrameCleanup ||= new WeakMap();
         this.homeTrailerFrameCleanup.set(frame, cleanup);
@@ -75,7 +105,10 @@ export function createHomeScreenMethods13() {
           "load",
           () => {
             if (!revealed) {
-              fallbackTimer = setTimeout(() => reveal(), 7000);
+              fallbackTimer = setTimeout(() => {
+                fallbackTimer = 0;
+                showUnconfirmed();
+              }, 7000);
             }
           },
           { once: true }

@@ -184,7 +184,7 @@ export function createHomeScreenMethods12() {
         } catch (_) {}
       }
       container.innerHTML = "";
-      container.classList.remove("is-active");
+      container.classList.remove("is-active", "is-unconfirmed");
     },
     pauseTrailerLayer(container) {
       if (!container) {
@@ -250,7 +250,7 @@ export function createHomeScreenMethods12() {
         cleanup();
       }, MODERN_HOME_CONSTANTS.smartTvTrailerCleanupDelayMs);
       this.homeTrailerLayerCleanupTimers.set(container, cleanupState);
-      container.classList.remove("is-active");
+      container.classList.remove("is-active", "is-unconfirmed");
     },
     refreshPendingHomeTrailerCleanup() {
       if (!this.shouldUseImmediateFocusScroll()) {

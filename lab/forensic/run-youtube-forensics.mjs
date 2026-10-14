@@ -380,10 +380,12 @@ async function main() {
     const beforeFallback = container.classList.contains("is-active");
     page.clock.advance(1);
     const afterFallback = container.classList.contains("is-active");
+    const unconfirmed = container.classList.contains("is-unconfirmed");
+    const timeoutRecovered = afterFallback === false && revealed === 0 && unconfirmed === true;
     cases.push(
       caseResult(
         "home-load-is-not-immediate-ready",
-        beforeLoad === false && beforeFallback === false ? "PASS" : "FAIL",
+        beforeLoad === false && beforeFallback === false && revealed === 0 ? "PASS" : "FAIL",
         "verified-behavior",
         "Home does not mark the trailer active on iframe load, nor at 6999ms. The load event only arms a timer.",
         { beforeLoad, beforeFallback, revealed }
@@ -392,18 +394,18 @@ async function main() {
     cases.push(
       caseResult(
         "home-7s-load-fallback-is-not-playback",
-        afterFallback ? "FAIL" : "PASS",
-        afterFallback ? "reproduced-defect" : "verified-behavior",
-        afterFallback
-          ? "7000ms after iframe load, Home adds is-active and calls onReady with no firstFrame and no currentTime. Iframe load plus a timer is treated as trailer readiness."
-          : "The 7s load fallback did not reveal the trailer.",
+        timeoutRecovered ? "PASS" : "FAIL",
+        timeoutRecovered ? "verified-behavior" : "reproduced-defect",
+        timeoutRecovered
+          ? "7000ms after iframe load adds is-unconfirmed and does not add is-active or call onReady. The surface is visible without counting as confirmed playback."
+          : "The 7s load fallback still confirmed playback, or it left the trailer with no visible recovery class.",
         {
-          expected: "is-active only after a first-frame signal.",
-          actual: { afterFallback, revealed, currentTime: 0 },
+          expected: { isActive: false, onReadyCalls: 0, isUnconfirmed: true },
+          actual: { afterFallback, revealed, unconfirmed, currentTime: 0 },
           callChain: [
             "homeScreenMethods-13-mount-trailer-layer.js frame load listener",
-            "setTimeout(reveal, 7000)",
-            "container.classList.add(is-active)"
+            "setTimeout(showUnconfirmed, 7000)",
+            "container.classList.add(is-unconfirmed)"
           ]
         }
       )
@@ -469,10 +471,14 @@ async function main() {
   {
     const home = homeScreen(createHomeScreenMethods12, createHomeScreenMethods13);
     const container = globalThis.document.createElement("div");
-    home.mountTrailerLayer(container, {
-      kind: "youtube",
-      embedUrl: "https://nuvio.local/youtube-proxy.html?v=abcdefghijk"
-    });
+    let revealed = 0;
+    home.mountTrailerLayer(
+      container,
+      { kind: "youtube", embedUrl: "https://nuvio.local/youtube-proxy.html?v=abcdefghijk" },
+      () => {
+        revealed += 1;
+      }
+    );
     const frame = container.querySelector("iframe");
     globalThis.window.dispatchMessage({
       source: frame.contentWindow,
@@ -486,21 +492,23 @@ async function main() {
     const before = container.classList.contains("is-active");
     page.clock.advance(1);
     const after = container.classList.contains("is-active");
+    const unconfirmed = container.classList.contains("is-unconfirmed");
+    const recovered = before === false && after === false && revealed === 0 && unconfirmed === true;
     cases.push(
       caseResult(
         "home-direct-embed-state-is-not-first-frame",
-        after ? "FAIL" : "PASS",
-        after ? "reproduced-defect" : "verified-behavior",
-        after
-          ? "Home reveals 1200ms after a controllable:false, loading:false state with currentTime 0. That is the direct-embed load signal, not a frame."
-          : "Direct-embed state did not reveal without a frame.",
+        recovered ? "PASS" : "FAIL",
+        recovered ? "verified-behavior" : "reproduced-defect",
+        recovered
+          ? "A controllable:false, loading:false state at currentTime 0 shows is-unconfirmed after 1200ms and does not call onReady. Direct embed remains visible without a first-frame claim."
+          : "Direct-embed state still confirmed playback, or the unconfirmed surface was not shown.",
         {
-          expected: "No is-active without currentTime > 0 or firstFrame.",
-          actual: { before, after },
+          expected: { isActive: false, onReadyCalls: 0, isUnconfirmed: true },
+          actual: { before, after, revealed, unconfirmed },
           callChain: [
             "docs/youtube-proxy.html direct embed load posts loading:false currentTime:0",
             "homeScreenMethods-13 controllable === false && loading === false",
-            "reveal(1200)"
+            "showUnconfirmed(1200)"
           ]
         }
       )
@@ -520,7 +528,143 @@ async function main() {
       }
     );
     const frame = container.querySelector("iframe");
+    const post = (data) =>
+      globalThis.window.dispatchMessage({ source: frame.contentWindow, data });
+    post({
+      source: "nuvio-youtube-proxy",
+      type: "ready",
+      videoId: "abcdefghijk"
+    });
+    post({
+      source: "nuvio-youtube-proxy",
+      type: "state",
+      state: { currentTime: 0, paused: false, loading: true, controllable: true, playerState: 3 }
+    });
+    post({
+      source: "nuvio-youtube-proxy",
+      type: "state",
+      state: { currentTime: 0, paused: false, loading: false, controllable: true, playerState: 1 }
+    });
+    page.clock.advance(2000);
+    const ignoredEarly =
+      revealed === 0 &&
+      !container.classList.contains("is-active") &&
+      !container.classList.contains("is-unconfirmed");
     frame.dispatchEvent({ type: "load" });
+    page.clock.advance(7000);
+    const unconfirmed = container.classList.contains("is-unconfirmed") && revealed === 0;
+    post({
+      source: "nuvio-youtube-proxy",
+      type: "firstFrame",
+      videoId: "abcdefghijk",
+      currentTime: 0.4
+    });
+    page.clock.advance(150);
+    const confirmed =
+      container.classList.contains("is-active") &&
+      !container.classList.contains("is-unconfirmed") &&
+      revealed === 1;
+    const ok = ignoredEarly && unconfirmed && confirmed;
+    cases.push(
+      caseResult(
+        "home-unconfirmed-timeout-still-confirms-first-frame",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "API ready, buffering, and playing at currentTime 0 do not confirm. The 7s timeout shows is-unconfirmed, and a later firstFrame still calls onReady and replaces that class with is-active."
+          : "Timeout recovery blocked a later firstFrame, or a zero-time state confirmed playback.",
+        { ignoredEarly, unconfirmed, confirmed, revealed }
+      )
+    );
+  }
+
+  resetPage();
+  {
+    const home = homeScreen(createHomeScreenMethods12, createHomeScreenMethods13);
+    const container = globalThis.document.createElement("div");
+    let revealed = 0;
+    home.mountTrailerLayer(
+      container,
+      { kind: "youtube", embedUrl: "https://nuvio.local/youtube-proxy.html?v=abcdefghijk" },
+      () => {
+        revealed += 1;
+      }
+    );
+    const frame = container.querySelector("iframe");
+    frame.dispatchEvent({ type: "load" });
+    page.clock.advance(7000);
+    globalThis.window.dispatchMessage({
+      source: frame.contentWindow,
+      data: { source: "nuvio-youtube-proxy", type: "error", videoId: "abcdefghijk" }
+    });
+    const clearedError =
+      revealed === 0 &&
+      !container.classList.contains("is-active") &&
+      !container.classList.contains("is-unconfirmed");
+    globalThis.window.dispatchMessage({
+      source: frame.contentWindow,
+      data: {
+        source: "nuvio-youtube-proxy",
+        type: "state",
+        state: { currentTime: 1.5, paused: false, loading: false, controllable: true }
+      }
+    });
+    page.clock.advance(150);
+    const laterFrame =
+      revealed === 1 &&
+      container.classList.contains("is-active") &&
+      !container.classList.contains("is-unconfirmed");
+    const ok = clearedError && laterFrame;
+    cases.push(
+      caseResult(
+        "home-error-clears-unconfirmed-without-blocking-later-frame",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "An error message removes the unconfirmed surface and does not call onReady. A later playing state with currentTime > 0 can still confirm."
+          : "Error handling confirmed playback or blocked a later frame.",
+        { clearedError, laterFrame, revealed }
+      )
+    );
+  }
+
+  resetPage();
+  {
+    const css = [
+      readFileSync(new URL("../../css/components-16.css", import.meta.url), "utf8"),
+      readFileSync(new URL("../../css/components-17.css", import.meta.url), "utf8")
+    ].join("\n");
+    const heroRule = css.includes(".home-hero-trailer-layer.is-unconfirmed");
+    const posterRule = css.includes(".home-poster-trailer-layer.is-unconfirmed");
+    const ok = heroRule && posterRule;
+    cases.push(
+      caseResult(
+        "home-unconfirmed-css-is-visible",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "is-unconfirmed has a hero opacity rule and an expanded poster display rule, so timeout recovery is not left at opacity 0. It does not use trailer-active."
+          : "The unconfirmed class has no visibility rule.",
+        { heroRule, posterRule }
+      )
+    );
+  }
+
+  resetPage();
+  {
+    const home = homeScreen(createHomeScreenMethods12, createHomeScreenMethods13);
+    const container = globalThis.document.createElement("div");
+    let revealed = 0;
+    home.mountTrailerLayer(
+      container,
+      { kind: "youtube", embedUrl: "https://nuvio.local/youtube-proxy.html?v=abcdefghijk" },
+      () => {
+        revealed += 1;
+      }
+    );
+    const frame = container.querySelector("iframe");
+    frame.dispatchEvent({ type: "load" });
+    page.clock.advance(7000);
     const listenersBefore = globalThis.window.listenerCount("message");
     home.clearTrailerLayer(container);
     const listenersAfter = globalThis.window.listenerCount("message");
@@ -530,6 +674,7 @@ async function main() {
       listenersAfter === 0 &&
       container.querySelector("iframe") == null &&
       !container.classList.contains("is-active") &&
+      !container.classList.contains("is-unconfirmed") &&
       revealed === 0 &&
       frame.src === "";
     cases.push(

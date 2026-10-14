@@ -413,6 +413,16 @@
   opacity: 1;
 }
 
+.home-screen-shell.home-layout-modern
+  .home-poster-card.is-expanded
+  .home-poster-trailer-layer.is-unconfirmed {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 1;
+  opacity: 1;
+}
+
 .home-screen-shell.home-layout-modern .home-continue-copy {
   left: 24px;
   right: 24px;
