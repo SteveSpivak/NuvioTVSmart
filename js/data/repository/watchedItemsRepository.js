@@ -7,6 +7,7 @@ import { TraktAuthService, requestJson as traktRequestJson } from "./traktAuthSe
 import { watchedItemIdentityValues, watchedItemsShareIdentity } from "./watchedIdentity.js";
 import { getSyncBackoffRemainingMs } from "../../core/sync/syncBackoffPolicy.js";
 import { registerSessionTeardownHandler } from "../../core/auth/sessionLifecycle.js";
+import { labFixEnabled } from "../../core/labSwitch.js";
 
 function activeProfileId() {
   return String(ProfileManager.getActiveProfileId() || "1");
@@ -515,7 +516,7 @@ class WatchedItemsRepository {
       // Flattening every watched episode and building its identity keys costs
       // hundreds of milliseconds on webOS, and details calls getAll twice per
       // open. Reuse the result while the Trakt caches return the same arrays.
-      let derived = this._traktRemoteDerived;
+      let derived = labFixEnabled("watchedMemo") ? this._traktRemoteDerived : null;
       if (!derived || derived.movies !== remoteMovies || derived.shows !== remoteShows) {
         const items = [
           ...remoteMovies,

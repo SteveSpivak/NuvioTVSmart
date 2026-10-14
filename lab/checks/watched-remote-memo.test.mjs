@@ -115,5 +115,15 @@ await test("new Trakt data after invalidation is not hidden by the reuse", async
   assert.ok(ids(all).includes("tt0000001:1:4"), "episode 4 from the refreshed Trakt list");
 });
 
+await test("lab switch off (nuvioLabOff=watchedMemo) rebuilds every call with the same result", async () => {
+  const on = ids(await repo.getAll());
+  localStorage.setItem("nuvioLabOff", "watchedMemo");
+  const before = repo._traktRemoteDerived;
+  const off = ids(await repo.getAll());
+  assert.notEqual(repo._traktRemoteDerived, before);
+  assert.deepEqual(off, on);
+  localStorage.removeItem("nuvioLabOff");
+});
+
 console.log(failed ? `${failed} FAILED` : "ALL PASSED");
 process.exit(failed ? 1 : 0);
