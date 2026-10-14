@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
+import { watchedItemHasIdentityIn, watchedItemIdentityValues } from "../../../data/repository/watchedIdentity.js";
+import { labFixEnabled } from "../../../core/labSwitch.js";
 
 export function createMetaDetailsScreenMethods05() {
   const {
@@ -96,9 +98,13 @@ export function createMetaDetailsScreenMethods05() {
       const contentId = String(this.params?.itemId || "");
       const contentReference = buildDetailContentReference(contentId, this.meta, this.params);
       this.enrichedWatchedState = remoteWatchedMap instanceof Map ? remoteWatchedMap : null;
+      // The title's identities are the same for every entry: build them once instead of per entry.
+      const referenceIds = labFixEnabled("identityIndex") ? watchedItemIdentityValues(contentReference) : null;
+      const sharesTitle = (entry) =>
+        referenceIds ? watchedItemHasIdentityIn(entry, referenceIds) : watchedItemsShareIdentity(entry, contentReference);
 
       (Array.isArray(progressItems) ? progressItems : []).forEach((entry) => {
-        if (!watchedItemsShareIdentity(entry, contentReference)) {
+        if (!sharesTitle(entry)) {
           return;
         }
         const season = Number(entry?.season || 0);
@@ -116,13 +122,7 @@ export function createMetaDetailsScreenMethods05() {
       (Array.isArray(watchedItems) ? watchedItems : []).forEach((entry) => {
         const season = Number(entry?.season || 0);
         const episode = Number(entry?.episode || 0);
-        if (
-          watchedItemsShareIdentity(entry, contentReference) &&
-          Number.isFinite(season) &&
-          season >= 0 &&
-          Number.isFinite(episode) &&
-          episode > 0
-        ) {
+        if (sharesTitle(entry) && Number.isFinite(season) && season >= 0 && Number.isFinite(episode) && episode > 0) {
           watchedKeys.add(`${season}:${episode}`);
         }
       });
