@@ -1,0 +1,11 @@
+{
+  "ids": [
+    "termination-before-push",
+    "conflict-equal-timestamp-remote-wins",
+    "short-position-duration-zero-roundtrip",
+    "missing-video-id-does-not-autoplay",
+    "home-7s-load-fallback-is-not-playback",
+    "home-direct-embed-state-is-not-first-frame"
+  ],
+  "note": "Known failures from 82789f7. Regression allows only these ids to FAIL. A new FAIL is a regression. A listed id that starts passing must be removed in the same change that fixes it."
+}

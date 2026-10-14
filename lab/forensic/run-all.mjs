@@ -4,6 +4,7 @@
 import { spawn, execSync } from "node:child_process";
 import { readFileSync, writeFileSync, copyFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { decideExit, summarizeCases } from "./exit-policy.mjs";
 
 function runNode(script) {
   return new Promise((resolve) => {
@@ -76,6 +77,21 @@ const commands = [
 ];
 
 const commandLog = [];
+{
+  const started = Date.now();
+  const result = await runNode("lab/forensic/exit-policy.test.mjs");
+  commandLog.push({
+    command: "node lab/forensic/exit-policy.test.mjs",
+    exitCode: result.code,
+    ms: Date.now() - started,
+    stderrBytes: result.stderr.length
+  });
+  if (result.code !== 0) {
+    console.error(result.stdout);
+    console.error(result.stderr);
+    process.exit(result.code || 1);
+  }
+}
 for (const command of commands) {
   const started = Date.now();
   const result = await runNode(command.script);
@@ -100,8 +116,27 @@ const youtube2 = JSON.parse(readFileSync(new URL("./youtube-run-2.json", forensi
 const repeatMatched =
   signature(sync1) === signature(sync2) && signature(youtube1) === signature(youtube2);
 
-const cases = [...sync2.cases, ...youtube2.cases];
-const counts = count(cases);
+const expectedFailureIds = process.env.FORENSIC_STRICT === "1"
+  ? []
+  : JSON.parse(readFileSync(new URL("./expected-failures.json", forensic), "utf8")).ids;
+const cases = [...sync2.cases, ...youtube2.cases].map((entry) => ({
+  ...entry,
+  expectation: expectedFailureIds.includes(entry.id) ? "expected" : "required"
+}));
+const counts = summarizeCases(cases);
+const mode = process.env.FORENSIC_MODE === "regression" ? "regression" : "investigate";
+const decision = decideExit({
+  mode,
+  cases,
+  repeatMatched,
+  expectedFailureIds
+});
+const strictDecision = decideExit({
+  mode: "regression",
+  cases,
+  repeatMatched,
+  expectedFailureIds: []
+});
 const head = execSync("git rev-parse HEAD", { cwd: root }).toString().trim();
 const branch = execSync("git rev-parse --abbrev-ref HEAD", { cwd: root }).toString().trim();
 const testsPresent = existsSync(new URL("../../tests", forensic));
@@ -112,6 +147,7 @@ function linesFor(entry) {
     `### ${entry.id}`,
     "",
     `- Verdict: **${entry.verdict}**`,
+    `- Expectation: ${entry.expectation || "required"}`,
     `- Classification: ${entry.classification}`,
     `- ${entry.summary}`,
     "",
@@ -147,10 +183,14 @@ const body = [
   `| --- | --- |`,
   `| PASS | ${counts.PASS} |`,
   `| FAIL | ${counts.FAIL} |`,
+  `| EXPECTED_FAIL | ${counts.EXPECTED_FAIL} |`,
   `| BLOCKED | ${counts.BLOCKED} |`,
   `| NOT_RUN | ${counts.NOT_RUN} |`,
   "",
-  `Suite cases: ${cases.length}. Existing plugin tests are not in this count; they are BLOCKED because \`tests/\` is absent.`,
+  `Suite cases: ${cases.length}. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because \`tests/\` is absent.`,
+  "",
+  `Runner mode: \`${mode}\`. Exit decision: ${decision.code} (${decision.reason}). Strict regression, treating every FAIL as required, would exit ${strictDecision.code}. Investigate exit 0 does not pass the expected failures.`,
+  `Node ${process.version}. FORENSIC_MODE=${process.env.FORENSIC_MODE || "investigate"}. FORENSIC_STRICT=${process.env.FORENSIC_STRICT || "0"}.`,
   "",
   "## Tooling",
   "",
@@ -180,7 +220,7 @@ const body = [
   "",
   "## Ranked corrections (not applied)",
   "",
-  "1. Send `position_ms` and `duration_ms` from `buildRemoteProgressEntries`, which `mapProgressRow` already prefers. Stops the 10s / duration 0 pull from becoming 10000000ms. Smallest sync fix with a regression on `short-position-duration-zero-roundtrip`.",
+  "1. Do not add `position_ms` to the push. The published self-host `sync_push_watch_progress` stores only `position` and `duration`, and the pull returns those columns. Fix the reader: missing, null, or non-positive duration must not scale a legacy position. Keep the seconds-pair scale only when a positive duration is `<= 28800`.",
   "2. Do not reveal the Home trailer on the 7000ms iframe-load timer or the 1200ms uncontrollable `loading:false` state unless `firstFrame` or `currentTime > 0` has arrived. Keep those timers as a loading affordance, not `is-active`.",
   "3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.",
   "4. Do not change the equal-`updatedAt` tie or the 1.5s / 15s debounce without a product decision. Both are implemented as written. The tie drops the local write. A kill inside the debounce keeps the local row and loses the cloud write.",
@@ -189,7 +229,7 @@ const body = [
   "## Not verifiable here",
   "",
   "- The first composited frame on the LG 65UR78006LL. `firstFrame` is a player-API signal.",
-  "- Whether the production Supabase RPC replaces the whole progress set or upserts. This mock upserts, matching the client comment that an empty push must not wipe remote rows.",
+  "- Live production data. The published self-host baseline upserts `watch_progress` and drops unknown entry keys. This mock matches that shape. It is not a live account.",
   "- Live account merge, Trakt history, and a second installed package id. This tree has only `space.nuvio.webos`.",
   "",
   "## Next task for local Claude",
@@ -206,7 +246,18 @@ if (!repeatMatched) {
 }
 
 writeFileSync(new URL("./RESULTS.md", forensic), body.join("\n"));
-console.log(JSON.stringify({ repeatMatched, counts, commands: commandLog }, null, 2));
-if (!repeatMatched || cases.length === 0) {
-  process.exit(1);
-}
+console.log(
+  JSON.stringify(
+    {
+      repeatMatched,
+      counts,
+      mode,
+      exit: decision,
+      strictRegressionExit: strictDecision.code,
+      commands: commandLog
+    },
+    null,
+    2
+  )
+);
+process.exit(decision.code);

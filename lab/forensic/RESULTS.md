@@ -1,15 +1,16 @@
 # Forensic test results
 
 Recorded by `node lab/forensic/run-all.mjs` on Node v22.22.3.
-Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `3ddd16e2c0a98f323524262adcf571706042b9b4`.
+Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `82789f7106cf23392e33f01b53b3e5907f90a5c4`.
 No live Supabase, Trakt, or TV call. Production sync and trailer code were not modified.
 
 ## Commands
 
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 6280ms
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 6018ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 237ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 235ms
+- `node lab/forensic/exit-policy.test.mjs` exit 0 in 46ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 5882ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 6370ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 271ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 368ms
 - Repeated each suite once. Verdict signatures matched: **yes**.
 - `tests/` is absent and gitignored. `npm test` was not run. Existing plugin tests: **BLOCKED**.
 - Full `npm run build` / webOS package: **NOT_RUN**. The suites imported the current modules, which is the practical parse check for this pass.
@@ -17,20 +18,23 @@ No live Supabase, Trakt, or TV call. Production sync and trailer code were not m
 ## Counts
 
 | Verdict | Count |
-| ------- | ----- |
-| PASS    | 35    |
-| FAIL    | 6     |
-| BLOCKED | 0     |
-| NOT_RUN | 1     |
+| --- | --- |
+| PASS | 35 |
+| FAIL | 6 |
+| EXPECTED_FAIL | 6 |
+| BLOCKED | 0 |
+| NOT_RUN | 1 |
 
-Suite cases: 42. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
+Suite cases: 42. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
+
+Runner mode: `investigate`. Exit decision: 0 (investigate). Strict regression, treating every FAIL as required, would exit 1. Investigate exit 0 does not pass the expected failures.
+Node v22.22.3. FORENSIC_MODE=investigate. FORENSIC_STRICT=0.
 
 ## Tooling
 
-- `node --check` on the four forensic runners: exit 0.
-- `./node_modules/.bin/eslint lab/forensic/**/*.mjs --no-ignore --quiet`: exit 0. The repo `npm run lint` target does not include `lab/`.
-- `npm run format:check`: exit 0 after Prettier on the forensic files.
-- `npm test` and `npm run build`: **BLOCKED** / **NOT_RUN**. `tests/` is absent. No webOS package was built.
+- `node --check` is not part of this runner. The runner's own exit code is the execution check.
+- Repo `npm run lint` was not run: `node_modules` is not installed, and `npx eslint` cannot load `@eslint/js` from the repo config. Status: **BLOCKED**.
+- `npm run build` was not run. Status: **NOT_RUN**.
 
 ## Reproduced failures
 
@@ -65,7 +69,7 @@ Suite cases: 42. Existing plugin tests are not in this count; they are BLOCKED b
 
 ## Ranked corrections (not applied)
 
-1. Send `position_ms` and `duration_ms` from `buildRemoteProgressEntries`, which `mapProgressRow` already prefers. Stops the 10s / duration 0 pull from becoming 10000000ms. Smallest sync fix with a regression on `short-position-duration-zero-roundtrip`.
+1. Do not add `position_ms` to the push. The published self-host `sync_push_watch_progress` stores only `position` and `duration`, and the pull returns those columns. Fix the reader: missing, null, or non-positive duration must not scale a legacy position. Keep the seconds-pair scale only when a positive duration is `<= 28800`.
 2. Do not reveal the Home trailer on the 7000ms iframe-load timer or the 1200ms uncontrollable `loading:false` state unless `firstFrame` or `currentTime > 0` has arrived. Keep those timers as a loading affordance, not `is-active`.
 3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.
 4. Do not change the equal-`updatedAt` tie or the 1.5s / 15s debounce without a product decision. Both are implemented as written. The tie drops the local write. A kill inside the debounce keeps the local row and loses the cloud write.
@@ -74,7 +78,7 @@ Suite cases: 42. Existing plugin tests are not in this count; they are BLOCKED b
 ## Not verifiable here
 
 - The first composited frame on the LG 65UR78006LL. `firstFrame` is a player-API signal.
-- Whether the production Supabase RPC replaces the whole progress set or upserts. This mock upserts, matching the client comment that an empty push must not wipe remote rows.
+- Live production data. The published self-host baseline upserts `watch_progress` and drops unknown entry keys. This mock matches that shape. It is not a live account.
 - Live account merge, Trakt history, and a second installed package id. This tree has only `space.nuvio.webos`.
 
 ## Next task for local Claude
@@ -86,6 +90,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### same-account-profile-roundtrip
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Same account and profile: A saved locally, push after 1.5s, B pull restored the same position.
 
@@ -112,6 +117,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### different-account-isolated
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - A different account pulled an empty snapshot and did not see account A's row.
 
@@ -129,6 +135,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### different-profile-isolated
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Same account, profile 2 did not receive profile 1 progress.
 
@@ -147,6 +154,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### local-save-before-push
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - saveProgress writes localStorage before the debounced cloud push.
 
@@ -171,6 +179,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### debounce-1500
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Unconstrained push fired at 1500ms, not at 1499ms.
 
@@ -184,6 +193,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### constrained-debounce-15000
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - performance-constrained body class delayed the push to 15s.
 
@@ -197,6 +207,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### termination-before-push
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.
 
@@ -220,6 +231,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### failed-push-retry-backoff
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - A failed push is not retried until 120s have passed for the same signature. The later retry committed.
 
@@ -244,12 +256,16 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### independent-changes-both-kept
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Upserts of different keys from two clients both remain. The mock follows the client contract that a push is not a full replace.
 
 ```json
 {
-  "rows": ["tt1000009", "tt1000010"],
+  "rows": [
+    "tt1000009",
+    "tt1000010"
+  ],
   "divergence": "none after both pushes"
 }
 ```
@@ -257,6 +273,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### conflict-newer-local-wins
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Both sides changed from the baseline. B's newer updatedAt kept B's position on pull.
 
@@ -277,6 +294,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### conflict-equal-timestamp-remote-wins
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.
 
@@ -304,6 +322,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### pending-delete-then-resave
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - A re-save while delete was in flight was pushed again after the delete. The newer local row is back in the mock cloud.
 
@@ -345,6 +364,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### empty-remote-keeps-local
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - An empty remote snapshot did not replace the nonempty local store and did not schedule an empty push.
 
@@ -367,6 +387,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### stale-snapshot-after-pull
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Pull replaced the progress store but left homeContinueWatchingDisplaySnapshot unchanged. Home can still render the stale card until it rewrites the snapshot.
 
@@ -398,6 +419,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-writer-reconciles-snapshot
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - The real Home snapshot writer replaces the stale card when Home reconcile runs. Pull itself does not.
 
@@ -416,6 +438,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### trakt-source-skips-nuvio-cloud
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - A Trakt-selected authenticated install skips Supabase watch-progress pull. It does not show the other install's Nuvio Sync row. Divergence starts at shouldUseSupabaseWatchProgressSync.
 
@@ -435,6 +458,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### trakt-filter-drops-local-source-row
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Switching the same install to Trakt hides a tt-id row whose source does not start with trakt. Cloud push is a separate skip.
 
@@ -458,6 +482,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### profile-switch-queued-push-keeps-profile
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - The debounced push kept the profile id captured at save time. Switching the active profile did not retarget it.
 
@@ -471,6 +496,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### profile-switch-inflight-pull-writes-original
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - pull() resolved the profile id before the RPC. A later profile switch did not write that response into profile 2.
 
@@ -492,6 +518,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### older-generation-skips-home-notify
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Stopping StartupSyncService during an in-flight watch-state pull suppresses the Home notification. The progress store is still replaced by the late response.
 
@@ -514,6 +541,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### foreground-resume-leaves-snapshot-until-rewrite
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Foreground watch-state scheduling does not itself rewrite the Home display snapshot. The stale card remains until Home calls writeContinueWatchingDisplaySnapshot.
 
@@ -529,13 +557,18 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
   ],
   "storeHasFresh": true,
   "notes": 1,
-  "rpc": ["sync_pull_watched_items", "sync_pull_library", "sync_pull_watch_progress"]
+  "rpc": [
+    "sync_pull_watched_items",
+    "sync_pull_library",
+    "sync_pull_watch_progress"
+  ]
 }
 ```
 
 ### player-flush-saves-before-cloud
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - player flushProgress saved the local row immediately and the cloud row appeared only after the debounce.
 
@@ -572,6 +605,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### short-position-duration-zero-roundtrip
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.
 
@@ -602,6 +636,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### empty-push-does-not-wipe-cloud
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - B had no local rows. push() returned success and did not send an empty payload, so A's cloud row remained.
 
@@ -618,6 +653,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### installation-ids-differ
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Two installs minted different client ids. The id is sent on push and is not the merge key.
 
@@ -632,6 +668,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### double-save-one-push
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - A second save inside the debounce replaced the timer. One push carried the later position.
 
@@ -662,6 +699,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### proxy-document-before-api-ready
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Running the proxy document injects the official iframe_api script. Before onYouTubeIframeAPIReady, no player exists and no ready or firstFrame message is posted.
 
@@ -676,12 +714,16 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### api-ready-and-playing-at-zero-are-not-first-frame
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - onReady posts ready and calls playVideo. currentTime is still 0, so firstFrame is not posted. API ready is not a decoded frame.
 
 ```json
 {
-  "types": ["ready", "state"],
+  "types": [
+    "ready",
+    "state"
+  ],
   "state": 1,
   "currentTime": 0
 }
@@ -690,18 +732,22 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### buffering-is-not-first-frame
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - playerState 3 (buffering) does not emit firstFrame.
 
 ```json
 {
-  "types": ["state"]
+  "types": [
+    "state"
+  ]
 }
 ```
 
 ### first-frame-once-when-playing-past-zero
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - The state poll emits firstFrame once when playerState is playing and currentTime > 0. A later poll does not emit it again.
 
@@ -720,6 +766,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### watchdog-4500-direct-embed
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - If onReady has not fired, the 4500ms watchdog destroys the API player and inserts a direct youtube.com/embed iframe. That is a fallback document, not a firstFrame.
 
@@ -734,6 +781,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### direct-param-skips-api
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - direct=1 skips iframe_api and inserts the embed iframe immediately. No YT.Player is constructed.
 
@@ -746,6 +794,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### stale-command-source-ignored
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Proxy commands are accepted only from window.parent with source nuvio-detail-trailer. A foreign source or a non-parent window does not pause.
 
@@ -760,6 +809,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### missing-video-id-does-not-autoplay
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.
 
@@ -781,6 +831,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-load-is-not-immediate-ready
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Home does not mark the trailer active on iframe load, nor at 6999ms. The load event only arms a timer.
 
@@ -795,6 +846,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-7s-load-fallback-is-not-playback
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - 7000ms after iframe load, Home adds is-active and calls onReady with no firstFrame and no currentTime. Iframe load plus a timer is treated as trailer readiness.
 
@@ -817,6 +869,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-first-frame-reveals-after-150
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Home ignores a firstFrame from the wrong window or the wrong source. A matching firstFrame reveals 150ms later, not immediately.
 
@@ -833,6 +886,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-direct-embed-state-is-not-first-frame
 
 - Verdict: **FAIL**
+- Expectation: expected
 - Classification: reproduced-defect
 - Home reveals 1200ms after a controllable:false, loading:false state with currentTime 0. That is the direct-embed load signal, not a frame.
 
@@ -854,6 +908,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### home-clear-removes-timer-listener-and-frame
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - clearTrailerLayer removes the message listener, clears the 7s timer, blanks the iframe, and does not reveal after the abandoned timer.
 
@@ -869,6 +924,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### rapid-home-details-back-cleans-up
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - Details rejects a foreign window and a stale video id, accepts a matching firstFrame, and the real cleanup removes the listener. Home clear blanks its iframe. No further firstFrame is applied.
 
@@ -886,6 +942,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 ### missing-metadata-does-not-mount-player
 
 - Verdict: **PASS**
+- Expectation: required
 - Classification: verified-behavior
 - resolveTrailerSource and buildYoutubeEmbedUrl produce no embed when metadata has no video id. Home does not mount an iframe for an empty embedUrl. This is separate from the proxy page's own default id.
 
@@ -894,13 +951,14 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
   "missing": null,
   "blank": null,
   "emptyUrl": "",
-  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-2dn8i0"
+  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-b3zyoq"
 }
 ```
 
 ### tv-first-rendered-frame
 
 - Verdict: **NOT_RUN**
+- Expectation: required
 - Classification: not-run
 - A virtual document cannot prove the first composited frame on the LG 65UR78006LL. firstFrame remains a player-API signal, not a TV frame.
 
