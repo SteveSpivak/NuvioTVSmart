@@ -29,7 +29,7 @@ Next idea: row windowing. Keep only rows near the focus in the document, as Stre
 
 ## Update 2026-10-14: details-open time on the television
 
-**Background loading already works: after resting 5 seconds on a card, details settle in about 2.0 seconds instead of about 5.9. A 2 second rest gives about half that gain (3.9 seconds). About 1.3 seconds of main-thread work happens on every open and is the floor that prefetching cannot remove.** MEASURED, 10 trials.
+**Background loading already changes settle time: after resting 5 seconds on a card, details settle in about 2.0 seconds instead of about 5.9. A 2 second rest gives about 3.9 seconds. Every open also recorded about 1.1–1.8 seconds of long-task duration. That sum is not a proven latency floor. No CPU stack or timeline shows it is serial, on the critical path, or impossible to overlap.** MEASURED totals, 10 trials. Cause UNKNOWN. Profile NOT_RUN.
 
 Method: `lab/perf/details.mjs` on Nuvio 1.2.5-lg1, title rows only (never Continue Watching, so OK cannot start playback). Each trial focuses a new card, waits, presses OK, records for 12 seconds, presses Back once. Order cold/dwell/dwell/cold. "Settled" is the last change in text length or element count of `#detail`.
 
@@ -39,7 +39,9 @@ Method: `lab/perf/details.mjs` on Nuvio 1.2.5-lg1, title rows only (never Contin
 | 2 s                    | 2      | 0.7–0.8 s      | 1.5 s               | 3.9 s            | 1.2–1.3 s              |
 | 5 s                    | 3      | 0.7–1.1 s      | 2.0 s               | 2.0 s            | 1.1–1.5 s              |
 
-Results: `lab/results/tv/2026-10-14_details_open/` (5 s rest, no request data: the page's resource-timing buffer was full, fixed in the script afterwards) and `lab/results/tv/2026-10-14_details_open_dwell2s/` (2 s rest, with request data).
+Results: `lab/results/tv/2026-10-14_details_open/` (5 s rest, no request data: the page's resource-timing buffer was full, fixed in the script afterwards) and `lab/results/tv/2026-10-14_details_open_dwell2s/` (2 s rest, with request data). Commit `9019da8`.
+
+The long-task column is a sum of observer durations. It is not first visible, not usable Details, not full enrichment, not trailer readiness, and not first selectable source. CPU stacks were not captured.
 
 What the code shows (VERIFIED):
 
@@ -211,7 +213,7 @@ Code, VERIFIED: reduced mode loads 5 catalogs first, then batches of 4, and does
 
 ## Question 4. Transitions
 
-Home to details to sources was NOT_RUN. No timing claim.
+Home to Details has five different milestones. First visible Details is MEASURED (`visibleMs`). Usable Details, full enrichment, trailer readiness, and first selectable source are NOT_RUN. "Settled" is the last text or element-count change of `#detail`, not any of those four. See `lab/LOADING-ARCHITECTURE.md`. The long-task sum is not a proven floor.
 
 ## Question 5. Other applications
 

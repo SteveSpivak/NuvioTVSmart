@@ -164,3 +164,7 @@ Compare runs with the same label scheme, for example `base_20rows`,
 2. One `perf/<idea>` branch per fix, rebased on `lab`, with emulator
    before/after numbers.
 3. A list of branches the owner should measure on the TV, in priority order.
+4. Loading research, 2026-10-14: `lab/LOADING-ARCHITECTURE.md`,
+   `lab/EXTERNAL-PATTERNS.md`, `lab/TRAILER-PIPELINE.md`,
+   `lab/EXPERIMENT-BACKLOG.md`. Research only. No Home, cache, or trailer
+   change.
