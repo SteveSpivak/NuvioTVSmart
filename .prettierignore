@@ -11,3 +11,6 @@ services/**/runtime
 .claude
 .opencode
 .orchestration
+
+# Measurement dumps are data, not source. Prettier --check . hangs on the traces.
+lab/results

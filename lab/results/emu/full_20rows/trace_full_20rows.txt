@@ -1,0 +1,47 @@
+TRACE full_20rows seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18004 ms events 102178
+-- thread CrRendererMain (4580, 4580)  busy 3650 ms
+       1236 ms  x3684   RunTask
+        892 ms  x1025   UpdateLayerTree
+        380 ms  x4070   FunctionCall
+        350 ms  x1022   CompositeLayers
+        223 ms  x429    UpdateLayoutTree
+        197 ms  x1496   Paint
+         94 ms  x2044   IntersectionObserverController::computeIntersections
+         80 ms  x31316  UpdateLayer
+         59 ms  x1258   EventDispatch
+         32 ms  x34     HitTest
+         29 ms  x2176   FireAnimationFrame
+         20 ms  x946    ScrollLayer
+         19 ms  x438    TimerFire
+         16 ms  x202    RunMicrotasks
+          7 ms  x747    PaintImage
+-- thread Compositor (4580, 4592)  busy 1544 ms
+       1544 ms  x11854  RunTask
+-- thread CompositorTileWorker1 (4580, 4594)  busy 1794 ms
+       1782 ms  x4290   RasterTask
+         12 ms  x1330   ImageDecodeTask
+-- thread VizCompositorThread (4553, 4584)  busy 3179 ms
+       3179 ms  x4430   RunTask
+-- thread CompositorTileWorkerBackground (4580, 4595)  busy 313 ms
+        313 ms  x415    RasterTask
+-- 20 longest single main-thread events
+         8 ms  CompositeLayers      {"layerTreeId": 1}
+         6 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 4196}}
+         6 ms  FunctionCall         {"data": {"columnNumber": 757608, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "T", "lineNumber": 1, "scriptId": "9", "url": "http://1
+         6 ms  UpdateLayoutTree     {"beginData": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C"}, "elementCount": 15}
+         5 ms  EventDispatch        {"data": {"type": "keydown"}}
+         5 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "handleKey", "lineNumber": 1, "scriptId": "9", "url": 
+         5 ms  CompositeLayers      {"layerTreeId": 1}
+         4 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 5451}}
+         4 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 3444}}
+         4 ms  FunctionCall         {"data": {"columnNumber": 757608, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "T", "lineNumber": 1, "scriptId": "9", "url": "http://1
+         4 ms  UpdateLayoutTree     {"beginData": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C"}, "elementCount": 14}
+         4 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "", "lineNumber": 1, "scriptId": "9", "url": "http://12
+         4 ms  CompositeLayers      {"layerTreeId": 1}
+         4 ms  CompositeLayers      {"layerTreeId": 1}
+         4 ms  CompositeLayers      {"layerTreeId": 1}
+         4 ms  EventDispatch        {"data": {"type": "keydown"}}
+         3 ms  TimerFire            {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "timerId": 1438}}
+         3 ms  EventDispatch        {"data": {"type": "keydown"}}
+         3 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "handleKey", "lineNumber": 1, "scriptId": "9", "url": 
+         3 ms  EventDispatch        {"data": {"type": "keydown"}}

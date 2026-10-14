@@ -1,0 +1,72 @@
+RUN iso_notrans_short  seq R*6@300,D*4@600  presses 10  wall 5775 ms  sampled 5777 ms
+-- browser metrics, delta over the run
+  ScriptDuration                 98 ms
+  LayoutDuration                  3 ms
+  RecalcStyleDuration            16 ms
+  TaskDuration                  782 ms
+  LayoutCount                       0 ->           10
+  RecalcStyleCount                  0 ->           47
+  JSHeapUsedSize              8445668 ->      7721180
+  Nodes                         53803 ->        54687
+  JSEventListeners                121 ->          136
+-- frames: 345  avg fps 58.7  median 17 ms  p90 17 ms  p99 17 ms  max 33 ms
+   frames over 50 ms: 0  over 100 ms: 0  over 200 ms: 0  time in frames over 50 ms: 0 ms
+-- long tasks: 0  total 0 ms  worst 0 ms
+-- top self time
+      5046 ms  87.3%  (idle)                                       :0:0
+       619 ms  10.7%  (program)                                    :0:0
+        24 ms   0.4%  T                                            app.bundle.js?v=20260531su:1:757608
+        10 ms   0.2%  getBoundingClientRect                        :0:0
+         8 ms   0.1%  focus                                        :0:0
+         8 ms   0.1%  requestAnimationFrame                        :0:0
+         4 ms   0.1%  querySelectorAll                             :0:0
+         3 ms   0.1%  (anonymous)                                  app.bundle.js?v=20260531su:1:934528
+         3 ms   0.1%  boundHomeViewport.i.boundHomeViewportScrollH app.bundle.js?v=20260531su:1:894155
+         3 ms   0.1%  N                                            app.bundle.js?v=20260531su:1:433
+         2 ms   0.0%  tick                                         :1:78
+         2 ms   0.0%  (garbage collector)                          :0:0
+         2 ms   0.0%  setTimeout                                   :0:0
+         2 ms   0.0%  scheduleHomeLazyImageHydration               app.bundle.js?v=20260531su:1:930255
+         2 ms   0.0%  parse                                        core-js.bundle.js:1:63741
+         2 ms   0.0%  (anonymous)                                  app.bundle.js?v=20260531su:1:860359
+         2 ms   0.0%  ft                                           app.bundle.js?v=20260531su:1:680410
+         1 ms   0.0%  add                                          :0:0
+         1 ms   0.0%  isScrollAnimationActive                      app.bundle.js?v=20260531su:1:759418
+         1 ms   0.0%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+         1 ms   0.0%  querySelector                                :0:0
+         1 ms   0.0%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+         1 ms   0.0%  zV                                           app.bundle.js?v=20260531su:1:791054
+         1 ms   0.0%  Ql                                           app.bundle.js?v=20260531su:1:681615
+         1 ms   0.0%  getNodeRowKey                                app.bundle.js?v=20260531su:1:798145
+         1 ms   0.0%  set length                                   :0:0
+         1 ms   0.0%  clearTimeout                                 :0:0
+         1 ms   0.0%  fetch                                        :0:0
+-- top inclusive time (app functions)
+        25 ms   0.4%  T                                            app.bundle.js?v=20260531su:1:757608
+        21 ms   0.4%  handleKey                                    app.bundle.js?v=20260531su:1:3156209
+        20 ms   0.3%  handleHomeDpad                               app.bundle.js?v=20260531su:1:888128
+        20 ms   0.3%  onKeyDown                                    app.bundle.js?v=20260531su:1:955116
+        18 ms   0.3%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+        11 ms   0.2%  boundHomeViewport.i.boundHomeViewportScrollH app.bundle.js?v=20260531su:1:894155
+         8 ms   0.1%  Bo                                           app.bundle.js?v=20260531su:1:667330
+         8 ms   0.1%  focusWithoutAutoScroll                       app.bundle.js?v=20260531su:1:800479
+         7 ms   0.1%  S                                            app.bundle.js?v=20260531su:1:834555
+         7 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:313105
+         7 ms   0.1%  pm                                           app.bundle.js?v=20260531su:1:714349
+         7 ms   0.1%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+         6 ms   0.1%  getForProfile                                app.bundle.js?v=20260531su:1:313055
+         6 ms   0.1%  RV                                           app.bundle.js?v=20260531su:1:719264
+         6 ms   0.1%  vC                                           app.bundle.js?v=20260531su:1:311117
+         5 ms   0.1%  scheduleHomeLazyImageHydration               app.bundle.js?v=20260531su:1:930255
+         5 ms   0.1%  jte                                          app.bundle.js?v=20260531su:1:311007
+         5 ms   0.1%  M                                            app.bundle.js?v=20260531su:1:964329
+         5 ms   0.1%  u                                            app.bundle.js?v=20260531su:1:963683
+         5 ms   0.1%  E                                            app.bundle.js?v=20260531su:1:837127
+         4 ms   0.1%  scheduleFocusedPosterFlow                    app.bundle.js?v=20260531su:1:861766
+         4 ms   0.1%  $o                                           app.bundle.js?v=20260531su:1:701284
+         4 ms   0.1%  hV                                           app.bundle.js?v=20260531su:1:703677
+         4 ms   0.1%  getNodeHeroSource                            app.bundle.js?v=20260531su:1:802114
+         4 ms   0.1%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+         4 ms   0.1%  applyModernHeroDescriptionBounds             app.bundle.js?v=20260531su:1:860122
+         4 ms   0.1%  scheduleHomeTruncationUpdate                 app.bundle.js?v=20260531su:1:858260
+         4 ms   0.1%  collapseFocusedPoster                        app.bundle.js?v=20260531su:1:852077

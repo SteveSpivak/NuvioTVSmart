@@ -1,0 +1,53 @@
+TRACE promote_warm_20rows seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600 presses 38 wall 18111 ms events 30049
+-- thread CrRendererMain (4048, 4048)  busy 1023 ms
+        253 ms  x410    FunctionCall
+        252 ms  x1483   RunTask
+        123 ms  x363    UpdateLayerTree
+        113 ms  x395    UpdateLayoutTree
+         62 ms  x321    CompositeLayers
+         37 ms  x253    Paint
+         29 ms  x32     HitTest
+         23 ms  x49     Layout
+         23 ms  x207    RunMicrotasks
+         11 ms  x1      V8.GC_MC_INCREMENTAL_START
+         11 ms  x149    TimerFire
+         10 ms  x390    EventDispatch
+         10 ms  x4112   UpdateLayer
+          8 ms  x642    IntersectionObserverController::computeIntersections
+          6 ms  x38     EvaluateScript
+          6 ms  x314    PaintImage
+-- thread Compositor (4048, 4058)  busy 827 ms
+        827 ms  x5720   RunTask
+-- thread CompositorTileWorker1 (4048, 4060)  busy 878 ms
+        872 ms  x3496   RasterTask
+          6 ms  x209    ImageDecodeTask
+-- thread VizCompositorThread (4013, 4062)  busy 4458 ms
+       4458 ms  x2767   RunTask
+-- thread CompositorTileWorkerBackground (4048, 4061)  busy 198 ms
+        196 ms  x245    RasterTask
+-- thread ThreadPoolForegroundWorker (4048, 4349)  busy 53 ms
+         24 ms  x5      Decode Image
+         11 ms  x3      V8.GC_MC_BACKGROUND_MARKING
+          8 ms  x1      BlinkGC.ConcurrentSweepingStep
+          8 ms  x4      ImageDecodeTask
+-- 20 longest single main-thread events
+        15 ms  EventDispatch        {"data": {"type": "keydown"}}
+        15 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "handleKey", "lineNumber": 1, "scriptId": "10", "url":
+        10 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3890}}
+         9 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "", "lineNumber": 1, "scriptId": "10", "url": "http://1
+         8 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3855}}
+         8 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3870}}
+         8 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3865}}
+         8 ms  EventDispatch        {"data": {"type": "keydown"}}
+         8 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3925}}
+         8 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "handleKey", "lineNumber": 1, "scriptId": "10", "url":
+         7 ms  EventDispatch        {"data": {"type": "keydown"}}
+         7 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "handleKey", "lineNumber": 1, "scriptId": "10", "url":
+         6 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "", "lineNumber": 1, "scriptId": "10", "url": "http://1
+         6 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "", "lineNumber": 1, "scriptId": "10", "url": "http://1
+         6 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "", "lineNumber": 1, "scriptId": "10", "url": "http://1
+         6 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "", "lineNumber": 1, "scriptId": "10", "url": "http://1
+         6 ms  EventDispatch        {"data": {"type": "keydown"}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3920}}
+         6 ms  FireAnimationFrame   {"data": {"frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "id": 3880}}
+         6 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "FFD263FD9ABBA7EA3D7014C5DD55ED2F", "functionName": "handleKey", "lineNumber": 1, "scriptId": "10", "url":

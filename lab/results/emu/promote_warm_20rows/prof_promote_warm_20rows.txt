@@ -1,0 +1,72 @@
+RUN promote_warm_20rows  seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600  presses 38  wall 18089 ms  sampled 18075 ms
+-- browser metrics, delta over the run
+  ScriptDuration                335 ms
+  LayoutDuration                 15 ms
+  RecalcStyleDuration           147 ms
+  TaskDuration                 1499 ms
+  LayoutCount                       0 ->           51
+  RecalcStyleCount                  0 ->          600
+  JSHeapUsedSize              6816724 ->      6858544
+  Nodes                         39117 ->        40506
+  JSEventListeners                124 ->          132
+-- frames: 1067  avg fps 57.8  median 17 ms  p90 17 ms  p99 33 ms  max 50 ms
+   frames over 50 ms: 0  over 100 ms: 0  over 200 ms: 0  time in frames over 50 ms: 0 ms
+-- long tasks: 0  total 0 ms  worst 0 ms
+-- top self time
+     16744 ms  92.6%  (idle)                                       :0:0
+       941 ms   5.2%  (program)                                    :0:0
+        56 ms   0.3%  focus                                        :0:0
+        40 ms   0.2%  getBoundingClientRect                        :0:0
+        33 ms   0.2%  querySelectorAll                             :0:0
+        30 ms   0.2%  requestAnimationFrame                        :0:0
+        22 ms   0.1%  get stack                                    :0:0
+        16 ms   0.1%  N                                            app.bundle.js?v=20260531su:1:433
+        14 ms   0.1%  (anonymous)                                  app.bundle.js?v=20260531su:1:860359
+        13 ms   0.1%  ec                                           app.bundle.js?v=20260531su:1:719401
+        13 ms   0.1%  querySelector                                :0:0
+         9 ms   0.1%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+         8 ms   0.0%  tick                                         :1:78
+         7 ms   0.0%  stringify                                    core-js.bundle.js:1:66524
+         7 ms   0.0%  (anonymous)                                  :0:0
+         6 ms   0.0%  hO                                           app.bundle.js?v=20260531su:1:37352
+         5 ms   0.0%  parse                                        core-js.bundle.js:1:63741
+         5 ms   0.0%  (anonymous)                                  app.bundle.js?v=20260531su:1:934528
+         4 ms   0.0%  tN                                           app.bundle.js?v=20260531su:1:226
+         4 ms   0.0%  (garbage collector)                          :0:0
+         4 ms   0.0%  refreshPendingHomeTrailerCleanup             app.bundle.js?v=20260531su:1:847315
+         4 ms   0.0%  u                                            app.bundle.js?v=20260531su:1:963683
+         3 ms   0.0%  Fq.exports                                   core-js.bundle.js:1:32741
+         3 ms   0.0%  (anonymous)                                  app.bundle.js?v=20260531su:1:311062
+         3 ms   0.0%  v                                            app.bundle.js?v=20260531su:1:311
+         3 ms   0.0%  getNodeHeroSource                            app.bundle.js?v=20260531su:1:802114
+         3 ms   0.0%  setTimeout                                   :0:0
+         3 ms   0.0%  Hd                                           app.bundle.js?v=20260531su:1:690632
+-- top inclusive time (app functions)
+       132 ms   0.7%  handleKey                                    app.bundle.js?v=20260531su:1:3156209
+       127 ms   0.7%  onKeyDown                                    app.bundle.js?v=20260531su:1:955116
+       126 ms   0.7%  handleHomeDpad                               app.bundle.js?v=20260531su:1:888128
+       123 ms   0.7%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+        69 ms   0.4%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+        57 ms   0.3%  Bo                                           app.bundle.js?v=20260531su:1:667330
+        57 ms   0.3%  focusWithoutAutoScroll                       app.bundle.js?v=20260531su:1:800479
+        43 ms   0.2%  pm                                           app.bundle.js?v=20260531su:1:714349
+        35 ms   0.2%  applyModernHeroDescriptionBounds             app.bundle.js?v=20260531su:1:860122
+        35 ms   0.2%  scheduleHomeTruncationUpdate                 app.bundle.js?v=20260531su:1:858260
+        33 ms   0.2%  get                                          app.bundle.js?v=20260531su:1:313105
+        32 ms   0.2%  RV                                           app.bundle.js?v=20260531su:1:719264
+        31 ms   0.2%  S                                            app.bundle.js?v=20260531su:1:834555
+        30 ms   0.2%  getForProfile                                app.bundle.js?v=20260531su:1:313055
+        26 ms   0.1%  refreshPendingHomeTrailerCleanup             app.bundle.js?v=20260531su:1:847315
+        26 ms   0.1%  vC                                           app.bundle.js?v=20260531su:1:311117
+        23 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:39870
+        23 ms   0.1%  Zg                                           app.bundle.js?v=20260531su:1:712965
+        20 ms   0.1%  $o                                           app.bundle.js?v=20260531su:1:701284
+        19 ms   0.1%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+        18 ms   0.1%  scheduleFocusedPosterFlow                    app.bundle.js?v=20260531su:1:861766
+        17 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:248520
+        16 ms   0.1%  N                                            app.bundle.js?v=20260531su:1:433
+        16 ms   0.1%  getNodeHeroSource                            app.bundle.js?v=20260531su:1:802114
+        16 ms   0.1%  collapseFocusedPoster                        app.bundle.js?v=20260531su:1:852077
+        16 ms   0.1%  jte                                          app.bundle.js?v=20260531su:1:311007
+        13 ms   0.1%  ec                                           app.bundle.js?v=20260531su:1:719401
+        13 ms   0.1%  hV                                           app.bundle.js?v=20260531su:1:703677
