@@ -266,7 +266,8 @@
   }
 }
 
-.series-detail-shell {
+.series-detail-shell,
+.detail-preview-shell {
   position: relative;
   width: 100vw;
   height: 100vh;

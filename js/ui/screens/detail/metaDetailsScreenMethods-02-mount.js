@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
+import { detailPreviewEnabled, renderDetailPreview } from "./detailPreview.js";
 
 export function createMetaDetailsScreenMethods02() {
   const { Router, ScreenUtils, hasMdbListRatings } = internals;
@@ -122,7 +123,9 @@ export function createMetaDetailsScreenMethods02() {
         return;
       }
 
-      this.container.innerHTML = `
+      this.container.innerHTML = detailPreviewEnabled()
+        ? renderDetailPreview(params)
+        : `
           <div class="detail-loading-shell" aria-label="Loading detail">
             <div class="detail-loading-top">
               <div class="detail-loading-block detail-loading-poster"></div>

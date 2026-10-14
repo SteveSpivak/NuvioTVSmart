@@ -313,7 +313,8 @@
   color: var(--detail-text-secondary);
 }
 
-.series-detail-shell {
+.series-detail-shell,
+.detail-preview-shell {
   --detail-bg: var(--bg-color);
   --detail-bg-elevated: var(--bg-elevated);
   --detail-bg-card: var(--card-bg);

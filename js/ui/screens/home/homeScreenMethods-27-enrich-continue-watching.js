@@ -249,6 +249,7 @@ export function createHomeScreenMethods27() {
         fallbackTitle: node.dataset.itemTitle || "Untitled",
         fallbackPoster: node.dataset.posterSrc || "",
         fallbackBackground: node.dataset.backdropSrc || "",
+        fallbackLogo: node.dataset.logoSrc || "",
         addonBaseUrl: node.dataset.addonBaseUrl || "",
         addonId: node.dataset.addonId || "",
         addonName: node.dataset.addonName || "",

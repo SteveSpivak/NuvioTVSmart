@@ -388,7 +388,8 @@
 /* Android TV details port. The existing profile port maps Android dp/sp to this
    1920px TV CSS viewport at 2x, so these details metrics follow the same scale. */
 
-.series-detail-shell {
+.series-detail-shell,
+.detail-preview-shell {
   --detail-safe-x: 96px;
   --detail-episode-safe-x: 112px;
   --detail-action-gap: 24px;
@@ -409,6 +410,12 @@
 
 .detail-hero-brand {
   min-height: 200px;
+}
+
+/* Lab "detailPreview": reserve the hero body (actions, description, meta row) so the
+   preview logo sits where the full render puts it. */
+.detail-preview-body {
+  height: 318px;
 }
 
 .series-detail-logo {
