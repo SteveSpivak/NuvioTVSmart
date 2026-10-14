@@ -1,0 +1,5353 @@
+{
+ "schema": "nuvio-lab/details/2",
+ "device": "tv",
+ "order": "CDDC",
+ "dwellMs": 2000,
+ "waitMs": 12000,
+ "profile": "alt",
+ "stacks": "async",
+ "sampleUs": 1000,
+ "capabilities": {
+  "debuggerPausesResumed": 0,
+  "network": true,
+  "asyncStacks": true,
+  "throttle": null,
+  "profiler": true
+ },
+ "aborted": null,
+ "results": [
+  {
+   "trial": 1,
+   "kind": "cold",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 248,
+   "loadingShellMs": 248,
+   "metaRenderedMs": 2346,
+   "usableMs": 2346,
+   "contentMs": 3264,
+   "settledMs": 3264,
+   "samples": 183,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 11748,
+   "requests": 49,
+   "images": 2,
+   "longTasks": 7,
+   "longTaskMs": 1882,
+   "longTaskUnionMs": 1882,
+   "longTaskMaxOverlap": 1,
+   "worstLongTaskMs": 1031,
+   "longTaskEntries": [
+    [
+     77,
+     107
+    ],
+    [
+     186,
+     59
+    ],
+    [
+     1234,
+     1031
+    ],
+    [
+     2272,
+     54
+    ],
+    [
+     2510,
+     75
+    ],
+    [
+     3072,
+     186
+    ],
+    [
+     8057,
+     370
+    ]
+   ],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 51,
+     "spreadMs": 2,
+     "offsetMs": -15600337.476
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 5,
+    "unattributed": 3,
+    "lastBeforeRenderEndMs": 1232,
+    "lastAfterRenderEndMs": 11748,
+    "endedAfterUsable": 35,
+    "providers": {
+     "nuvio-catalog": 36,
+     "tmdb": 2,
+     "trakt": 15,
+     "cinemeta": 1
+    },
+    "categories": {
+     "nuvio-catalog /meta/movie/{x}": {
+      "count": 9,
+      "finished": 7,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 2,
+      "httpCacheHits": 0,
+      "phases": [
+       "home",
+       "after-render"
+      ],
+      "owners": [
+       "enrichCurrentHeroAsync",
+       "refreshLibraryMembership"
+      ],
+      "medianDurMs": 911,
+      "repeated": true
+     },
+     "tmdb /3/movie/{x}": {
+      "count": 2,
+      "finished": 2,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "home",
+       "after-render"
+      ],
+      "owners": [
+       "enrichCurrentHeroAsync",
+       "enrichMeta"
+      ],
+      "medianDurMs": 20.5,
+      "repeated": true
+     },
+     "trakt /sync/history": {
+      "count": 3,
+      "finished": 3,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getResumeByContentId"
+      ],
+      "medianDurMs": 295,
+      "repeated": true
+     },
+     "trakt /sync/playback/movies": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getResumeByContentId"
+      ],
+      "medianDurMs": 250,
+      "repeated": false
+     },
+     "trakt /sync/playback/episodes": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getResumeByContentId"
+      ],
+      "medianDurMs": 272,
+      "repeated": false
+     },
+     "trakt /sync/watched/shows": {
+      "count": 2,
+      "finished": 2,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getResumeByContentId"
+      ],
+      "medianDurMs": 504,
+      "repeated": true
+     },
+     "trakt /sync/watched/movies": {
+      "count": 3,
+      "finished": 3,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "unattributed"
+      ],
+      "owners": [],
+      "medianDurMs": 277,
+      "repeated": true
+     },
+     "cinemeta /meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 91,
+      "repeated": false
+     },
+     "trakt /movies/{x}/related": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "medianDurMs": 282,
+      "repeated": false
+     },
+     "trakt /movies/{x}/comments/likes": {
+      "count": 2,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 1,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "loadTraktComments"
+      ],
+      "medianDurMs": 328,
+      "repeated": true
+     },
+     "trakt /sync/watchlist": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "medianDurMs": 231,
+      "repeated": false
+     },
+     "trakt /users/{x}/lists": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "medianDurMs": 275,
+      "repeated": false
+     },
+     "nuvio-catalog /meta/series/{x}": {
+      "count": 27,
+      "finished": 24,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 3,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "medianDurMs": 1232,
+      "repeated": true
+     }
+    },
+    "requests": [
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6,
+      "endMs": 750,
+      "durMs": 744,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2442,
+      "initiatorType": "script",
+      "owner": "enrichCurrentHeroAsync",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "enrichCurrentHeroAsync"
+      ],
+      "phase": "home",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "tmdb",
+      "category": "/3/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 17,
+      "endMs": 40,
+      "durMs": 23,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 14425,
+      "initiatorType": "script",
+      "owner": "enrichCurrentHeroAsync",
+      "owners": [
+       "fetchEnrichment",
+       "enrichCurrentHeroAsync"
+      ],
+      "phase": "home",
+      "frames": [
+       "fetchEnrichment@app.bundle.js:0:553898",
+       "sR@app.bundle.js:0:687827",
+       "enrichCurrentHeroAsync@app.bundle.js:0:836718",
+       "(anonymous)@app.bundle.js:0:833114",
+       "I@app.bundle.js:0:832644"
+      ]
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 75,
+      "endMs": 90,
+      "durMs": 14,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": true,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 0,
+      "initiatorType": "other",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": []
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 77,
+      "endMs": 325,
+      "durMs": 248,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4929,
+      "initiatorType": "other",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": []
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/history",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 173,
+      "endMs": 431,
+      "durMs": 259,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 7722,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchHistory@app.bundle.js:0:349547",
+       "(anonymous)@app.bundle.js:0:419478",
+       "FS@app.bundle.js:0:421022",
+       "getRecent@app.bundle.js:0:424968"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/playback/movies",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 175,
+      "endMs": 425,
+      "durMs": 250,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1307,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchPlaybackState@app.bundle.js:0:350300",
+       "(anonymous)@app.bundle.js:0:419587",
+       "FS@app.bundle.js:0:421022",
+       "getRecent@app.bundle.js:0:424968"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/playback/episodes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 177,
+      "endMs": 449,
+      "durMs": 272,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 799,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchPlaybackState@app.bundle.js:0:350300",
+       "(anonymous)@app.bundle.js:0:419587",
+       "FS@app.bundle.js:0:421022",
+       "getRecent@app.bundle.js:0:424968"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watched/shows",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 180,
+      "endMs": 656,
+      "durMs": 476,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 18105,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchedShows@app.bundle.js:0:350621",
+       "zy@app.bundle.js:0:360435",
+       "getRemoteTraktWatchedShows@app.bundle.js:0:366669",
+       "(anonymous)@app.bundle.js:0:419703"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watched/movies",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 182,
+      "endMs": 459,
+      "durMs": 277,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 18463,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchedMovies@app.bundle.js:0:350847",
+       "qy@app.bundle.js:0:359877",
+       "getAll@app.bundle.js:0:363243",
+       "isWatched@app.bundle.js:0:364579"
+      ]
+     },
+     {
+      "provider": "cinemeta",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 259,
+      "endMs": 350,
+      "durMs": 91,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1399,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/history",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 444,
+      "endMs": 788,
+      "durMs": 344,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 8854,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchHistory@app.bundle.js:0:349547",
+       "(anonymous)@app.bundle.js:0:419478",
+       "FS@app.bundle.js:0:421022",
+       "getRecent@app.bundle.js:0:424968"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watched/movies",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 480,
+      "endMs": 760,
+      "durMs": 280,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 15799,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "Kb@app.bundle.js:0:338886",
+       "fetchWatchedMovies@app.bundle.js:0:350924",
+       "fetchWatchedMovies@app.bundle.js:0:350847",
+       "qy@app.bundle.js:0:359877"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watched/shows",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 700,
+      "endMs": 1232,
+      "durMs": 532,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5967,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "Kb@app.bundle.js:0:338886",
+       "fetchWatchedShows@app.bundle.js:0:350698",
+       "fetchWatchedShows@app.bundle.js:0:350621",
+       "zy@app.bundle.js:0:360435"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watched/movies",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 774,
+      "endMs": 1019,
+      "durMs": 245,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 14023,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "Kb@app.bundle.js:0:338886",
+       "fetchWatchedMovies@app.bundle.js:0:350924",
+       "fetchWatchedMovies@app.bundle.js:0:350847",
+       "qy@app.bundle.js:0:359877"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/history",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 797,
+      "endMs": 1092,
+      "durMs": 295,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 8904,
+      "initiatorType": "script",
+      "owner": "getResumeByContentId",
+      "owners": [
+       "getResumeByContentIds",
+       "getResumeByContentId"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchHistory@app.bundle.js:0:349547",
+       "(anonymous)@app.bundle.js:0:419478",
+       "FS@app.bundle.js:0:421022",
+       "getRecent@app.bundle.js:0:424968"
+      ]
+     },
+     {
+      "provider": "other",
+      "category": "other",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 2218,
+      "endMs": 2330,
+      "durMs": 111,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 698,
+      "initiatorType": "other",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": []
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/related",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2227,
+      "endMs": 2509,
+      "durMs": 282,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 10444,
+      "initiatorType": "script",
+      "owner": "fetchMoreLikeThis",
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchTraktRelated@app.bundle.js:0:2137792",
+       "fetchMoreLikeThis@app.bundle.js:0:2136653",
+       "loadDetail@app.bundle.js:0:2133217",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "tmdb",
+      "category": "/3/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2233,
+      "endMs": 2250,
+      "durMs": 18,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 14426,
+      "initiatorType": "script",
+      "owner": "enrichMeta",
+      "owners": [
+       "fetchEnrichment",
+       "enrichMeta"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchEnrichment@app.bundle.js:0:553898",
+       "enrichMeta@app.bundle.js:0:2152923",
+       "(anonymous)@app.bundle.js:0:2133512",
+       "loadDetail@app.bundle.js:0:2135589",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2237,
+      "endMs": 2594,
+      "durMs": 356,
+      "outcome": "canceled",
+      "status": null,
+      "errorText": "net::ERR_ABORTED",
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "loadDetail@app.bundle.js:0:2133180",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/sync/watchlist",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2260,
+      "endMs": 2490,
+      "durMs": 231,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4634,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchWatchlist@app.bundle.js:0:349921",
+       "refreshNow@app.bundle.js:0:533608",
+       "refreshNow@app.bundle.js:0:533506",
+       "ensureFreshTraktState@app.bundle.js:0:527396"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/users/{x}/lists",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2265,
+      "endMs": 2540,
+      "durMs": 275,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 156,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "IA@app.bundle.js:0:523218",
+       "RA@app.bundle.js:0:525949",
+       "refreshNow@app.bundle.js:0:533636",
+       "refreshNow@app.bundle.js:0:533506"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 2503,
+      "endMs": 2803,
+      "durMs": 300,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 12072,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "(anonymous)@app.bundle.js:0:2134305",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3010,
+      "endMs": 3657,
+      "durMs": 647,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4214,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3015,
+      "endMs": 4265,
+      "durMs": 1250,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4858,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3021,
+      "endMs": 4284,
+      "durMs": 1263,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 8850,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3028,
+      "endMs": 4140,
+      "durMs": 1111,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2472,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3032,
+      "endMs": 3690,
+      "durMs": 658,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 7956,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3036,
+      "endMs": 4345,
+      "durMs": 1309,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4651,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4611,
+      "endMs": 5773,
+      "durMs": 1163,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4304,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4614,
+      "endMs": 5768,
+      "durMs": 1154,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2464,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4619,
+      "endMs": 5763,
+      "durMs": 1143,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 6817,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4625,
+      "endMs": 5536,
+      "durMs": 911,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2451,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4629,
+      "endMs": 5778,
+      "durMs": 1149,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4763,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4634,
+      "endMs": 5563,
+      "durMs": 929,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5406,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6059,
+      "endMs": 6357,
+      "durMs": 298,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 7344,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6063,
+      "endMs": 6352,
+      "durMs": 289,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 7053,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6068,
+      "endMs": 8632,
+      "durMs": 2565,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 3475,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6071,
+      "endMs": 6474,
+      "durMs": 403,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 14578,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6074,
+      "endMs": 7511,
+      "durMs": 1437,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 15311,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 6077,
+      "endMs": 6422,
+      "durMs": 345,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2623,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8436,
+      "endMs": 9910,
+      "durMs": 1473,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4304,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8441,
+      "endMs": 9160,
+      "durMs": 720,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1847,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8445,
+      "endMs": 9096,
+      "durMs": 651,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2203,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8451,
+      "endMs": 10129,
+      "durMs": 1679,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5087,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8456,
+      "endMs": 9670,
+      "durMs": 1214,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 6135,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 8461,
+      "endMs": 8796,
+      "durMs": 335,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5264,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10409,
+      "endMs": 11417,
+      "durMs": 1009,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1878,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10412,
+      "endMs": 11717,
+      "durMs": 1305,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2195,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10416,
+      "endMs": 11748,
+      "durMs": 1332,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2914,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10420,
+      "endMs": 11681,
+      "durMs": 1262,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2584,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10424,
+      "endMs": 11741,
+      "durMs": 1317,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5057,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 10427,
+      "endMs": 11687,
+      "durMs": 1260,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 3094,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 11987,
+      "endMs": null,
+      "durMs": null,
+      "outcome": "incomplete",
+      "status": null,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 11993,
+      "endMs": null,
+      "durMs": null,
+      "outcome": "incomplete",
+      "status": null,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 11997,
+      "endMs": null,
+      "durMs": null,
+      "outcome": "incomplete",
+      "status": null,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 12002,
+      "endMs": null,
+      "durMs": null,
+      "outcome": "incomplete",
+      "status": null,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 12005,
+      "endMs": null,
+      "durMs": null,
+      "outcome": "incomplete",
+      "status": null,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     6,
+     "request",
+     "nuvio-catalog /meta/movie/{x} home"
+    ],
+    [
+     17,
+     "request",
+     "tmdb /3/movie/{x} home"
+    ],
+    [
+     40,
+     "response",
+     "tmdb /3/movie/{x} finished 200"
+    ],
+    [
+     77,
+     "longtask",
+     "107 ms"
+    ],
+    [
+     173,
+     "request",
+     "trakt /sync/history before-render"
+    ],
+    [
+     175,
+     "request",
+     "trakt /sync/playback/movies before-render"
+    ],
+    [
+     177,
+     "request",
+     "trakt /sync/playback/episodes before-render"
+    ],
+    [
+     180,
+     "request",
+     "trakt /sync/watched/shows before-render"
+    ],
+    [
+     182,
+     "request",
+     "trakt /sync/watched/movies unattributed"
+    ],
+    [
+     186,
+     "longtask",
+     "59 ms"
+    ],
+    [
+     248,
+     "marker",
+     "visible"
+    ],
+    [
+     248,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     259,
+     "request",
+     "cinemeta /meta/movie/{x} before-render"
+    ],
+    [
+     350,
+     "response",
+     "cinemeta /meta/movie/{x} finished 200"
+    ],
+    [
+     425,
+     "response",
+     "trakt /sync/playback/movies finished 200"
+    ],
+    [
+     431,
+     "response",
+     "trakt /sync/history finished 200"
+    ],
+    [
+     444,
+     "request",
+     "trakt /sync/history before-render"
+    ],
+    [
+     449,
+     "response",
+     "trakt /sync/playback/episodes finished 200"
+    ],
+    [
+     459,
+     "response",
+     "trakt /sync/watched/movies finished 200"
+    ],
+    [
+     480,
+     "request",
+     "trakt /sync/watched/movies unattributed"
+    ],
+    [
+     656,
+     "response",
+     "trakt /sync/watched/shows finished 200"
+    ],
+    [
+     700,
+     "request",
+     "trakt /sync/watched/shows before-render"
+    ],
+    [
+     750,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     760,
+     "response",
+     "trakt /sync/watched/movies finished 200"
+    ],
+    [
+     774,
+     "request",
+     "trakt /sync/watched/movies unattributed"
+    ],
+    [
+     788,
+     "response",
+     "trakt /sync/history finished 200"
+    ],
+    [
+     797,
+     "request",
+     "trakt /sync/history before-render"
+    ],
+    [
+     1019,
+     "response",
+     "trakt /sync/watched/movies finished 200"
+    ],
+    [
+     1092,
+     "response",
+     "trakt /sync/history finished 200"
+    ],
+    [
+     1232,
+     "response",
+     "trakt /sync/watched/shows finished 200"
+    ],
+    [
+     1234,
+     "longtask",
+     "1031 ms"
+    ],
+    [
+     2227,
+     "request",
+     "trakt /movies/{x}/related after-render"
+    ],
+    [
+     2233,
+     "request",
+     "tmdb /3/movie/{x} after-render"
+    ],
+    [
+     2237,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     2250,
+     "response",
+     "tmdb /3/movie/{x} finished 200"
+    ],
+    [
+     2260,
+     "request",
+     "trakt /sync/watchlist after-render"
+    ],
+    [
+     2265,
+     "request",
+     "trakt /users/{x}/lists after-render"
+    ],
+    [
+     2272,
+     "longtask",
+     "54 ms"
+    ],
+    [
+     2346,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     2346,
+     "marker",
+     "usable"
+    ],
+    [
+     2490,
+     "response",
+     "trakt /sync/watchlist finished 200"
+    ],
+    [
+     2503,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     2509,
+     "response",
+     "trakt /movies/{x}/related finished 200"
+    ],
+    [
+     2510,
+     "longtask",
+     "75 ms"
+    ],
+    [
+     2540,
+     "response",
+     "trakt /users/{x}/lists finished 200"
+    ],
+    [
+     2594,
+     "response",
+     "trakt /movies/{x}/comments/likes canceled"
+    ],
+    [
+     2803,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     3010,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     3015,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     3021,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     3028,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     3032,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     3036,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     3072,
+     "longtask",
+     "186 ms"
+    ],
+    [
+     3264,
+     "marker",
+     "content"
+    ],
+    [
+     3264,
+     "marker",
+     "settled"
+    ],
+    [
+     3657,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     3690,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     4140,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     4265,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     4284,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     4345,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     4611,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     4614,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     4619,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     4625,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     4629,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     4634,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     5536,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     5563,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     5763,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     5768,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     5773,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     5778,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     6059,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6063,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6068,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6071,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6074,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6077,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     6352,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     6357,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     6422,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     6474,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     7511,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     8057,
+     "longtask",
+     "370 ms"
+    ],
+    [
+     8436,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     8441,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     8445,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     8451,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     8456,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     8461,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     8632,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     8796,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     9096,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     9160,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     9670,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     9910,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     10129,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     10409,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     10412,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     10416,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     10420,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     10424,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     10427,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     11417,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     11681,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     11687,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     11717,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     11741,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     11748,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     11987,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ],
+    [
+     11993,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     11997,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     12002,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     12005,
+     "request",
+     "nuvio-catalog /meta/movie/{x} after-render"
+    ]
+   ]
+  },
+  {
+   "trial": 2,
+   "kind": "dwell",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 338,
+   "loadingShellMs": 338,
+   "metaRenderedMs": 669,
+   "usableMs": 669,
+   "contentMs": 1953,
+   "settledMs": 1953,
+   "samples": 216,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 2138,
+   "requests": 7,
+   "images": 1,
+   "longTasks": 6,
+   "longTaskMs": 1083,
+   "longTaskUnionMs": 1083,
+   "longTaskMaxOverlap": 1,
+   "worstLongTaskMs": 354,
+   "longTaskEntries": [
+    [
+     26,
+     241
+    ],
+    [
+     267,
+     66
+    ],
+    [
+     441,
+     189
+    ],
+    [
+     1081,
+     94
+    ],
+    [
+     1284,
+     139
+    ],
+    [
+     1595,
+     354
+    ]
+   ],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 8,
+     "spreadMs": 3,
+     "offsetMs": -15619228.068999998
+    },
+    "orphans": 8,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": 435,
+    "lastAfterRenderEndMs": 2138,
+    "endedAfterUsable": 5,
+    "providers": {
+     "cinemeta": 1,
+     "trakt": 3,
+     "tmdb": 1,
+     "nuvio-catalog": 2
+    },
+    "categories": {
+     "cinemeta /meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 95,
+      "repeated": false
+     },
+     "trakt /movies/{x}/related": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "medianDurMs": 329,
+      "repeated": false
+     },
+     "tmdb /3/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "enrichMeta"
+      ],
+      "medianDurMs": 20,
+      "repeated": false
+     },
+     "trakt /movies/{x}/comments/likes": {
+      "count": 2,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 1,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "loadTraktComments"
+      ],
+      "medianDurMs": 466.5,
+      "repeated": true
+     },
+     "nuvio-catalog /meta/series/{x}": {
+      "count": 2,
+      "finished": 2,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "refreshLibraryMembership"
+      ],
+      "medianDurMs": 938,
+      "repeated": true
+     }
+    },
+    "requests": [
+     {
+      "provider": "cinemeta",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 340,
+      "endMs": 435,
+      "durMs": 95,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1367,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/related",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 591,
+      "endMs": 920,
+      "durMs": 329,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 10334,
+      "initiatorType": "script",
+      "owner": "fetchMoreLikeThis",
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchTraktRelated@app.bundle.js:0:2137792",
+       "fetchMoreLikeThis@app.bundle.js:0:2136653",
+       "loadDetail@app.bundle.js:0:2133217",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "tmdb",
+      "category": "/3/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 598,
+      "endMs": 618,
+      "durMs": 20,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 28455,
+      "initiatorType": "script",
+      "owner": "enrichMeta",
+      "owners": [
+       "fetchEnrichment",
+       "enrichMeta"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchEnrichment@app.bundle.js:0:553898",
+       "enrichMeta@app.bundle.js:0:2152923",
+       "(anonymous)@app.bundle.js:0:2133512",
+       "loadDetail@app.bundle.js:0:2135589",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 603,
+      "endMs": 1190,
+      "durMs": 587,
+      "outcome": "canceled",
+      "status": 200,
+      "errorText": "net::ERR_ABORTED",
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": null,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "loadDetail@app.bundle.js:0:2133180",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 1044,
+      "endMs": 1390,
+      "durMs": 346,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 34906,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "(anonymous)@app.bundle.js:0:2134305",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 1150,
+      "endMs": 1371,
+      "durMs": 221,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5301,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "_renderDetailSectionsNow@app.bundle.js:0:2178959",
+       "(anonymous)@app.bundle.js:0:2178510",
+       "updateRenderedDetailSections@app.bundle.js:0:2178322",
+       "(anonymous)@app.bundle.js:0:2134184",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 1193,
+      "endMs": 2135,
+      "durMs": 941,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2286,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/series/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 1203,
+      "endMs": 2138,
+      "durMs": 935,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2699,
+      "initiatorType": "script",
+      "owner": "refreshLibraryMembership",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "refreshLibraryMembership"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 11256,
+    "intervalUs": 1067,
+    "whole": {
+     "sampledMs": 12446,
+     "recorderMs": 557.8,
+     "self": [
+      [
+       "(idle)",
+       9993.2
+      ],
+      [
+       "(program)",
+       474.4
+      ],
+      [
+       "i.detailScrollHandler@app.bundle.js:0:2249380",
+       297.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       295.9
+      ],
+      [
+       "(garbage collector)",
+       157.3
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       9993.2
+      ],
+      [
+       "(program)",
+       474.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       459.7
+      ],
+      [
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       457.1
+      ],
+      [
+       "(anonymous)@app.bundle.js:0:2178324",
+       457.1
+      ]
+     ],
+     "owners": [
+      [
+       "getMetaFromAllAddons",
+       145.5
+      ],
+      [
+       "getMeta",
+       86.5
+      ],
+      [
+       "fetchEnrichment",
+       12.8
+      ],
+      [
+       "enrichMeta",
+       8
+      ],
+      [
+       "getResumeByContentIds",
+       6.6
+      ]
+     ],
+     "heaviestPath": [
+      "(anonymous)@app.bundle.js:0:2178324",
+      "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+      "bindDetailChrome@app.bundle.js:0:2249147",
+      "i.detailScrollHandler@app.bundle.js:0:2249380"
+     ]
+    },
+    "windows": [
+     {
+      "start": 26,
+      "dur": 241,
+      "sampledMs": 240.6,
+      "recorderMs": 2.1,
+      "self": [
+       [
+        "dy@app.bundle.js:0:351387",
+        51.2
+       ],
+       [
+        "uy@app.bundle.js:0:351522",
+        30
+       ],
+       [
+        "d@app.bundle.js:0:404",
+        28.2
+       ],
+       [
+        "getAll@app.bundle.js:0:363165",
+        17.8
+       ],
+       [
+        "Yy@app.bundle.js:0:360965",
+        11.4
+       ]
+      ],
+      "inclusive": [
+       [
+        "isWatched@app.bundle.js:0:364511",
+        137
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:364594",
+        133.7
+       ],
+       [
+        "cy@app.bundle.js:0:351921",
+        98.3
+       ],
+       [
+        "uy@app.bundle.js:0:351522",
+        89.4
+       ],
+       [
+        "dy@app.bundle.js:0:351387",
+        52.9
+       ]
+      ],
+      "owners": [
+       [
+        "getMeta",
+        24.6
+       ],
+       [
+        "getResumeByContentIds",
+        3.3
+       ],
+       [
+        "getResumeByContentId",
+        3.3
+       ]
+      ],
+      "heaviestPath": [
+       "isWatched@app.bundle.js:0:364511",
+       "(anonymous)@app.bundle.js:0:364594",
+       "cy@app.bundle.js:0:351921",
+       "uy@app.bundle.js:0:351522",
+       "dy@app.bundle.js:0:351387"
+      ]
+     },
+     {
+      "start": 267,
+      "dur": 66,
+      "sampledMs": 65.7,
+      "recorderMs": 0,
+      "self": [
+       [
+        "(program)",
+        65
+       ],
+       [
+        "(idle)",
+        0.6
+       ]
+      ],
+      "inclusive": [
+       [
+        "(program)",
+        65
+       ],
+       [
+        "(idle)",
+        0.6
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": []
+     },
+     {
+      "start": 441,
+      "dur": 189,
+      "sampledMs": 189.1,
+      "recorderMs": 2.1,
+      "self": [
+       [
+        "dy@app.bundle.js:0:351387",
+        32.1
+       ],
+       [
+        "focus@(native)",
+        21.5
+       ],
+       [
+        "uy@app.bundle.js:0:351522",
+        14.8
+       ],
+       [
+        "fetch@(native)",
+        14.4
+       ],
+       [
+        "renderMovieLayout@app.bundle.js:0:2175610",
+        9.7
+       ]
+      ],
+      "inclusive": [
+       [
+        "loadDetail@app.bundle.js:0:2130214",
+        126.3
+       ],
+       [
+        "buildEpisodeState@app.bundle.js:0:2147765",
+        62.5
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2148296",
+        55
+       ],
+       [
+        "hy@app.bundle.js:0:351999",
+        53.9
+       ],
+       [
+        "p@app.bundle.js:0:2147986",
+        53.9
+       ]
+      ],
+      "owners": [
+       [
+        "enrichMeta",
+        7.2
+       ],
+       [
+        "fetchEnrichment",
+        6.1
+       ],
+       [
+        "getResumeByContentIds",
+        3.3
+       ],
+       [
+        "refreshTrailerSource",
+        2.9
+       ],
+       [
+        "fetchMoreLikeThis",
+        2.2
+       ]
+      ],
+      "heaviestPath": [
+       "loadDetail@app.bundle.js:0:2130214",
+       "buildEpisodeState@app.bundle.js:0:2147765",
+       "(anonymous)@app.bundle.js:0:2148296",
+       "p@app.bundle.js:0:2147986",
+       "hy@app.bundle.js:0:351999",
+       "uy@app.bundle.js:0:351522",
+       "dy@app.bundle.js:0:351387"
+      ]
+     },
+     {
+      "start": 1081,
+      "dur": 94,
+      "sampledMs": 93.2,
+      "recorderMs": 3.2,
+      "self": [
+       [
+        "(program)",
+        21.9
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        21.6
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        16.3
+       ],
+       [
+        "(garbage collector)",
+        5.5
+       ],
+       [
+        "focus@(native)",
+        3.2
+       ]
+      ],
+      "inclusive": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        62.7
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        62.7
+       ],
+       [
+        "bindDetailChrome@app.bundle.js:0:2249147",
+        29.2
+       ],
+       [
+        "(program)",
+        21.9
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        21.6
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       "bindDetailChrome@app.bundle.js:0:2249147",
+       "i.detailScrollHandler@app.bundle.js:0:2249380"
+      ]
+     },
+     {
+      "start": 1284,
+      "dur": 139,
+      "sampledMs": 138,
+      "recorderMs": 17.4,
+      "self": [
+       [
+        "(garbage collector)",
+        56.2
+       ],
+       [
+        "querySelectorAll@(native)",
+        16.4
+       ],
+       [
+        "(program)",
+        12.8
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        11
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        9.8
+       ]
+      ],
+      "inclusive": [
+       [
+        "(garbage collector)",
+        56.2
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        51.7
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        51.7
+       ],
+       [
+        "renderHeroSection@app.bundle.js:0:2166283",
+        19.8
+       ],
+       [
+        "renderMovieHeroMarkup@app.bundle.js:0:2162962",
+        19.8
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567"
+      ]
+     },
+     {
+      "start": 1595,
+      "dur": 354,
+      "sampledMs": 355.1,
+      "recorderMs": 3.2,
+      "self": [
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        258.2
+       ],
+       [
+        "(program)",
+        29.7
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        22.7
+       ],
+       [
+        "Xa@app.bundle.js:0:106251",
+        9.6
+       ],
+       [
+        "querySelectorAll@(native)",
+        5.4
+       ]
+      ],
+      "inclusive": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        321
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        321
+       ],
+       [
+        "bindDetailChrome@app.bundle.js:0:2249147",
+        263.6
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        258.2
+       ],
+       [
+        "(program)",
+        29.7
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       "bindDetailChrome@app.bundle.js:0:2249147",
+       "i.detailScrollHandler@app.bundle.js:0:2249380"
+      ]
+     }
+    ]
+   },
+   "timeline": [
+    [
+     26,
+     "longtask",
+     "241 ms"
+    ],
+    [
+     267,
+     "longtask",
+     "66 ms"
+    ],
+    [
+     338,
+     "marker",
+     "visible"
+    ],
+    [
+     338,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     340,
+     "request",
+     "cinemeta /meta/movie/{x} before-render"
+    ],
+    [
+     435,
+     "response",
+     "cinemeta /meta/movie/{x} finished 200"
+    ],
+    [
+     441,
+     "longtask",
+     "189 ms"
+    ],
+    [
+     591,
+     "request",
+     "trakt /movies/{x}/related after-render"
+    ],
+    [
+     598,
+     "request",
+     "tmdb /3/movie/{x} after-render"
+    ],
+    [
+     603,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     618,
+     "response",
+     "tmdb /3/movie/{x} finished 200"
+    ],
+    [
+     669,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     669,
+     "marker",
+     "usable"
+    ],
+    [
+     920,
+     "response",
+     "trakt /movies/{x}/related finished 200"
+    ],
+    [
+     1044,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     1081,
+     "longtask",
+     "94 ms"
+    ],
+    [
+     1190,
+     "response",
+     "trakt /movies/{x}/comments/likes canceled 200"
+    ],
+    [
+     1193,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     1203,
+     "request",
+     "nuvio-catalog /meta/series/{x} after-render"
+    ],
+    [
+     1284,
+     "longtask",
+     "139 ms"
+    ],
+    [
+     1390,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     1595,
+     "longtask",
+     "354 ms"
+    ],
+    [
+     1953,
+     "marker",
+     "content"
+    ],
+    [
+     1953,
+     "marker",
+     "settled"
+    ],
+    [
+     2135,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ],
+    [
+     2138,
+     "response",
+     "nuvio-catalog /meta/series/{x} finished 200"
+    ]
+   ]
+  },
+  {
+   "trial": 3,
+   "kind": "dwell",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 183,
+   "loadingShellMs": 183,
+   "metaRenderedMs": 669,
+   "usableMs": 669,
+   "contentMs": 1352,
+   "settledMs": 4294,
+   "samples": 222,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 3960,
+   "requests": 5,
+   "images": 1,
+   "longTasks": 6,
+   "longTaskMs": 1039,
+   "longTaskUnionMs": 1039,
+   "longTaskMaxOverlap": 1,
+   "worstLongTaskMs": 322,
+   "longTaskEntries": [
+    [
+     27,
+     85
+    ],
+    [
+     113,
+     65
+    ],
+    [
+     432,
+     199
+    ],
+    [
+     1029,
+     322
+    ],
+    [
+     3544,
+     81
+    ],
+    [
+     4006,
+     287
+    ]
+   ],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 6,
+     "spreadMs": 1,
+     "offsetMs": -15637899.114500001
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": 429,
+    "lastAfterRenderEndMs": 3960,
+    "endedAfterUsable": 4,
+    "providers": {
+     "cinemeta": 1,
+     "trakt": 3,
+     "tmdb": 1
+    },
+    "categories": {
+     "cinemeta /meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 243,
+      "repeated": false
+     },
+     "trakt /movies/{x}/related": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "medianDurMs": 316,
+      "repeated": false
+     },
+     "trakt /movies/{x}/comments/likes": {
+      "count": 2,
+      "finished": 2,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "loadTraktComments"
+      ],
+      "medianDurMs": 383.5,
+      "repeated": true
+     },
+     "tmdb /3/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "enrichMeta"
+      ],
+      "medianDurMs": 73,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "cinemeta",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 185,
+      "endMs": 429,
+      "durMs": 243,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1347,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/related",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 609,
+      "endMs": 925,
+      "durMs": 316,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 9751,
+      "initiatorType": "script",
+      "owner": "fetchMoreLikeThis",
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchTraktRelated@app.bundle.js:0:2137792",
+       "fetchMoreLikeThis@app.bundle.js:0:2136653",
+       "loadDetail@app.bundle.js:0:2133217",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 613,
+      "endMs": 963,
+      "durMs": 350,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 35746,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "loadDetail@app.bundle.js:0:2133180",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "tmdb",
+      "category": "/3/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3387,
+      "endMs": 3461,
+      "durMs": 73,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 19416,
+      "initiatorType": "script",
+      "owner": "enrichMeta",
+      "owners": [
+       "fetchEnrichment",
+       "enrichMeta"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchEnrichment@app.bundle.js:0:553898",
+       "enrichMeta@app.bundle.js:0:2152923",
+       "(anonymous)@app.bundle.js:0:2133512",
+       "loadDetail@app.bundle.js:0:2135589",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 3542,
+      "endMs": 3960,
+      "durMs": 417,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 34225,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "(anonymous)@app.bundle.js:0:2134305",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 3610,
+      "endMs": 3704,
+      "durMs": 94,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 14058,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "_renderDetailSectionsNow@app.bundle.js:0:2178959",
+       "(anonymous)@app.bundle.js:0:2178510",
+       "updateRenderedDetailSections@app.bundle.js:0:2178322",
+       "(anonymous)@app.bundle.js:0:2134184",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     27,
+     "longtask",
+     "85 ms"
+    ],
+    [
+     113,
+     "longtask",
+     "65 ms"
+    ],
+    [
+     183,
+     "marker",
+     "visible"
+    ],
+    [
+     183,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     185,
+     "request",
+     "cinemeta /meta/movie/{x} before-render"
+    ],
+    [
+     429,
+     "response",
+     "cinemeta /meta/movie/{x} finished 200"
+    ],
+    [
+     432,
+     "longtask",
+     "199 ms"
+    ],
+    [
+     609,
+     "request",
+     "trakt /movies/{x}/related after-render"
+    ],
+    [
+     613,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     669,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     669,
+     "marker",
+     "usable"
+    ],
+    [
+     925,
+     "response",
+     "trakt /movies/{x}/related finished 200"
+    ],
+    [
+     963,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     1029,
+     "longtask",
+     "322 ms"
+    ],
+    [
+     1352,
+     "marker",
+     "content"
+    ],
+    [
+     3387,
+     "request",
+     "tmdb /3/movie/{x} after-render"
+    ],
+    [
+     3461,
+     "response",
+     "tmdb /3/movie/{x} finished 200"
+    ],
+    [
+     3542,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     3544,
+     "longtask",
+     "81 ms"
+    ],
+    [
+     3960,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     4006,
+     "longtask",
+     "287 ms"
+    ],
+    [
+     4294,
+     "marker",
+     "settled"
+    ]
+   ]
+  },
+  {
+   "trial": 4,
+   "kind": "cold",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 232,
+   "loadingShellMs": 232,
+   "metaRenderedMs": 579,
+   "usableMs": 579,
+   "contentMs": 1393,
+   "settledMs": 5155,
+   "samples": 221,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 4797,
+   "requests": 5,
+   "images": 2,
+   "longTasks": 7,
+   "longTaskMs": 1177,
+   "longTaskUnionMs": 1177,
+   "longTaskMaxOverlap": 1,
+   "worstLongTaskMs": 351,
+   "longTaskEntries": [
+    [
+     54,
+     103
+    ],
+    [
+     157,
+     65
+    ],
+    [
+     330,
+     206
+    ],
+    [
+     586,
+     67
+    ],
+    [
+     1040,
+     351
+    ],
+    [
+     4460,
+     84
+    ],
+    [
+     4853,
+     301
+    ]
+   ],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 7,
+     "spreadMs": 1,
+     "offsetMs": -15654926.640999999
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": 324,
+    "lastAfterRenderEndMs": 4797,
+    "endedAfterUsable": 4,
+    "providers": {
+     "nuvio-catalog": 1,
+     "cinemeta": 1,
+     "trakt": 3,
+     "tmdb": 1
+    },
+    "categories": {
+     "nuvio-catalog /meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "home"
+      ],
+      "owners": [
+       "enrichCurrentHeroAsync"
+      ],
+      "medianDurMs": 186,
+      "repeated": false
+     },
+     "cinemeta /meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 89,
+      "repeated": false
+     },
+     "trakt /movies/{x}/related": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "medianDurMs": 293,
+      "repeated": false
+     },
+     "trakt /movies/{x}/comments/likes": {
+      "count": 2,
+      "finished": 2,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "loadTraktComments"
+      ],
+      "medianDurMs": 409,
+      "repeated": true
+     },
+     "tmdb /3/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "after-render"
+      ],
+      "owners": [
+       "enrichMeta"
+      ],
+      "medianDurMs": 17,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "metahub-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": -53,
+      "endMs": -40,
+      "durMs": 13,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": true,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 0,
+      "initiatorType": "other",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": []
+     },
+     {
+      "provider": "nuvio-catalog",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": -48,
+      "endMs": 137,
+      "durMs": 186,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 2341,
+      "initiatorType": "script",
+      "owner": "enrichCurrentHeroAsync",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "enrichCurrentHeroAsync"
+      ],
+      "phase": "home",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "cinemeta",
+      "category": "/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 235,
+      "endMs": 324,
+      "durMs": 89,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 1354,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "Ur@app.bundle.js:0:61204",
+       "Ur@app.bundle.js:0:61138",
+       "(anonymous)@app.bundle.js:0:63344",
+       "(anonymous)@app.bundle.js:0:59725",
+       "Mr@app.bundle.js:0:59716"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/related",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 505,
+      "endMs": 798,
+      "durMs": 293,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 9859,
+      "initiatorType": "script",
+      "owner": "fetchMoreLikeThis",
+      "owners": [
+       "fetchMoreLikeThis"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "(anonymous)@app.bundle.js:0:339810",
+       "fetchTraktRelated@app.bundle.js:0:2137792",
+       "fetchMoreLikeThis@app.bundle.js:0:2136653",
+       "loadDetail@app.bundle.js:0:2133217",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 513,
+      "endMs": 993,
+      "durMs": 479,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 31174,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "loadDetail@app.bundle.js:0:2133180",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "tmdb",
+      "category": "/3/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4349,
+      "endMs": 4366,
+      "durMs": 17,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 22640,
+      "initiatorType": "script",
+      "owner": "enrichMeta",
+      "owners": [
+       "fetchEnrichment",
+       "enrichMeta"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchEnrichment@app.bundle.js:0:553898",
+       "enrichMeta@app.bundle.js:0:2152923",
+       "(anonymous)@app.bundle.js:0:2133512",
+       "loadDetail@app.bundle.js:0:2135589",
+       "loadDetail@app.bundle.js:0:2130549"
+      ]
+     },
+     {
+      "provider": "trakt",
+      "category": "/movies/{x}/comments/likes",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 4458,
+      "endMs": 4797,
+      "durMs": 339,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 29406,
+      "initiatorType": "script",
+      "owner": "loadTraktComments",
+      "owners": [
+       "loadTraktComments"
+      ],
+      "phase": "after-render",
+      "frames": [
+       "fetchTraktCommentsPage@app.bundle.js:0:2140855",
+       "fetchTraktCommentsPage@app.bundle.js:0:2140601",
+       "loadTraktComments@app.bundle.js:0:2143088",
+       "(anonymous)@app.bundle.js:0:2134305",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 4523,
+      "endMs": 4533,
+      "durMs": 10,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": true,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 0,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "applyDetailBackdrop@app.bundle.js:0:2177941",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178764",
+       "(anonymous)@app.bundle.js:0:2178510",
+       "updateRenderedDetailSections@app.bundle.js:0:2178322",
+       "(anonymous)@app.bundle.js:0:2134184"
+      ]
+     },
+     {
+      "provider": "tmdb-image",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 4525,
+      "endMs": 4608,
+      "durMs": 83,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 5301,
+      "initiatorType": "script",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": [
+       "_renderDetailSectionsNow@app.bundle.js:0:2178959",
+       "(anonymous)@app.bundle.js:0:2178510",
+       "updateRenderedDetailSections@app.bundle.js:0:2178322",
+       "(anonymous)@app.bundle.js:0:2134184",
+       "(anonymous)@app.bundle.js:0:2133505"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 11136,
+    "intervalUs": 1069,
+    "whole": {
+     "sampledMs": 12269,
+     "recorderMs": 398.5,
+     "self": [
+      [
+       "(idle)",
+       9758
+      ],
+      [
+       "(program)",
+       711.4
+      ],
+      [
+       "i.detailScrollHandler@app.bundle.js:0:2249380",
+       518.8
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       273.8
+      ],
+      [
+       "(garbage collector)",
+       177.9
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       9758
+      ],
+      [
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       738
+      ],
+      [
+       "(anonymous)@app.bundle.js:0:2178324",
+       738
+      ],
+      [
+       "(program)",
+       711.4
+      ],
+      [
+       "bindDetailChrome@app.bundle.js:0:2249147",
+       537.6
+      ]
+     ],
+     "owners": [
+      [
+       "getMeta",
+       25.9
+      ],
+      [
+       "fetchEnrichment",
+       9.4
+      ],
+      [
+       "getResumeByContentIds",
+       8.6
+      ],
+      [
+       "refreshTrailerSource",
+       6.6
+      ],
+      [
+       "enrichMeta",
+       5.2
+      ]
+     ],
+     "heaviestPath": [
+      "(anonymous)@app.bundle.js:0:2178324",
+      "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+      "bindDetailChrome@app.bundle.js:0:2249147",
+      "i.detailScrollHandler@app.bundle.js:0:2249380"
+     ]
+    },
+    "windows": [
+     {
+      "start": 54,
+      "dur": 103,
+      "sampledMs": 104.1,
+      "recorderMs": 3.3,
+      "self": [
+       [
+        "MS@app.bundle.js:0:416282",
+        12.3
+       ],
+       [
+        "Yy@app.bundle.js:0:360965",
+        9.9
+       ],
+       [
+        "canonicalizeUrl@app.bundle.js:0:378795",
+        9.8
+       ],
+       [
+        "parse@core-js.bundle.js:0:58404",
+        9.6
+       ],
+       [
+        "querySelectorAll@(native)",
+        6.3
+       ]
+      ],
+      "inclusive": [
+       [
+        "loadDetail@app.bundle.js:0:2130214",
+        34.6
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2130757",
+        25.9
+       ],
+       [
+        "getMeta@app.bundle.js:0:397121",
+        24.8
+       ],
+       [
+        "getInstalledAddons@app.bundle.js:0:387837",
+        23.7
+       ],
+       [
+        "resolveDirectMetaType@app.bundle.js:0:400324",
+        23.7
+       ]
+      ],
+      "owners": [
+       [
+        "getMeta",
+        25.9
+       ],
+       [
+        "getResumeByContentIds",
+        2.1
+       ],
+       [
+        "getResumeByContentId",
+        2.1
+       ]
+      ],
+      "heaviestPath": [
+       "getRecent@app.bundle.js:0:424781",
+       "MS@app.bundle.js:0:416282"
+      ]
+     },
+     {
+      "start": 157,
+      "dur": 65,
+      "sampledMs": 62,
+      "recorderMs": 0,
+      "self": [
+       [
+        "(program)",
+        62
+       ]
+      ],
+      "inclusive": [
+       [
+        "(program)",
+        62
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": []
+     },
+     {
+      "start": 330,
+      "dur": 206,
+      "sampledMs": 205.8,
+      "recorderMs": 3.3,
+      "self": [
+       [
+        "dy@app.bundle.js:0:351387",
+        43.6
+       ],
+       [
+        "focus@(native)",
+        32.5
+       ],
+       [
+        "uy@app.bundle.js:0:351522",
+        23.4
+       ],
+       [
+        "fetch@(native)",
+        13.9
+       ],
+       [
+        "renderMovieLayout@app.bundle.js:0:2175610",
+        13.6
+       ]
+      ],
+      "inclusive": [
+       [
+        "loadDetail@app.bundle.js:0:2130214",
+        153.4
+       ],
+       [
+        "uy@app.bundle.js:0:351522",
+        71.1
+       ],
+       [
+        "buildEpisodeState@app.bundle.js:0:2147765",
+        67.5
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2148296",
+        64.2
+       ],
+       [
+        "renderMovieLayout@app.bundle.js:0:2175610",
+        61.6
+       ]
+      ],
+      "owners": [
+       [
+        "getResumeByContentIds",
+        6.5
+       ],
+       [
+        "refreshTrailerSource",
+        5.5
+       ],
+       [
+        "loadTraktComments",
+        2.8
+       ],
+       [
+        "fetchMoreLikeThis",
+        2
+       ],
+       [
+        "enrichMeta",
+        1.1
+       ]
+      ],
+      "heaviestPath": [
+       "getRecent@app.bundle.js:0:424781",
+       "(anonymous)@app.bundle.js:0:425135",
+       "(anonymous)@app.bundle.js:0:425266",
+       "uy@app.bundle.js:0:351522",
+       "dy@app.bundle.js:0:351387"
+      ]
+     },
+     {
+      "start": 586,
+      "dur": 67,
+      "sampledMs": 66.8,
+      "recorderMs": 0,
+      "self": [
+       [
+        "(program)",
+        66.8
+       ]
+      ],
+      "inclusive": [
+       [
+        "(program)",
+        66.8
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": []
+     },
+     {
+      "start": 1040,
+      "dur": 351,
+      "sampledMs": 351.9,
+      "recorderMs": 2.9,
+      "self": [
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        261.9
+       ],
+       [
+        "(program)",
+        31.5
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        20.6
+       ],
+       [
+        "Xa@app.bundle.js:0:106251",
+        5.5
+       ],
+       [
+        "JQ@app.bundle.js:0:2108212",
+        5.4
+       ]
+      ],
+      "inclusive": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        317.5
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        317.5
+       ],
+       [
+        "bindDetailChrome@app.bundle.js:0:2249147",
+        265.7
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        261.9
+       ],
+       [
+        "(program)",
+        31.5
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       "bindDetailChrome@app.bundle.js:0:2249147",
+       "i.detailScrollHandler@app.bundle.js:0:2249380"
+      ]
+     },
+     {
+      "start": 4460,
+      "dur": 84,
+      "sampledMs": 84.7,
+      "recorderMs": 3.4,
+      "self": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        20.8
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        20.4
+       ],
+       [
+        "(program)",
+        17.9
+       ],
+       [
+        "focus@(native)",
+        3.2
+       ],
+       [
+        "s@app.bundle.js:0:204",
+        3.2
+       ]
+      ],
+      "inclusive": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        62.4
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        62.4
+       ],
+       [
+        "bindDetailChrome@app.bundle.js:0:2249147",
+        27
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        20.4
+       ],
+       [
+        "(program)",
+        17.9
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567"
+      ]
+     },
+     {
+      "start": 4853,
+      "dur": 301,
+      "sampledMs": 300.7,
+      "recorderMs": 3.3,
+      "self": [
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        220.3
+       ],
+       [
+        "(program)",
+        28.6
+       ],
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        16.2
+       ],
+       [
+        "Xa@app.bundle.js:0:106251",
+        9.6
+       ],
+       [
+        "Ga@app.bundle.js:0:105474",
+        2.2
+       ]
+      ],
+      "inclusive": [
+       [
+        "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+        268.9
+       ],
+       [
+        "(anonymous)@app.bundle.js:0:2178324",
+        268.9
+       ],
+       [
+        "bindDetailChrome@app.bundle.js:0:2249147",
+        223.5
+       ],
+       [
+        "i.detailScrollHandler@app.bundle.js:0:2249380",
+        220.3
+       ],
+       [
+        "(program)",
+        28.6
+       ]
+      ],
+      "owners": [],
+      "heaviestPath": [
+       "(anonymous)@app.bundle.js:0:2178324",
+       "_renderDetailSectionsNow@app.bundle.js:0:2178567",
+       "bindDetailChrome@app.bundle.js:0:2249147",
+       "i.detailScrollHandler@app.bundle.js:0:2249380"
+      ]
+     }
+    ]
+   },
+   "timeline": [
+    [
+     -48,
+     "request",
+     "nuvio-catalog /meta/movie/{x} home"
+    ],
+    [
+     54,
+     "longtask",
+     "103 ms"
+    ],
+    [
+     137,
+     "response",
+     "nuvio-catalog /meta/movie/{x} finished 200"
+    ],
+    [
+     157,
+     "longtask",
+     "65 ms"
+    ],
+    [
+     232,
+     "marker",
+     "visible"
+    ],
+    [
+     232,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     235,
+     "request",
+     "cinemeta /meta/movie/{x} before-render"
+    ],
+    [
+     324,
+     "response",
+     "cinemeta /meta/movie/{x} finished 200"
+    ],
+    [
+     330,
+     "longtask",
+     "206 ms"
+    ],
+    [
+     505,
+     "request",
+     "trakt /movies/{x}/related after-render"
+    ],
+    [
+     513,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     579,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     579,
+     "marker",
+     "usable"
+    ],
+    [
+     586,
+     "longtask",
+     "67 ms"
+    ],
+    [
+     798,
+     "response",
+     "trakt /movies/{x}/related finished 200"
+    ],
+    [
+     993,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     1040,
+     "longtask",
+     "351 ms"
+    ],
+    [
+     1393,
+     "marker",
+     "content"
+    ],
+    [
+     4349,
+     "request",
+     "tmdb /3/movie/{x} after-render"
+    ],
+    [
+     4366,
+     "response",
+     "tmdb /3/movie/{x} finished 200"
+    ],
+    [
+     4458,
+     "request",
+     "trakt /movies/{x}/comments/likes after-render"
+    ],
+    [
+     4460,
+     "longtask",
+     "84 ms"
+    ],
+    [
+     4797,
+     "response",
+     "trakt /movies/{x}/comments/likes finished 200"
+    ],
+    [
+     4853,
+     "longtask",
+     "301 ms"
+    ],
+    [
+     5155,
+     "marker",
+     "settled"
+    ]
+   ]
+  }
+ ]
+}
