@@ -14,8 +14,45 @@ const ORDER = (process.argv[2] || "CDDCCD").toUpperCase();
 const DWELL_MS = +(process.env.DWELL_MS || 5000);
 const WAIT_MS = +(process.env.WAIT_MS || 12000);
 const BACK = ["GoBack", 461];
+// PROFILE=1: CPU profile per open (prof_trial<N>.cpuprofile) plus script/style/layout time deltas.
+const PROFILE = process.env.PROFILE === "1";
+const OUT = path.join(
+  HERE,
+  "../results",
+  DEVICE,
+  process.env.LABEL || `details_${new Date().toISOString().slice(0, 10)}`
+);
+fs.mkdirSync(OUT, { recursive: true });
 
 const c = await connect();
+const METRIC_KEYS = [
+  "TaskDuration",
+  "ScriptDuration",
+  "RecalcStyleDuration",
+  "LayoutDuration",
+  "LayoutCount",
+  "RecalcStyleCount",
+  "Nodes",
+  "JSHeapUsedSize"
+];
+const metrics = async () => {
+  const m = Object.fromEntries(
+    ((await c.send("Performance.getMetrics")).result?.metrics || []).map((x) => [x.name, x.value])
+  );
+  return Object.fromEntries(METRIC_KEYS.map((k) => [k, m[k]]));
+};
+const metricDelta = (a, b) =>
+  Object.fromEntries(
+    METRIC_KEYS.map((k) => [
+      k,
+      k.endsWith("Duration") ? Math.round((b[k] - a[k]) * 1000) : Math.round(b[k] - a[k])
+    ])
+  );
+if (PROFILE) {
+  await c.send("Performance.enable");
+  await c.send("Profiler.enable");
+  await c.send("Profiler.setSamplingInterval", { interval: 500 });
+}
 const safeCard = () =>
   c.ev(`(()=>{const a=document.activeElement;if(!a||!a.closest(".home-row"))return "not_in_row";
     if(a.closest(".home-row-continue"))return "continue_row";
@@ -75,10 +112,20 @@ for (const [i, kind] of [...ORDER].entries()) {
     continue;
   }
   await c.ev(ARM);
+  const m0 = PROFILE ? await metrics() : null;
+  if (PROFILE) await c.send("Profiler.start");
   await c.key(KEYS.OK);
   await sleep(WAIT_MS);
+  let prof = null;
+  if (PROFILE) prof = (await c.send("Profiler.stop")).result?.profile;
+  const m1 = PROFILE ? await metrics() : null;
   const s = summarize(await c.ev(COLLECT));
   s.kind = kind === "D" ? "dwell" : "cold";
+  if (PROFILE) {
+    s.metrics = metricDelta(m0, m1);
+    s.metrics.NodesAfter = Math.round(m1.Nodes);
+    fs.writeFileSync(path.join(OUT, `prof_trial${i + 1}.cpuprofile`), JSON.stringify(prof));
+  }
   results.push(s);
   console.log(JSON.stringify({ trial: i + 1, ...s }));
   if (s.visibleMs == null) {
@@ -93,17 +140,11 @@ for (const [i, kind] of [...ORDER].entries()) {
   }
 }
 
-const out = path.join(
-  HERE,
-  "../results",
-  DEVICE,
-  process.env.LABEL || `details_${new Date().toISOString().slice(0, 10)}`
-);
-fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(
-  path.join(out, "details.json"),
+  path.join(OUT, "details.json"),
   JSON.stringify({ order: ORDER, dwellMs: DWELL_MS, results }, null, 1)
 );
-console.log("saved", out);
+console.log("saved", OUT);
+if (PROFILE) await c.send("Profiler.disable");
 c.close();
 process.exit(0);
