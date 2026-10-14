@@ -8,6 +8,7 @@ import { watchedItemIdentityValues, watchedItemsShareIdentity } from "./watchedI
 import { getSyncBackoffRemainingMs } from "../../core/sync/syncBackoffPolicy.js";
 import { registerSessionTeardownHandler } from "../../core/auth/sessionLifecycle.js";
 import { labFixEnabled } from "../../core/labSwitch.js";
+import { staleTraktWatchedItems } from "./traktWatchedStaleRead.js";
 
 function activeProfileId() {
   return String(ProfileManager.getActiveProfileId() || "1");
@@ -204,7 +205,7 @@ async function getTraktWatchedMovies() {
     return traktWatchedMoviesCache.items;
   }
   if (traktWatchedMoviesInFlight?.profileId === profileId) {
-    return traktWatchedMoviesInFlight.promise;
+    return staleTraktWatchedItems(traktWatchedMoviesCache, profileId, now) || traktWatchedMoviesInFlight.promise;
   }
 
   const promise = TraktAuthService.fetchWatchedMovies()
@@ -230,7 +231,7 @@ async function getTraktWatchedMovies() {
       }
     });
   traktWatchedMoviesInFlight = { profileId, promise };
-  return promise;
+  return staleTraktWatchedItems(traktWatchedMoviesCache, profileId, now) || promise;
 }
 
 async function getTraktWatchedShows() {
@@ -247,7 +248,7 @@ async function getTraktWatchedShows() {
     return traktWatchedShowsCache.items;
   }
   if (traktWatchedShowsInFlight?.profileId === profileId) {
-    return traktWatchedShowsInFlight.promise;
+    return staleTraktWatchedItems(traktWatchedShowsCache, profileId, now) || traktWatchedShowsInFlight.promise;
   }
 
   const promise = TraktAuthService.fetchWatchedShows()
@@ -273,7 +274,7 @@ async function getTraktWatchedShows() {
       }
     });
   traktWatchedShowsInFlight = { profileId, promise };
-  return promise;
+  return staleTraktWatchedItems(traktWatchedShowsCache, profileId, now) || promise;
 }
 
 function toTraktWatchedShowEpisodeItems(show = {}) {
