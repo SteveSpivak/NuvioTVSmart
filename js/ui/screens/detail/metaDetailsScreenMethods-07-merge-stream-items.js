@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
+import { renderDetailTrailerLoading } from "./detailTrailerLoading.js";
 
 export function createMetaDetailsScreenMethods07() {
   const {
@@ -159,7 +160,7 @@ export function createMetaDetailsScreenMethods07() {
           <div class="series-detail-shell${detailDirectionClass}${this.getTrailerShellStateClasses()}">
             <div class="series-detail-backdrop" data-backdrop-url="${escapeAttribute(backdrop || "")}"${backdrop ? ` style="background-image:url('${backdrop.replace(/'/g, "%27")}')"` : ""}></div>
             <div class="detail-trailer-layer"></div>
-            <div class="detail-trailer-loading-spinner" aria-hidden="true">${renderLoadingIndicator({ className: "player-loading-spinner-ring" })}</div>
+            ${renderDetailTrailerLoading(meta, backdrop)}
             <div class="series-detail-vignette"></div>
             <div class="detail-bottom-shadow"></div>
 

@@ -407,6 +407,29 @@
   opacity: 0;
 }
 
+/* Lab "trailerLoader": manual trailers load behind the player's identity screen. */
+.detail-trailer-loading-identity-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  inset: 0;
+  display: none;
+}
+
+.detail-trailer-manual .detail-trailer-loading-spinner.has-identity .detail-trailer-loading-identity-layer {
+  display: block;
+}
+
+.detail-trailer-manual .detail-trailer-loading-spinner.has-identity .detail-trailer-loading-ring {
+  display: none;
+}
+
+.detail-trailer-ready .detail-trailer-loading-identity-layer .player-loading-identity {
+  animation: none;
+}
+
 .detail-trailer-manual .detail-trailer-layer {
   z-index: 2;
 }
