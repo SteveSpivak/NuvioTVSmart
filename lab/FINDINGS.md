@@ -27,6 +27,37 @@ How to read it:
 
 Next idea: row windowing. Keep only rows near the focus in the document, as Stremio's visible-catalog window does. That removes layers and paint together, instead of trading one for the other.
 
+## Update 2026-10-14: details-open time on the television
+
+**Background loading already works: after resting 5 seconds on a card, details settle in about 2.0 seconds instead of about 5.9. A 2 second rest gives about half that gain (3.9 seconds). About 1.3 seconds of main-thread work happens on every open and is the floor that prefetching cannot remove.** MEASURED, 10 trials.
+
+Method: `lab/perf/details.mjs` on Nuvio 1.2.5-lg1, title rows only (never Continue Watching, so OK cannot start playback). Each trial focuses a new card, waits, presses OK, records for 12 seconds, presses Back once. Order cold/dwell/dwell/cold. "Settled" is the last change in text length or element count of `#detail`.
+
+| Rest on card before OK | Trials | Screen visible | Text shown (median) | Settled (median) | Main-thread long tasks |
+| ---------------------- | ------ | -------------- | ------------------- | ---------------- | ---------------------- |
+| 0.4 s (cold)           | 5      | 0.4–0.9 s      | 1.8 s               | 5.9 s            | 1.2–1.8 s              |
+| 2 s                    | 2      | 0.7–0.8 s      | 1.5 s               | 3.9 s            | 1.2–1.3 s              |
+| 5 s                    | 3      | 0.7–1.1 s      | 2.0 s               | 2.0 s            | 1.1–1.5 s              |
+
+Results: `lab/results/tv/2026-10-14_details_open/` (5 s rest, no request data: the page's resource-timing buffer was full, fixed in the script afterwards) and `lab/results/tv/2026-10-14_details_open_dwell2s/` (2 s rest, with request data).
+
+What the code shows (VERIFIED):
+
+- The Home hero calls `metaRepository.getMetaFromAllAddons` when focus settles (`homeScreenMethods-11-enrich-current-hero-async.js:160`). The details screen calls the same function (`metaDetailsScreenMethods-03-load-detail.js:62`), and `metaRepository` caches it. That is the existing prefetch.
+- Not prefetched: the source-addon `getMeta` (waits up to 1.8 s), `enrichMeta` with TMDB (up to 4 s) and the TMDB cast fallback (up to 3.2 s).
+- `metaCache` has no size limit. On a 1.3 GB television this may matter over a long session (INFERRED).
+
+What the measurements show:
+
+- Settled time ends within about 0.1 s of the last network request (4 trials with request data). The late part is network: Trakt 3–5 requests, TMDB 1–2, Cinemeta 1 per open.
+- 1.1–1.8 s of long tasks (worst single task 0.6–0.96 s) appear in every trial, with or without prefetch. Cause UNKNOWN.
+
+Next ideas, one branch each:
+
+1. `perf/details-prefetch`: when the hero commits, also prefetch the source-addon meta and the TMDB enrichment. One request in flight, cancel when focus moves, cap the cache. Target: settled time after a 2 s rest close to the 5 s result.
+2. `perf/details-trakt`: check whether the 3–5 Trakt requests per open repeat or could be cached or deferred.
+3. `perf/details-render`: profile the ~1.3 s of main-thread work on open (CPU profile around OK). This is the only way below about 2 seconds.
+
 ## Setup
 
 | Step                                                                | Result                                                                 |

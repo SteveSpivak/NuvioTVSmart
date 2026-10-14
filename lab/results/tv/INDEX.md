@@ -28,3 +28,10 @@ Unpromote test: the class `webos-unpromoted-home-tracks` was toggled on the live
 | L3_unpromoted | no              |                                          |
 | L4_promoted   | yes             | warm baseline                            |
 | L5_unpromoted | no              | warm, compare with L4                    |
+
+Details-open timing (`lab/perf/details.mjs`, title rows only):
+
+| Run                 | Order  | Rest on card | Notes                                   |
+| ------------------- | ------ | ------------ | --------------------------------------- |
+| details_open        | CDDCCD | 5 s          | no request data (timing buffer was full) |
+| details_open_dwell2s | CDDC   | 2 s          | with request hosts                      |

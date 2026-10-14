@@ -1,0 +1,75 @@
+{
+ "order": "CDDC",
+ "dwellMs": 2000,
+ "results": [
+  {
+   "visibleMs": 944,
+   "contentMs": 1965,
+   "settledMs": 5853,
+   "lastRequestEndMs": 5770,
+   "requests": 6,
+   "images": 2,
+   "requestHosts": {
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 2
+   },
+   "longTasks": 7,
+   "longTaskMs": 1380,
+   "worstLongTaskMs": 843,
+   "kind": "cold"
+  },
+  {
+   "visibleMs": 687,
+   "contentMs": 1498,
+   "settledMs": 3985,
+   "lastRequestEndMs": 3896,
+   "requests": 8,
+   "images": 2,
+   "requestHosts": {
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 5,
+    "api.themoviedb.org": 2
+   },
+   "longTasks": 8,
+   "longTaskMs": 1236,
+   "worstLongTaskMs": 603,
+   "kind": "dwell"
+  },
+  {
+   "visibleMs": 824,
+   "contentMs": 1511,
+   "settledMs": 3887,
+   "lastRequestEndMs": 3772,
+   "requests": 6,
+   "images": 2,
+   "requestHosts": {
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 2
+   },
+   "longTasks": 7,
+   "longTaskMs": 1329,
+   "worstLongTaskMs": 746,
+   "kind": "dwell"
+  },
+  {
+   "visibleMs": 921,
+   "contentMs": 1661,
+   "settledMs": 6056,
+   "lastRequestEndMs": 5948,
+   "requests": 6,
+   "images": 0,
+   "requestHosts": {
+    "catalog.nuvio.tv": 1,
+    "v3-cinemeta.strem.io": 1,
+    "api.trakt.tv": 3,
+    "api.themoviedb.org": 1
+   },
+   "longTasks": 8,
+   "longTaskMs": 1376,
+   "worstLongTaskMs": 690,
+   "kind": "cold"
+  }
+ ]
+}
