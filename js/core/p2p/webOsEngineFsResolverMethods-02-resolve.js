@@ -61,8 +61,8 @@ export function createWebOsEngineFsResolverMethods02() {
         let statusError = "";
         try {
           const statusResult = await withTimeout(
-            requestWebOsCompanionService({ method: "status", parameters: {}, timeoutMs: 5000 }),
-            5000,
+            requestWebOsCompanionService({ method: "status", parameters: {}, timeoutMs: 20000 }),
+            20000,
             "webOS companion status request timed out"
           );
           statusPayload = statusResult?.payload || {};
