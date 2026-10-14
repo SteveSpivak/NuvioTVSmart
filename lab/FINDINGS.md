@@ -190,3 +190,34 @@ CDP_URL=http://127.0.0.1:19998 DEVICE=tv lab/perf/run-suite.sh unpromote94_20row
 ## Next decision
 
 Measure `unpromote94_20rows` on the television before any more code. If frame rate does not improve, revert the cutoff. Row removal is the next idea only after that result.
+
+## 2026-10-14 update: Trakt watched-list reuse (`watchedMemo`), TV A/B
+
+Branch `perf/watched-remote-memo`, installed side by side as "Nuvio Lab" (`space.nuvio.lab`) and switched with
+localStorage `nuvioLabOff`. Runner `lab/perf/details_ab.mjs`, blocks A/B/B/A, opens cold/dwell/dwell/cold,
+CPU profile per open. Data: `lab/results/tv/2026-10-14r3_ab_watchedMemo_*`, summary in
+`2026-10-14r3_ab_watchedMemo.summary.txt`. All numbers MEASURED, medians, n = 4 per cell.
+
+| Cold opens                             | Fix on | Fix off |
+| -------------------------------------- | ------ | ------- |
+| Text content shown (ms)                | 3302   | 4740    |
+| Settled (ms)                           | 5524   | 5529    |
+| Worst long task (ms)                   | 386    | 1127    |
+| CPU in watched-identity functions (ms) | 472    | 868     |
+
+Dwell opens showed no difference. One open with the fix on froze for 13 s (block 4A, trial 2).
+
+Decision: **UNKNOWN**. The direction favours the fix on cold opens, but n is small and settle time did not move.
+Do not merge on this evidence.
+
+Findings from the profiles (MEASURED, cause VERIFIED in the profile call trees):
+
+1. The 13 s freeze was on Home, not in details: `getTitleWatchedItems` spent 6.0 s in
+   `watchedItemsShareIdentity` (5.1 s) after the reload refreshed the rows. It compares every row item with every
+   watched item and rebuilds identity strings and RegExps each time. The memo does not touch this path. The
+   blocked thread made the app read OK as a long press and open the card menu; `details.mjs` now closes it with Back.
+2. A cold open with the fix off spent 2.2 s in `getInstalledAddons`, mostly `readProfileScopedValue` and
+   `canonicalizeUrl`: addon settings are parsed from localStorage and normalized again on every metadata lookup.
+
+Next decision: an identity-key index for `getTitleWatchedItems` and `buildEpisodeState` (one Set lookup per item),
+which addresses finding 1 and the details cost together. Then a cache for the parsed addon state (finding 2).

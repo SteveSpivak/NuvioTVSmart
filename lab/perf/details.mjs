@@ -129,8 +129,24 @@ for (const [i, kind] of [...ORDER].entries()) {
   results.push(s);
   console.log(JSON.stringify({ trial: i + 1, ...s }));
   if (s.visibleMs == null) {
-    console.log("ABORT details screen never appeared; not pressing Back");
-    break;
+    // A blocked main thread can make the app read OK as a long press and open the card menu
+    // (Go to details / Manage Lists / Mark as watched). Close it with Back; never press OK in it.
+    const menu = await c.ev(
+      '!!(document.activeElement&&document.activeElement.closest(".nuvio-dialog-actions"))'
+    );
+    if (!menu) {
+      console.log("ABORT details screen never appeared; not pressing Back");
+      break;
+    }
+    s.longPressMenu = true;
+    console.log("LONGPRESS_MENU trial", i + 1, "closing the card menu with one Back");
+    await c.key(BACK);
+    await sleep(2000);
+    if (!(await c.onHome())) {
+      console.log("ABORT Home did not return after closing the card menu");
+      break;
+    }
+    continue;
   }
   await c.key(BACK);
   await sleep(2500);
