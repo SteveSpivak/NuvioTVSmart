@@ -256,9 +256,11 @@ export function createMetaDetailsScreenMethods06() {
       const currentKey = JSON.stringify(this.trailerSource || null);
       const nextKey = JSON.stringify(nextSource || null);
       if (currentKey === nextKey) {
+        this.scheduleTrailerWarm();
         return;
       }
       this.trailerSource = nextSource;
+      this.scheduleTrailerWarm();
       if (!this.isTrailerPlaying) {
         this.updateRenderedDetailSections(this.meta || meta);
       }

@@ -367,6 +367,16 @@
   z-index: 0;
 }
 
+/* Lab "trailerWarm": a paused, preloaded trailer player kept invisible. */
+.detail-trailer-warm {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .detail-trailer-active.detail-trailer-ready .detail-trailer-layer {
   opacity: 1;
 }

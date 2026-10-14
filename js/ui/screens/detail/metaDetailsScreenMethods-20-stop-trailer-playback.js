@@ -103,6 +103,7 @@ export function createMetaDetailsScreenMethods20() {
       }
     },
     stopTrailerPlaybackForNavigation() {
+      this.discardWarmTrailer();
       this.stopTrailerPlayback({
         keepDom: false,
         restartAutoplay: false,

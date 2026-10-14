@@ -102,6 +102,14 @@ export function createMetaDetailsScreenMethods01() {
         if (!data || typeof data !== "object" || data.source !== "nuvio-youtube-proxy") {
           return;
         }
+        const warm = this.trailerWarm;
+        if (warm && event?.source && event.source === warm.frame?.contentWindow) {
+          // A paused warm player is not the active trailer; only note readiness.
+          if (data.type === "ready") {
+            warm.ready = true;
+          }
+          return;
+        }
         const eventOrigin = String(event?.origin || "").trim();
         const sourceMatchesFrame = Boolean(frameWindow && event?.source === frameWindow);
         const originMatchesProxy = Boolean(trustedProxyOrigin && eventOrigin === trustedProxyOrigin);

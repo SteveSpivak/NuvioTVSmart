@@ -1,10 +1,89 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
+import { labFixEnabled } from "../../../core/labSwitch.js";
+
+// Lab experiment "trailerWarm": load the YouTube proxy paused (no video) while
+// Details is open, so pressing Trailer skips the proxy page and player script
+// startup. The warm layer sits right after the real layer and takes its place
+// on play, because moving an iframe in the DOM would reload it.
+const TRAILER_WARM_DELAY_MS = 1000;
 
 export function createMetaDetailsScreenMethods19() {
   const { t, escapeHtml, buildInlineYoutubePlayerUrl } = internals;
 
   return {
+    scheduleTrailerWarm() {
+      if (this.trailerWarmTimer) {
+        clearTimeout(this.trailerWarmTimer);
+      }
+      this.trailerWarmTimer = setTimeout(() => {
+        this.trailerWarmTimer = null;
+        this.warmTrailerPlayer();
+      }, TRAILER_WARM_DELAY_MS);
+    },
+    warmTrailerPlayer() {
+      const ytId = String(this.trailerSource?.ytId || "").trim();
+      if (!labFixEnabled("trailerWarm") || this.isTrailerPlaying || this.trailerSource?.kind !== "youtube" || !ytId) {
+        return;
+      }
+      if (this.trailerWarm?.ytId === ytId && this.trailerWarm.layer.isConnected) {
+        return;
+      }
+      this.discardWarmTrailer();
+      const layer = this.container?.querySelector(".detail-trailer-layer");
+      const url = buildInlineYoutubePlayerUrl(ytId, { muted: true, loop: false, statePollMs: 500 });
+      if (!layer || !url) {
+        return;
+      }
+      const warmUrl = new URL(url, globalThis?.location?.href || "https://example.com/");
+      warmUrl.searchParams.set("autoplay", "0");
+      const warmLayer = document.createElement("div");
+      warmLayer.className = "detail-trailer-warm";
+      warmLayer.innerHTML = `
+            <div class="detail-trailer-media detail-trailer-youtube" data-trailer-media>
+              <iframe
+                class="detail-trailer-frame"
+                src="${escapeHtml(warmUrl.toString())}"
+                title="Trailer"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerpolicy="origin-when-cross-origin"
+                allowfullscreen
+                scrolling="no"
+                tabindex="-1"
+                aria-hidden="true"
+              ></iframe>
+            </div>
+          `;
+      layer.after(warmLayer);
+      this.trailerWarm = { ytId, layer: warmLayer, frame: warmLayer.querySelector("iframe"), ready: false };
+    },
+    discardWarmTrailer() {
+      if (this.trailerWarmTimer) {
+        clearTimeout(this.trailerWarmTimer);
+        this.trailerWarmTimer = null;
+      }
+      const warm = this.trailerWarm;
+      this.trailerWarm = null;
+      if (!warm) {
+        return;
+      }
+      try {
+        warm.frame?.removeAttribute("src");
+      } catch (_) {}
+      warm.layer.remove();
+    },
+    // Returns the warm layer as the new trailer layer when it matches ytId.
+    adoptWarmTrailer(layer, ytId) {
+      const warm = this.trailerWarm;
+      if (!warm || warm.ytId !== ytId || !warm.layer.isConnected || warm.layer.previousElementSibling !== layer) {
+        this.discardWarmTrailer();
+        return null;
+      }
+      this.trailerWarm = null;
+      layer.remove();
+      warm.layer.className = "detail-trailer-layer";
+      return warm;
+    },
     toggleActiveTrailerPlayback() {
       if (!this.isTrailerPlaying || !this.trailerSource || this.trailerPlaybackMode !== "manual") {
         return;
@@ -143,6 +222,26 @@ export function createMetaDetailsScreenMethods19() {
         `
           : "";
       if (this.trailerSource.kind === "youtube") {
+        const warm = this.adoptWarmTrailer(layer, String(this.trailerSource.ytId || "").trim());
+        if (warm) {
+          warm.layer.insertAdjacentHTML("beforeend", controlsMarkup);
+          this.cacheTrailerRefs();
+          if (this.trailerPlaybackMode === "manual") {
+            this.trailerUiRefs?.overlay?.focus?.({ preventScroll: true });
+            this.startTrailerProgressTimer();
+          }
+          this.initYoutubeTrailerPlayer();
+          if (warm.ready) {
+            // The proxy already sent "ready" while warm; replay it so the normal
+            // handler unmutes, plays and starts first-frame polling.
+            this.trailerProxyMessageHandler?.({
+              source: warm.frame.contentWindow,
+              origin: "",
+              data: { source: "nuvio-youtube-proxy", type: "ready", videoId: warm.ytId }
+            });
+          }
+          return;
+        }
         const youtubeFrameUrl =
           buildInlineYoutubePlayerUrl(this.trailerSource.ytId, {
             muted: this.trailerMuted,

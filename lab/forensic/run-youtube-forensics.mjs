@@ -750,6 +750,7 @@ async function main() {
       trailerPlaybackMode: "auto",
       isTrailerPlaying: true,
       cancelTraktCommentsRequest() {},
+      discardWarmTrailer() {},
       cancelPendingEpisodeHold() {},
       cancelPendingSeasonHold() {},
       cancelPendingPosterHold() {},
