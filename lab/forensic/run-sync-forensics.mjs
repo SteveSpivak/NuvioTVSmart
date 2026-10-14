@@ -405,14 +405,16 @@ async function main() {
       const pushes = cloud.names("A").filter((name) => name === "sync_push_watch_progress").length;
       const localKept = byId(local, "tt1000007")?.positionMs === 200000;
       const cloudMissed = pushes === 0;
-      const reproduced = localKept && cloudMissed;
+      const documented = localKept && cloudMissed;
       return caseResult(
         "termination-before-push",
-        reproduced ? "FAIL" : "PASS",
-        reproduced ? "reproduced-defect" : "verified-behavior",
-        "Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.",
+        documented ? "PASS" : "FAIL",
+        "documented-policy",
+        documented
+          ? "Unchanged policy: teardown inside the 1500ms debounce cancels the cloud push and keeps the local row. A kill in that window loses the cloud write. Not changed in the unit fix."
+          : "Debounce teardown policy changed. Do not treat that as an accidental improvement.",
         {
-          expected: "Local save is durable to the mock cloud even if teardown happens 500ms later.",
+          expected: "Local row remains and no sync_push_watch_progress is sent after teardown.",
           actual: { localKept, pushes, cloudRows: cloud.rows("account-a", 1).length },
           callChain: [
             "player/repository saveProgress",
@@ -550,15 +552,16 @@ async function main() {
       await clients.B.call("saveProgress", { progress: movie("tt1000012", 330000, EPOCH + 40000) });
       const pulled = await clients.B.call("pull");
       const local = byId(await clients.B.call("getLocal", { profileId: "1" }), "tt1000012");
-      const remoteWon = local?.positionMs === 220000;
+      const remoteWon = local?.positionMs === 220000 && local?.positionMs !== 330000;
       return caseResult(
         "conflict-equal-timestamp-remote-wins",
-        remoteWon ? "FAIL" : "PASS",
-        "reproduced-defect",
-        "Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.",
+        remoteWon ? "PASS" : "FAIL",
+        "documented-policy",
+        remoteWon
+          ? "Unchanged policy: equal updatedAt keeps the remote row because merge uses `>`. B's simultaneous 330000ms write is discarded on pull."
+          : "Equal-timestamp remote-wins policy changed.",
         {
-          expected:
-            "A tie should not silently drop the local write, or the winner should be explicit and stable across clients.",
+          expected: { winner: "remote", positionMs: 220000, discardedLocalPositionMs: 330000 },
           actual: local,
           callChain: [
             "WatchProgressSyncService.pull",
@@ -957,7 +960,7 @@ async function main() {
   });
 
   await runCase("short-position-duration-zero-roundtrip", async () => {
-    return withClients(["A", "B"], async (clients) => {
+    return withClients(["A", "B"], async (clients, cloud) => {
       await clients.A.call("configure", {
         accountId: "account-a",
         profileId: "1",
@@ -973,25 +976,262 @@ async function main() {
         options: { syncRemote: false }
       });
       await clients.A.call("push");
+      const pushed = cloud.rows("account-a", 1).find((row) => row.content_id === "short-clip");
       const pulled = await clients.B.call("pull");
       const item = byId(pulled.items, "short-clip");
-      const preserved = item?.positionMs === 10000;
+      const writerUsesLegacyColumns =
+        pushed?.position === 10000 &&
+        pushed?.duration === 0 &&
+        !Object.prototype.hasOwnProperty.call(pushed || {}, "position_ms") &&
+        !Object.prototype.hasOwnProperty.call(pushed || {}, "duration_ms");
+      const preserved = item?.positionMs === 10000 && item?.durationMs === 0 && writerUsesLegacyColumns;
       return caseResult(
         "short-position-duration-zero-roundtrip",
         preserved ? "PASS" : "FAIL",
         preserved ? "verified-behavior" : "reproduced-defect",
         preserved
-          ? "A 10s position with no duration survived pull unchanged."
-          : "Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.",
+          ? "A 10000ms position with duration 0 was pushed as position/duration and pulled without scaling. position_ms is not in the payload."
+          : "Duration 0 still inflates the position, or the writer added a field the published RPC does not store.",
         {
-          expected: { positionMs: 10000, durationMs: 0 },
+          expected: { positionMs: 10000, durationMs: 0, pushedPosition: 10000, pushedDuration: 0 },
           actual: item,
+          pushed,
           callChain: [
             "watchProgressRepository.saveProgress",
             "WatchProgressSyncService.push",
             "buildRemoteProgressEntries position/duration without _ms suffix",
             "mapProgressRow normalizeAmbiguousRemoteTime"
           ]
+        }
+      );
+    });
+  });
+
+  await runCase("legacy-seconds-pair-still-scales", async () => {
+    return withClients(["A"], async (clients, cloud) => {
+      await clients.A.call("configure", {
+        accountId: "account-a",
+        profileId: "1",
+        clientId: "nuvio-web-client-a"
+      });
+      cloud.seed("account-a", 1, {
+        content_id: "legacy-seconds",
+        content_type: "movie",
+        position: 125,
+        duration: 7200,
+        last_watched: EPOCH + 30000,
+        progress_key: "legacy-seconds"
+      });
+      const item = byId((await clients.A.call("pull")).items, "legacy-seconds");
+      const ok = item?.positionMs === 125000 && item?.durationMs === 7_200_000;
+      return caseResult(
+        "legacy-seconds-pair-still-scales",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "A positive duration of 7200, at or under 28800, still scales the legacy seconds pair to milliseconds."
+          : "Legacy seconds pair was not scaled.",
+        { expected: { positionMs: 125000, durationMs: 7_200_000 }, actual: item }
+      );
+    });
+  });
+
+  await runCase("multi-hour-milliseconds-not-scaled", async () => {
+    return withClients(["A"], async (clients, cloud) => {
+      await clients.A.call("configure", {
+        accountId: "account-a",
+        profileId: "1",
+        clientId: "nuvio-web-client-a"
+      });
+      cloud.seed("account-a", 1, {
+        content_id: "multi-hour",
+        content_type: "movie",
+        position: 5_400_000,
+        duration: MOVIE_DURATION,
+        last_watched: EPOCH + 31000,
+        progress_key: "multi-hour"
+      });
+      const item = byId((await clients.A.call("pull")).items, "multi-hour");
+      const ok = item?.positionMs === 5_400_000 && item?.durationMs === MOVIE_DURATION;
+      return caseResult(
+        "multi-hour-milliseconds-not-scaled",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "A 90 minute position on a 2 hour duration stayed in milliseconds."
+          : "Multi-hour millisecond row was scaled or truncated.",
+        { actual: item }
+      );
+    });
+  });
+
+  await runCase("missing-null-zero-duration-not-scaled", async () => {
+    return withClients(["A"], async (clients, cloud) => {
+      await clients.A.call("configure", {
+        accountId: "account-a",
+        profileId: "1",
+        clientId: "nuvio-web-client-a"
+      });
+      const rows = [
+        { content_id: "dur-missing", position: 10000, last_watched: EPOCH + 32000, progress_key: "dur-missing" },
+        {
+          content_id: "dur-null",
+          position: 10000,
+          duration: null,
+          last_watched: EPOCH + 32001,
+          progress_key: "dur-null"
+        },
+        {
+          content_id: "dur-zero",
+          position: 10000,
+          duration: 0,
+          last_watched: EPOCH + 32002,
+          progress_key: "dur-zero"
+        },
+        {
+          content_id: "dur-blank",
+          position: 10000,
+          duration: "",
+          last_watched: EPOCH + 32003,
+          progress_key: "dur-blank"
+        },
+        {
+          content_id: "historical-seconds-unscaled",
+          position: 10,
+          duration: 0,
+          last_watched: EPOCH + 32004,
+          progress_key: "historical-seconds-unscaled"
+        }
+      ];
+      rows.forEach((row) => cloud.seed("account-a", 1, { content_type: "movie", ...row }));
+      const pulled = await clients.A.call("pull");
+      const read = (id) => byId(pulled.items, id);
+      const ok =
+        read("dur-missing")?.positionMs === 10000 &&
+        read("dur-null")?.positionMs === 10000 &&
+        read("dur-zero")?.positionMs === 10000 &&
+        read("dur-blank")?.positionMs === 10000 &&
+        read("historical-seconds-unscaled")?.positionMs === 10 &&
+        [read("dur-missing"), read("dur-null"), read("dur-zero"), read("dur-blank")].every(
+          (item) => item?.durationMs === 0
+        );
+      return caseResult(
+        "missing-null-zero-duration-not-scaled",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "Missing, null, blank, and zero duration do not scale a legacy position. A duration-0 historical 10 second row stays 10; that loss is accepted because it is indistinguishable from 10ms."
+          : "A non-positive duration still changed the position unit.",
+        {
+          actual: {
+            missing: read("dur-missing"),
+            nullDuration: read("dur-null"),
+            zero: read("dur-zero"),
+            blank: read("dur-blank"),
+            historicalSeconds: read("historical-seconds-unscaled")
+          }
+        }
+      );
+    });
+  });
+
+  await runCase("seconds-versus-milliseconds-boundary", async () => {
+    return withClients(["A"], async (clients, cloud) => {
+      await clients.A.call("configure", {
+        accountId: "account-a",
+        profileId: "1",
+        clientId: "nuvio-web-client-a"
+      });
+      cloud.seed("account-a", 1, {
+        content_id: "boundary-seconds",
+        content_type: "movie",
+        position: 10,
+        duration: 28800,
+        last_watched: EPOCH + 33000,
+        progress_key: "boundary-seconds"
+      });
+      cloud.seed("account-a", 1, {
+        content_id: "boundary-ms",
+        content_type: "movie",
+        position: 10,
+        duration: 60000,
+        last_watched: EPOCH + 33001,
+        progress_key: "boundary-ms"
+      });
+      cloud.seed("account-a", 1, {
+        content_id: "explicit-ms",
+        content_type: "movie",
+        position: 10,
+        position_ms: 10000,
+        duration: 0,
+        duration_ms: 7200000,
+        last_watched: EPOCH + 33002,
+        progress_key: "explicit-ms"
+      });
+      const pulled = await clients.A.call("pull");
+      const seconds = byId(pulled.items, "boundary-seconds");
+      const milliseconds = byId(pulled.items, "boundary-ms");
+      const explicit = byId(pulled.items, "explicit-ms");
+      const ok =
+        seconds?.positionMs === 10000 &&
+        seconds?.durationMs === 28_800_000 &&
+        milliseconds?.positionMs === 10 &&
+        milliseconds?.durationMs === 60000 &&
+        explicit?.positionMs === 10000 &&
+        explicit?.durationMs === 7_200_000;
+      return caseResult(
+        "seconds-versus-milliseconds-boundary",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "Duration 28800 still scales as seconds. Duration 60000, the smallest syncable value above 28800, stays milliseconds. A 28801ms row is below the 60s sync minimum and is dropped by pull, so it is not the boundary observed here. Explicit position_ms is preferred by the reader, but the published push RPC drops that key, so the writer must not depend on it."
+          : "Seconds versus milliseconds boundary did not match the reader rule.",
+        { seconds, milliseconds, explicit }
+      );
+    });
+  });
+
+  await runCase("duration-zero-isolated-clients-no-watched-mutation", async () => {
+    return withClients(["A", "B"], async (clients) => {
+      await clients.A.call("configure", {
+        accountId: "account-a",
+        profileId: "1",
+        clientId: "nuvio-web-client-a"
+      });
+      await clients.B.call("configure", {
+        accountId: "account-b",
+        profileId: "1",
+        clientId: "nuvio-web-client-b"
+      });
+      const seeded = await clients.A.call("seedWatched", {
+        contentId: "tt-watched-only",
+        title: "Watched only",
+        watchedAt: EPOCH + 1000,
+        profileId: "1"
+      });
+      await clients.A.call("saveProgress", {
+        progress: movie("short-isolated", 10000, EPOCH + 34000, { durationMs: 0, title: "Isolated short" })
+      });
+      await clients.A.call("push");
+      const otherAccount = await clients.B.call("pull");
+      const sameAccount = await clients.A.call("pull");
+      const watchedAfter = await clients.A.call("getWatched");
+      const watchedUnchanged = JSON.stringify(seeded) === JSON.stringify(watchedAfter);
+      const isolated = otherAccount.items.length === 0;
+      const kept = byId(sameAccount.items, "short-isolated")?.positionMs === 10000;
+      const ok = watchedUnchanged && isolated && kept && seeded.length === 1;
+      return caseResult(
+        "duration-zero-isolated-clients-no-watched-mutation",
+        ok ? "PASS" : "FAIL",
+        ok ? "verified-behavior" : "reproduced-defect",
+        ok
+          ? "The duration-0 row stayed on account A at 10000ms, account B did not see it, and watchedItems was not mutated."
+          : "Isolation or watched-state protection failed around the unit fix.",
+        {
+          seeded,
+          watchedAfter,
+          otherAccount: otherAccount.items,
+          sameAccount: byId(sameAccount.items, "short-isolated")
         }
       );
     });

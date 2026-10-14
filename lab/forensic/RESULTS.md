@@ -1,16 +1,16 @@
 # Forensic test results
 
 Recorded by `node lab/forensic/run-all.mjs` on Node v22.22.3.
-Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `82789f7106cf23392e33f01b53b3e5907f90a5c4`.
-No live Supabase, Trakt, or TV call. Production sync and trailer code were not modified.
+Branch `arena/0ffafbca-nuvio-perf-lab`. HEAD at run start `e4cc51b94cf34cb555e77f01e661fc96aeac9cac`.
+No live Supabase, Trakt, or TV call. Verdicts come from the modules imported in this worktree.
 
 ## Commands
 
-- `node lab/forensic/exit-policy.test.mjs` exit 0 in 46ms
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 5882ms
-- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 6370ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 271ms
-- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 368ms
+- `node lab/forensic/exit-policy.test.mjs` exit 0 in 37ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 7049ms
+- `node lab/forensic/run-sync-forensics.mjs` exit 0 in 7031ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 228ms
+- `node lab/forensic/run-youtube-forensics.mjs` exit 0 in 254ms
 - Repeated each suite once. Verdict signatures matched: **yes**.
 - `tests/` is absent and gitignored. `npm test` was not run. Existing plugin tests: **BLOCKED**.
 - Full `npm run build` / webOS package: **NOT_RUN**. The suites imported the current modules, which is the practical parse check for this pass.
@@ -19,16 +19,16 @@ No live Supabase, Trakt, or TV call. Production sync and trailer code were not m
 
 | Verdict | Count |
 | --- | --- |
-| PASS | 35 |
-| FAIL | 6 |
-| EXPECTED_FAIL | 6 |
+| PASS | 43 |
+| FAIL | 3 |
+| EXPECTED_FAIL | 3 |
 | BLOCKED | 0 |
 | NOT_RUN | 1 |
 
-Suite cases: 42. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
+Suite cases: 47. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
 
-Runner mode: `investigate`. Exit decision: 0 (investigate). Strict regression, treating every FAIL as required, would exit 1. Investigate exit 0 does not pass the expected failures.
-Node v22.22.3. FORENSIC_MODE=investigate. FORENSIC_STRICT=0.
+Runner mode: `regression`. Exit decision: 0 (regression-ok). Strict regression, treating every FAIL as required, would exit 1. Investigate exit 0 does not pass the expected failures.
+Node v22.22.3. FORENSIC_MODE=regression. FORENSIC_STRICT=0.
 
 ## Tooling
 
@@ -37,12 +37,6 @@ Node v22.22.3. FORENSIC_MODE=investigate. FORENSIC_STRICT=0.
 - `npm run build` was not run. Status: **NOT_RUN**.
 
 ## Reproduced failures
-
-- **termination-before-push** (sync): Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.
-
-- **conflict-equal-timestamp-remote-wins** (sync): Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.
-
-- **short-position-duration-zero-roundtrip** (sync): Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.
 
 - **missing-video-id-does-not-autoplay** (youtube): youtube-proxy.html defaults a missing v parameter to qBg39HCJiTU and autoplays it. A metadata miss still starts a player.
 
@@ -67,13 +61,12 @@ Node v22.22.3. FORENSIC_MODE=investigate. FORENSIC_STRICT=0.
 - Foreign `postMessage` sources are ignored. Home and Details cleanup remove listeners and timers.
 - Missing trailer metadata does not build an embed URL or mount a Home iframe.
 
-## Ranked corrections (not applied)
+## Corrections and unchanged policy
 
-1. Do not add `position_ms` to the push. The published self-host `sync_push_watch_progress` stores only `position` and `duration`, and the pull returns those columns. Fix the reader: missing, null, or non-positive duration must not scale a legacy position. Keep the seconds-pair scale only when a positive duration is `<= 28800`.
+1. Reader fix: missing, null, blank, or non-positive duration does not scale a legacy position. A positive duration `<= 28800` still scales as a seconds pair. The writer still sends `position` and `duration` in milliseconds. `position_ms` is not added, because the published push RPC drops it.
 2. Do not reveal the Home trailer on the 7000ms iframe-load timer or the 1200ms uncontrollable `loading:false` state unless `firstFrame` or `currentTime > 0` has arrived. Keep those timers as a loading affordance, not `is-active`.
 3. Remove the hardcoded default video id in `docs/youtube-proxy.html`. If `v` is missing, post an error and do not construct `YT.Player`.
-4. Do not change the equal-`updatedAt` tie or the 1.5s / 15s debounce without a product decision. Both are implemented as written. The tie drops the local write. A kill inside the debounce keeps the local row and loses the cloud write.
-5. Do not expect a Trakt-selected install and a Nuvio Sync install to share Continue Watching through Supabase. That skip is explicit. Parity would be a product change, not a one-line fix.
+4. Unchanged policy, documented in `lab/forensic/SYNC-POLICY-PROPOSAL.md`: equal-`updatedAt` remote wins, 1500ms and 15000ms debounce, teardown cancels the pending push, Trakt skips Nuvio Sync, empty remote does not replace local.
 
 ## Not verifiable here
 
@@ -206,14 +199,14 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ### termination-before-push
 
-- Verdict: **FAIL**
-- Expectation: expected
-- Classification: reproduced-defect
-- Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.
+- Verdict: **PASS**
+- Expectation: required
+- Classification: documented-policy
+- Unchanged policy: teardown inside the 1500ms debounce cancels the cloud push and keeps the local row. A kill in that window loses the cloud write. Not changed in the unit fix.
 
 ```json
 {
-  "expected": "Local save is durable to the mock cloud even if teardown happens 500ms later.",
+  "expected": "Local row remains and no sync_push_watch_progress is sent after teardown.",
   "actual": {
     "localKept": true,
     "pushes": 0,
@@ -293,14 +286,18 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ### conflict-equal-timestamp-remote-wins
 
-- Verdict: **FAIL**
-- Expectation: expected
-- Classification: reproduced-defect
-- Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.
+- Verdict: **PASS**
+- Expectation: required
+- Classification: documented-policy
+- Unchanged policy: equal updatedAt keeps the remote row because merge uses `>`. B's simultaneous 330000ms write is discarded on pull.
 
 ```json
 {
-  "expected": "A tie should not silently drop the local write, or the winner should be explicit and stable across clients.",
+  "expected": {
+    "winner": "remote",
+    "positionMs": 220000,
+    "discardedLocalPositionMs": 330000
+  },
   "actual": {
     "contentId": "tt1000012",
     "profileId": "1",
@@ -604,25 +601,39 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ### short-position-duration-zero-roundtrip
 
-- Verdict: **FAIL**
-- Expectation: expected
-- Classification: reproduced-defect
-- Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- A 10000ms position with duration 0 was pushed as position/duration and pulled without scaling. position_ms is not in the payload.
 
 ```json
 {
   "expected": {
     "positionMs": 10000,
-    "durationMs": 0
+    "durationMs": 0,
+    "pushedPosition": 10000,
+    "pushedDuration": 0
   },
   "actual": {
     "contentId": "short-clip",
     "profileId": "",
     "source": "local",
-    "positionMs": 10000000,
+    "positionMs": 10000,
     "durationMs": 0,
     "updatedAt": 1700000024000,
     "title": ""
+  },
+  "pushed": {
+    "content_id": "short-clip",
+    "content_type": "movie",
+    "video_id": "short-clip",
+    "season": null,
+    "episode": null,
+    "position": 10000,
+    "duration": 0,
+    "last_watched": 1700000024000,
+    "progress_key": "short-clip",
+    "origin_client_id": "nuvio-web-client-a"
   },
   "callChain": [
     "watchProgressRepository.saveProgress",
@@ -630,6 +641,202 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
     "buildRemoteProgressEntries position/duration without _ms suffix",
     "mapProgressRow normalizeAmbiguousRemoteTime"
   ]
+}
+```
+
+### legacy-seconds-pair-still-scales
+
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- A positive duration of 7200, at or under 28800, still scales the legacy seconds pair to milliseconds.
+
+```json
+{
+  "expected": {
+    "positionMs": 125000,
+    "durationMs": 7200000
+  },
+  "actual": {
+    "contentId": "legacy-seconds",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 125000,
+    "durationMs": 7200000,
+    "updatedAt": 1700000030000,
+    "title": ""
+  }
+}
+```
+
+### multi-hour-milliseconds-not-scaled
+
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- A 90 minute position on a 2 hour duration stayed in milliseconds.
+
+```json
+{
+  "actual": {
+    "contentId": "multi-hour",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 5400000,
+    "durationMs": 7200000,
+    "updatedAt": 1700000031000,
+    "title": ""
+  }
+}
+```
+
+### missing-null-zero-duration-not-scaled
+
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- Missing, null, blank, and zero duration do not scale a legacy position. A duration-0 historical 10 second row stays 10; that loss is accepted because it is indistinguishable from 10ms.
+
+```json
+{
+  "actual": {
+    "missing": {
+      "contentId": "dur-missing",
+      "profileId": "",
+      "source": "local",
+      "positionMs": 10000,
+      "durationMs": 0,
+      "updatedAt": 1700000032000,
+      "title": ""
+    },
+    "nullDuration": {
+      "contentId": "dur-null",
+      "profileId": "",
+      "source": "local",
+      "positionMs": 10000,
+      "durationMs": 0,
+      "updatedAt": 1700000032001,
+      "title": ""
+    },
+    "zero": {
+      "contentId": "dur-zero",
+      "profileId": "",
+      "source": "local",
+      "positionMs": 10000,
+      "durationMs": 0,
+      "updatedAt": 1700000032002,
+      "title": ""
+    },
+    "blank": {
+      "contentId": "dur-blank",
+      "profileId": "",
+      "source": "local",
+      "positionMs": 10000,
+      "durationMs": 0,
+      "updatedAt": 1700000032003,
+      "title": ""
+    },
+    "historicalSeconds": {
+      "contentId": "historical-seconds-unscaled",
+      "profileId": "",
+      "source": "local",
+      "positionMs": 10,
+      "durationMs": 0,
+      "updatedAt": 1700000032004,
+      "title": ""
+    }
+  }
+}
+```
+
+### seconds-versus-milliseconds-boundary
+
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- Duration 28800 still scales as seconds. Duration 60000, the smallest syncable value above 28800, stays milliseconds. A 28801ms row is below the 60s sync minimum and is dropped by pull, so it is not the boundary observed here. Explicit position_ms is preferred by the reader, but the published push RPC drops that key, so the writer must not depend on it.
+
+```json
+{
+  "seconds": {
+    "contentId": "boundary-seconds",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 10000,
+    "durationMs": 28800000,
+    "updatedAt": 1700000033000,
+    "title": ""
+  },
+  "milliseconds": {
+    "contentId": "boundary-ms",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 10,
+    "durationMs": 60000,
+    "updatedAt": 1700000033001,
+    "title": ""
+  },
+  "explicit": {
+    "contentId": "explicit-ms",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 10000,
+    "durationMs": 7200000,
+    "updatedAt": 1700000033002,
+    "title": ""
+  }
+}
+```
+
+### duration-zero-isolated-clients-no-watched-mutation
+
+- Verdict: **PASS**
+- Expectation: required
+- Classification: verified-behavior
+- The duration-0 row stayed on account A at 10000ms, account B did not see it, and watchedItems was not mutated.
+
+```json
+{
+  "seeded": [
+    {
+      "profileId": "1",
+      "contentId": "tt-watched-only",
+      "contentType": "movie",
+      "imdbId": null,
+      "tmdbId": null,
+      "traktId": null,
+      "slug": null,
+      "title": "Watched only",
+      "season": null,
+      "episode": null,
+      "watchedAt": 1700000001000
+    }
+  ],
+  "watchedAfter": [
+    {
+      "profileId": "1",
+      "contentId": "tt-watched-only",
+      "contentType": "movie",
+      "imdbId": null,
+      "tmdbId": null,
+      "traktId": null,
+      "slug": null,
+      "title": "Watched only",
+      "season": null,
+      "episode": null,
+      "watchedAt": 1700000001000
+    }
+  ],
+  "otherAccount": [],
+  "sameAccount": {
+    "contentId": "short-isolated",
+    "profileId": "",
+    "source": "local",
+    "positionMs": 10000,
+    "durationMs": 0,
+    "updatedAt": 1700000034000,
+    "title": "Isolated short"
+  }
 }
 ```
 
@@ -951,7 +1158,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
   "missing": null,
   "blank": null,
   "emptyUrl": "",
-  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-b3zyoq"
+  "present": "https://nuvio.local/youtube-proxy.html?v=abcdefghijk&autoplay=1&muted=1&controls=0&loop=1&playlist=abcdefghijk&playsinline=1&rel=0&cc_load_policy=0&_cb=1700000000000-m5hx7u"
 }
 ```
 

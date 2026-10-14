@@ -280,15 +280,25 @@ function mapProgressRow(row = {}) {
     }
     return Math.trunc(useMilliseconds || n > MAX_AMBIGUOUS_SECONDS_PROGRESS_VALUE ? n : n * 1000);
   };
-  // The legacy RPC fields have no unit suffix. Infer one unit for the pair
-  // from its duration so a small millisecond position is not mistaken for
-  // seconds while historical second-based rows remain compatible.
+  // Legacy RPC columns have no unit. A positive duration <= 8 hours is the
+  // only seconds-pair signal. Missing, null, or non-positive duration is not
+  // that signal: the writer already stores milliseconds, and scaling those
+  // rows turns 10000ms into 10000000ms. Historical seconds with duration 0
+  // cannot be distinguished and stay unscaled. Do not add position_ms to the
+  // push; sync_push_watch_progress drops unknown keys and the pull cannot
+  // echo them.
   const hasLegacyTimePair = !hasPositionMs && !hasDurationMs;
-  const legacyDuration = Number(durationMsRaw);
+  const legacyDurationRaw = row.duration;
+  const legacyDuration = Number(legacyDurationRaw);
+  const legacyDurationMissingOrNonPositive =
+    legacyDurationRaw == null ||
+    legacyDurationRaw === "" ||
+    !Number.isFinite(legacyDuration) ||
+    legacyDuration <= 0;
   const legacyPairUsesMilliseconds =
     hasLegacyTimePair &&
-    Number.isFinite(legacyDuration) &&
-    legacyDuration > MAX_AMBIGUOUS_SECONDS_PROGRESS_VALUE;
+    (legacyDurationMissingOrNonPositive ||
+      legacyDuration > MAX_AMBIGUOUS_SECONDS_PROGRESS_VALUE);
   const positionMs = hasPositionMs
     ? toMilliseconds(positionMsRaw)
     : normalizeAmbiguousRemoteTime(positionMsRaw, legacyPairUsesMilliseconds);

@@ -49,7 +49,8 @@ const [
   { getSyncClientId },
   { notifySessionTeardownHandlers },
   { createPlayerControllerMethods20 },
-  { readContinueWatchingDisplaySnapshot, writeContinueWatchingDisplaySnapshot }
+  { readContinueWatchingDisplaySnapshot, writeContinueWatchingDisplaySnapshot },
+  { WatchedItemsStore }
 ] = await Promise.all([
   import("../../js/core/auth/authManager.js"),
   import("../../js/core/auth/authState.js"),
@@ -65,7 +66,8 @@ const [
   import("../../js/core/sync/syncClientIdentity.js"),
   import("../../js/core/auth/sessionLifecycle.js"),
   import("../../js/core/player/playerControllerMethods-20-flush-progress.js"),
-  import("../../js/ui/screens/home/homeScreenHelpers-10-get-cached-continue-watching-enrichment.js")
+  import("../../js/ui/screens/home/homeScreenHelpers-10-get-cached-continue-watching-enrichment.js"),
+  import("../../js/data/local/watchedItemsStore.js")
 ]);
 
 const pendingRpc = new Map();
@@ -264,6 +266,19 @@ async function handle(command) {
       return [
         ...Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index))
       ];
+    case "seedWatched":
+      WatchedItemsStore.upsert(
+        {
+          contentId: command.contentId,
+          contentType: command.contentType || "movie",
+          title: command.title || command.contentId,
+          watchedAt: command.watchedAt
+        },
+        command.profileId || "1"
+      );
+      return WatchedItemsStore.listAll();
+    case "getWatched":
+      return WatchedItemsStore.listAll();
     default:
       throw new Error(`Unknown command ${command.cmd}`);
   }

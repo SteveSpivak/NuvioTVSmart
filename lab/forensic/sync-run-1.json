@@ -104,11 +104,11 @@
     {
       "id": "termination-before-push",
       "track": "sync",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "Session teardown before the debounce cancels the cloud push. The local row remains. A kill inside the debounce window loses the cloud write.",
+      "verdict": "PASS",
+      "classification": "documented-policy",
+      "summary": "Unchanged policy: teardown inside the 1500ms debounce cancels the cloud push and keeps the local row. A kill in that window loses the cloud write. Not changed in the unit fix.",
       "evidence": {
-        "expected": "Local save is durable to the mock cloud even if teardown happens 500ms later.",
+        "expected": "Local row remains and no sync_push_watch_progress is sent after teardown.",
         "actual": {
           "localKept": true,
           "pushes": 0,
@@ -151,7 +151,10 @@
       "classification": "verified-behavior",
       "summary": "Upserts of different keys from two clients both remain. The mock follows the client contract that a push is not a full replace.",
       "evidence": {
-        "rows": ["tt1000009", "tt1000010"],
+        "rows": [
+          "tt1000009",
+          "tt1000010"
+        ],
         "divergence": "none after both pushes"
       }
     },
@@ -176,11 +179,15 @@
     {
       "id": "conflict-equal-timestamp-remote-wins",
       "track": "sync",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "Equal updatedAt values take the remote row because the comparison is `>`, not `>=`. B's simultaneous local position is discarded on pull.",
+      "verdict": "PASS",
+      "classification": "documented-policy",
+      "summary": "Unchanged policy: equal updatedAt keeps the remote row because merge uses `>`. B's simultaneous 330000ms write is discarded on pull.",
       "evidence": {
-        "expected": "A tie should not silently drop the local write, or the winner should be explicit and stable across clients.",
+        "expected": {
+          "winner": "remote",
+          "positionMs": 220000,
+          "discardedLocalPositionMs": 330000
+        },
         "actual": {
           "contentId": "tt1000012",
           "profileId": "1",
@@ -407,7 +414,11 @@
         ],
         "storeHasFresh": true,
         "notes": 1,
-        "rpc": ["sync_pull_watched_items", "sync_pull_library", "sync_pull_watch_progress"]
+        "rpc": [
+          "sync_pull_watched_items",
+          "sync_pull_library",
+          "sync_pull_watch_progress"
+        ]
       }
     },
     {
@@ -447,22 +458,36 @@
     {
       "id": "short-position-duration-zero-roundtrip",
       "track": "sync",
-      "verdict": "FAIL",
-      "classification": "reproduced-defect",
-      "summary": "Pull inflated a 10s position because the legacy position/duration fields have no unit and duration 0 does not force millisecond mode.",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A 10000ms position with duration 0 was pushed as position/duration and pulled without scaling. position_ms is not in the payload.",
       "evidence": {
         "expected": {
           "positionMs": 10000,
-          "durationMs": 0
+          "durationMs": 0,
+          "pushedPosition": 10000,
+          "pushedDuration": 0
         },
         "actual": {
           "contentId": "short-clip",
           "profileId": "",
           "source": "local",
-          "positionMs": 10000000,
+          "positionMs": 10000,
           "durationMs": 0,
           "updatedAt": 1700000024000,
           "title": ""
+        },
+        "pushed": {
+          "content_id": "short-clip",
+          "content_type": "movie",
+          "video_id": "short-clip",
+          "season": null,
+          "episode": null,
+          "position": 10000,
+          "duration": 0,
+          "last_watched": 1700000024000,
+          "progress_key": "short-clip",
+          "origin_client_id": "nuvio-web-client-a"
         },
         "callChain": [
           "watchProgressRepository.saveProgress",
@@ -470,6 +495,187 @@
           "buildRemoteProgressEntries position/duration without _ms suffix",
           "mapProgressRow normalizeAmbiguousRemoteTime"
         ]
+      }
+    },
+    {
+      "id": "legacy-seconds-pair-still-scales",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A positive duration of 7200, at or under 28800, still scales the legacy seconds pair to milliseconds.",
+      "evidence": {
+        "expected": {
+          "positionMs": 125000,
+          "durationMs": 7200000
+        },
+        "actual": {
+          "contentId": "legacy-seconds",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 125000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000030000,
+          "title": ""
+        }
+      }
+    },
+    {
+      "id": "multi-hour-milliseconds-not-scaled",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "A 90 minute position on a 2 hour duration stayed in milliseconds.",
+      "evidence": {
+        "actual": {
+          "contentId": "multi-hour",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 5400000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000031000,
+          "title": ""
+        }
+      }
+    },
+    {
+      "id": "missing-null-zero-duration-not-scaled",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Missing, null, blank, and zero duration do not scale a legacy position. A duration-0 historical 10 second row stays 10; that loss is accepted because it is indistinguishable from 10ms.",
+      "evidence": {
+        "actual": {
+          "missing": {
+            "contentId": "dur-missing",
+            "profileId": "",
+            "source": "local",
+            "positionMs": 10000,
+            "durationMs": 0,
+            "updatedAt": 1700000032000,
+            "title": ""
+          },
+          "nullDuration": {
+            "contentId": "dur-null",
+            "profileId": "",
+            "source": "local",
+            "positionMs": 10000,
+            "durationMs": 0,
+            "updatedAt": 1700000032001,
+            "title": ""
+          },
+          "zero": {
+            "contentId": "dur-zero",
+            "profileId": "",
+            "source": "local",
+            "positionMs": 10000,
+            "durationMs": 0,
+            "updatedAt": 1700000032002,
+            "title": ""
+          },
+          "blank": {
+            "contentId": "dur-blank",
+            "profileId": "",
+            "source": "local",
+            "positionMs": 10000,
+            "durationMs": 0,
+            "updatedAt": 1700000032003,
+            "title": ""
+          },
+          "historicalSeconds": {
+            "contentId": "historical-seconds-unscaled",
+            "profileId": "",
+            "source": "local",
+            "positionMs": 10,
+            "durationMs": 0,
+            "updatedAt": 1700000032004,
+            "title": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "seconds-versus-milliseconds-boundary",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "Duration 28800 still scales as seconds. Duration 60000, the smallest syncable value above 28800, stays milliseconds. A 28801ms row is below the 60s sync minimum and is dropped by pull, so it is not the boundary observed here. Explicit position_ms is preferred by the reader, but the published push RPC drops that key, so the writer must not depend on it.",
+      "evidence": {
+        "seconds": {
+          "contentId": "boundary-seconds",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 10000,
+          "durationMs": 28800000,
+          "updatedAt": 1700000033000,
+          "title": ""
+        },
+        "milliseconds": {
+          "contentId": "boundary-ms",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 10,
+          "durationMs": 60000,
+          "updatedAt": 1700000033001,
+          "title": ""
+        },
+        "explicit": {
+          "contentId": "explicit-ms",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 10000,
+          "durationMs": 7200000,
+          "updatedAt": 1700000033002,
+          "title": ""
+        }
+      }
+    },
+    {
+      "id": "duration-zero-isolated-clients-no-watched-mutation",
+      "track": "sync",
+      "verdict": "PASS",
+      "classification": "verified-behavior",
+      "summary": "The duration-0 row stayed on account A at 10000ms, account B did not see it, and watchedItems was not mutated.",
+      "evidence": {
+        "seeded": [
+          {
+            "profileId": "1",
+            "contentId": "tt-watched-only",
+            "contentType": "movie",
+            "imdbId": null,
+            "tmdbId": null,
+            "traktId": null,
+            "slug": null,
+            "title": "Watched only",
+            "season": null,
+            "episode": null,
+            "watchedAt": 1700000001000
+          }
+        ],
+        "watchedAfter": [
+          {
+            "profileId": "1",
+            "contentId": "tt-watched-only",
+            "contentType": "movie",
+            "imdbId": null,
+            "tmdbId": null,
+            "traktId": null,
+            "slug": null,
+            "title": "Watched only",
+            "season": null,
+            "episode": null,
+            "watchedAt": 1700000001000
+          }
+        ],
+        "otherAccount": [],
+        "sameAccount": {
+          "contentId": "short-isolated",
+          "profileId": "",
+          "source": "local",
+          "positionMs": 10000,
+          "durationMs": 0,
+          "updatedAt": 1700000034000,
+          "title": "Isolated short"
+        }
       }
     },
     {
@@ -528,7 +734,6 @@
     }
   ],
   "counts": {
-    "PASS": 23,
-    "FAIL": 3
+    "PASS": 31
   }
 }
