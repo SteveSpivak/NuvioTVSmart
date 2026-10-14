@@ -116,9 +116,10 @@ const youtube2 = JSON.parse(readFileSync(new URL("./youtube-run-2.json", forensi
 const repeatMatched =
   signature(sync1) === signature(sync2) && signature(youtube1) === signature(youtube2);
 
-const expectedFailureIds = process.env.FORENSIC_STRICT === "1"
-  ? []
-  : JSON.parse(readFileSync(new URL("./expected-failures.json", forensic), "utf8")).ids;
+const expectedFailureIds =
+  process.env.FORENSIC_STRICT === "1"
+    ? []
+    : JSON.parse(readFileSync(new URL("./expected-failures.json", forensic), "utf8")).ids;
 const cases = [...sync2.cases, ...youtube2.cases].map((entry) => ({
   ...entry,
   expectation: expectedFailureIds.includes(entry.id) ? "expected" : "required"

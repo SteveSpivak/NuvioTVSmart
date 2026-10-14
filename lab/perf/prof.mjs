@@ -18,7 +18,13 @@ export const INTERESTING_FUNCTIONS = [
 
 export function detectCapabilities(methods = []) {
   const available = new Set(methods);
-  const required = ["Profiler.enable", "Profiler.start", "Profiler.stop", "Tracing.start", "Tracing.end"];
+  const required = [
+    "Profiler.enable",
+    "Profiler.start",
+    "Profiler.stop",
+    "Tracing.start",
+    "Tracing.end"
+  ];
   const missing = required.filter((name) => !available.has(name));
   return {
     profiler: missing.every((name) => !name.startsWith("Profiler")),
@@ -48,7 +54,12 @@ export function redactProfile(profile) {
 }
 
 export function summarizeProfile(profile) {
-  if (!profile || !Array.isArray(profile.nodes) || !Array.isArray(profile.samples) || !profile.samples.length) {
+  if (
+    !profile ||
+    !Array.isArray(profile.nodes) ||
+    !Array.isArray(profile.samples) ||
+    !profile.samples.length
+  ) {
     return { verdict: "INCOMPLETE", reason: "empty-profile", functions: [], interesting: [] };
   }
   const self = new Map();
@@ -134,7 +145,13 @@ export function compareProfiled(profiled, unprofiled) {
   };
 }
 
-export function classifyCapture({ capabilities, profileSummary, trace, comparison, redactionOk = true } = {}) {
+export function classifyCapture({
+  capabilities,
+  profileSummary,
+  trace,
+  comparison,
+  redactionOk = true
+} = {}) {
   if (!redactionOk) return { verdict: "INVALID", reason: "redaction-failure" };
   if (!capabilities?.profiler || !capabilities?.tracing) {
     return { verdict: "INCOMPLETE", reason: "unsupported-method" };
@@ -142,7 +159,8 @@ export function classifyCapture({ capabilities, profileSummary, trace, compariso
   if (trace?.verdict === "INVALID" || profileSummary?.verdict === "INVALID") {
     return { verdict: "INVALID", reason: trace?.reason || profileSummary?.reason || "malformed" };
   }
-  if (trace?.verdict !== "PASS") return { verdict: "INCOMPLETE", reason: trace?.reason || "trace-incomplete" };
+  if (trace?.verdict !== "PASS")
+    return { verdict: "INCOMPLETE", reason: trace?.reason || "trace-incomplete" };
   if (profileSummary?.verdict !== "PASS") {
     return { verdict: "INCOMPLETE", reason: profileSummary?.reason || "profile-incomplete" };
   }
@@ -155,9 +173,21 @@ export function classifyCapture({ capabilities, profileSummary, trace, compariso
 function syntheticProfile() {
   return {
     nodes: [
-      { id: 1, callFrame: { functionName: "(root)", url: "https://nuvio.local/app.js?token=SECRET" }, children: [2] },
-      { id: 2, callFrame: { functionName: "getTitleWatchedItems", url: "https://nuvio.local/watched.js" }, children: [3] },
-      { id: 3, callFrame: { functionName: "normalizeMetadata", url: "https://nuvio.local/meta.js" }, children: [] }
+      {
+        id: 1,
+        callFrame: { functionName: "(root)", url: "https://nuvio.local/app.js?token=SECRET" },
+        children: [2]
+      },
+      {
+        id: 2,
+        callFrame: { functionName: "getTitleWatchedItems", url: "https://nuvio.local/watched.js" },
+        children: [3]
+      },
+      {
+        id: 3,
+        callFrame: { functionName: "normalizeMetadata", url: "https://nuvio.local/meta.js" },
+        children: []
+      }
     ],
     samples: [2, 3, 2],
     timeDeltas: [1000, 500, 250]
@@ -176,15 +206,27 @@ async function runSynthetic() {
   const profile = redactProfile(syntheticProfile());
   const summary = summarizeProfile(profile);
   const empty = summarizeProfile({ nodes: [], samples: [] });
-  const trace = classifyTrace({ events: [{ name: "RunTask", ts: 10 }, { name: "RunTask", ts: 20 }], complete: true });
+  const trace = classifyTrace({
+    events: [
+      { name: "RunTask", ts: 10 },
+      { name: "RunTask", ts: 20 }
+    ],
+    complete: true
+  });
   const partial = classifyTrace({ events: [{ name: "RunTask", ts: 10 }], complete: false });
   const malformed = classifyTrace({ events: [{ ts: 10 }], complete: true });
   const unordered = classifyTrace({
-    events: [{ name: "RunTask", ts: 30 }, { name: "RunTask", ts: 10 }],
+    events: [
+      { name: "RunTask", ts: 30 },
+      { name: "RunTask", ts: 10 }
+    ],
     complete: true
   });
   const navigated = classifyTrace({
-    events: [{ name: "RunTask", ts: 10 }, { name: "navigationStart", ts: 15 }],
+    events: [
+      { name: "RunTask", ts: 10 },
+      { name: "navigationStart", ts: 15 }
+    ],
     complete: true
   });
   const correlation = correlateTimeline({
@@ -192,7 +234,10 @@ async function runSynthetic() {
     requests: [{ provider: "tmdb", category: "movie", startMs: 90, endMs: 150 }],
     markers: { visibleMs: 180, usableMs: 420, settledMs: 9000 }
   });
-  const comparison = compareProfiled({ visibleMs: 200, settledMs: 1000 }, { visibleMs: 180, settledMs: 900 });
+  const comparison = compareProfiled(
+    { visibleMs: 200, settledMs: 1000 },
+    { visibleMs: 180, settledMs: 900 }
+  );
   const missingBaseline = compareProfiled({ visibleMs: 200 }, null);
   const capture = classifyCapture({
     capabilities,
@@ -203,16 +248,41 @@ async function runSynthetic() {
   });
   const checks = [
     { id: "yield-not-required", ok: capabilities.schedulerYieldRequired === false },
-    { id: "unsupported-is-incomplete", ok: classifyCapture({ capabilities: unsupported, profileSummary: summary, trace, comparison }).verdict === "INCOMPLETE" },
-    { id: "self-versus-inclusive", ok: summary.interesting.find((row) => row.functionName === "getTitleWatchedItems")?.selfUs === 1250 && summary.interesting.find((row) => row.functionName === "getTitleWatchedItems")?.inclusiveUs === 1750 },
-    { id: "absent-function-not-invented", ok: summary.interesting.find((row) => row.functionName === "discoverSources")?.present === false },
+    {
+      id: "unsupported-is-incomplete",
+      ok:
+        classifyCapture({ capabilities: unsupported, profileSummary: summary, trace, comparison })
+          .verdict === "INCOMPLETE"
+    },
+    {
+      id: "self-versus-inclusive",
+      ok:
+        summary.interesting.find((row) => row.functionName === "getTitleWatchedItems")?.selfUs ===
+          1250 &&
+        summary.interesting.find((row) => row.functionName === "getTitleWatchedItems")
+          ?.inclusiveUs === 1750
+    },
+    {
+      id: "absent-function-not-invented",
+      ok:
+        summary.interesting.find((row) => row.functionName === "discoverSources")?.present === false
+    },
     { id: "empty-profile-incomplete", ok: empty.verdict === "INCOMPLETE" },
     { id: "partial-trace-incomplete", ok: partial.verdict === "INCOMPLETE" },
     { id: "malformed-trace-invalid", ok: malformed.verdict === "INVALID" },
     { id: "unordered-trace-invalid", ok: unordered.verdict === "INVALID" },
     { id: "navigation-invalid", ok: navigated.verdict === "INVALID" },
-    { id: "redaction", ok: !JSON.stringify(profile).includes("SECRET") && !JSON.stringify(profile).includes("token=") },
-    { id: "correlation-not-floor", ok: correlation.longTaskDurationMs === 40 && correlation.userVisibleMs === 180 && correlation.longTaskDurationMs !== correlation.userVisibleMs },
+    {
+      id: "redaction",
+      ok: !JSON.stringify(profile).includes("SECRET") && !JSON.stringify(profile).includes("token=")
+    },
+    {
+      id: "correlation-not-floor",
+      ok:
+        correlation.longTaskDurationMs === 40 &&
+        correlation.userVisibleMs === 180 &&
+        correlation.longTaskDurationMs !== correlation.userVisibleMs
+    },
     { id: "missing-baseline-incomplete", ok: missingBaseline.verdict === "INCOMPLETE" },
     { id: "synthetic-capture-pass", ok: capture.verdict === "PASS" }
   ];
@@ -236,7 +306,9 @@ async function runSynthetic() {
     console.log("INVALID redaction-failure");
     process.exit(1);
   }
-  console.log(JSON.stringify({ verdict: payload.verdict, failed: failed.map((entry) => entry.id) }));
+  console.log(
+    JSON.stringify({ verdict: payload.verdict, failed: failed.map((entry) => entry.id) })
+  );
   process.exit(failed.length ? 1 : 0);
 }
 
@@ -282,82 +354,89 @@ if (!isMain) {
 }
 
 async function runLive(label, seq) {
-const c = await connect();
-const state = () =>
-  c.ev(
-    `(()=>JSON.stringify({vis:[...document.querySelectorAll("#app > *")].filter(e=>e.offsetWidth>0).map(e=>e.id||e.className).join(","),dom:document.getElementsByTagName("*").length,imgs:document.images.length,heapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576):null}))()`
-  );
-const metrics = async () =>
-  Object.fromEntries(
-    ((await c.send("Performance.getMetrics")).result?.metrics || []).map((m) => [m.name, m.value])
-  );
-console.log("before", await state());
-await c.send("Performance.enable");
-// Frame recorder (requestAnimationFrame gaps) and long-task observer inside the page.
-await c.ev(`(()=>{const w=window;w.__pf={f:[],on:true,last:performance.now()};const tick=n=>{if(!w.__pf.on)return;w.__pf.f.push(n-w.__pf.last);w.__pf.last=n;requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const c = await connect();
+  const state = () =>
+    c.ev(
+      `(()=>JSON.stringify({vis:[...document.querySelectorAll("#app > *")].filter(e=>e.offsetWidth>0).map(e=>e.id||e.className).join(","),dom:document.getElementsByTagName("*").length,imgs:document.images.length,heapMB:performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576):null}))()`
+    );
+  const metrics = async () =>
+    Object.fromEntries(
+      ((await c.send("Performance.getMetrics")).result?.metrics || []).map((m) => [m.name, m.value])
+    );
+  console.log("before", await state());
+  await c.send("Performance.enable");
+  // Frame recorder (requestAnimationFrame gaps) and long-task observer inside the page.
+  await c.ev(`(()=>{const w=window;w.__pf={f:[],on:true,last:performance.now()};const tick=n=>{if(!w.__pf.on)return;w.__pf.f.push(n-w.__pf.last);w.__pf.last=n;requestAnimationFrame(tick)};requestAnimationFrame(tick);
   w.__pf.lt=[];try{w.__pf.po=new PerformanceObserver(l=>{for(const e of l.getEntries())w.__pf.lt.push(Math.round(e.duration))});w.__pf.po.observe({entryTypes:["longtask"]})}catch(e){}return 1})()`);
-const m0 = await metrics();
-const enabled = await c.send("Profiler.enable");
-if (enabled?.error) {
-  console.log("INCOMPLETE unsupported-method", JSON.stringify(enabled.error));
-  c.close();
-  process.exit(2);
-}
-await c.send("Profiler.setSamplingInterval", { interval: 500 });
-await c.send("Profiler.start");
-const t0 = Date.now();
-const { presses, aborted } = await drive(c, seq);
-await sleep(1500);
-const stopped = await c.send("Profiler.stop");
-const prof = redactProfile(stopped.result?.profile);
-const summary = summarizeProfile(prof);
-const wallMs = Date.now() - t0;
-const m1 = await metrics();
-const frames = JSON.parse(
-  await c.ev(
-    `(()=>{const w=window;w.__pf.on=false;try{w.__pf.po.disconnect()}catch(e){};const r=JSON.stringify({f:w.__pf.f.map(x=>Math.round(x)),lt:w.__pf.lt});delete w.__pf;return r})()`
-  )
-);
-console.log("after", await state());
-const profileText = JSON.stringify(prof);
-if (/[?&][^=\s]+=|api[_-]?key|access[_-]?token/i.test(profileText)) {
-  console.log("INVALID redaction-failure");
-  c.close();
-  process.exit(1);
-}
-fs.writeFileSync(`prof_${label}.cpuprofile`, profileText);
-const d = {};
-for (const k of [
-  "ScriptDuration",
-  "LayoutDuration",
-  "RecalcStyleDuration",
-  "TaskDuration",
-  "LayoutCount",
-  "RecalcStyleCount",
-  "JSHeapUsedSize",
-  "Nodes",
-  "JSEventListeners"
-])
-  d[k] = [m0[k], m1[k]];
-fs.writeFileSync(
-  `prof_${label}.meta.json`,
-  JSON.stringify({
+  const m0 = await metrics();
+  const enabled = await c.send("Profiler.enable");
+  if (enabled?.error) {
+    console.log("INCOMPLETE unsupported-method", JSON.stringify(enabled.error));
+    c.close();
+    process.exit(2);
+  }
+  await c.send("Profiler.setSamplingInterval", { interval: 500 });
+  await c.send("Profiler.start");
+  const t0 = Date.now();
+  const { presses, aborted } = await drive(c, seq);
+  await sleep(1500);
+  const stopped = await c.send("Profiler.stop");
+  const prof = redactProfile(stopped.result?.profile);
+  const summary = summarizeProfile(prof);
+  const wallMs = Date.now() - t0;
+  const m1 = await metrics();
+  const frames = JSON.parse(
+    await c.ev(
+      `(()=>{const w=window;w.__pf.on=false;try{w.__pf.po.disconnect()}catch(e){};const r=JSON.stringify({f:w.__pf.f.map(x=>Math.round(x)),lt:w.__pf.lt});delete w.__pf;return r})()`
+    )
+  );
+  console.log("after", await state());
+  const profileText = JSON.stringify(prof);
+  if (/[?&][^=\s]+=|api[_-]?key|access[_-]?token/i.test(profileText)) {
+    console.log("INVALID redaction-failure");
+    c.close();
+    process.exit(1);
+  }
+  fs.writeFileSync(`prof_${label}.cpuprofile`, profileText);
+  const d = {};
+  for (const k of [
+    "ScriptDuration",
+    "LayoutDuration",
+    "RecalcStyleDuration",
+    "TaskDuration",
+    "LayoutCount",
+    "RecalcStyleCount",
+    "JSHeapUsedSize",
+    "Nodes",
+    "JSEventListeners"
+  ])
+    d[k] = [m0[k], m1[k]];
+  fs.writeFileSync(
+    `prof_${label}.meta.json`,
+    JSON.stringify({
+      label,
+      device: DEVICE,
+      throttle: process.env.THROTTLE || null,
+      seq,
+      presses,
+      aborted,
+      wallMs,
+      metrics: d,
+      frames,
+      profileSummary: summary,
+      comparison: { verdict: "INCOMPLETE", reason: "missing-unprofiled-baseline" },
+      note: "Stacks are not trusted until an unprofiled visible/settle comparison exists. Long-task sums are not a floor."
+    })
+  );
+  console.log(
+    aborted ? "INVALID_ABORTED" : "INCOMPLETE",
     label,
-    device: DEVICE,
-    throttle: process.env.THROTTLE || null,
-    seq,
-    presses,
-    aborted,
+    "wallMs",
     wallMs,
-    metrics: d,
-    frames,
-    profileSummary: summary,
-    comparison: { verdict: "INCOMPLETE", reason: "missing-unprofiled-baseline" },
-    note: "Stacks are not trusted until an unprofiled visible/settle comparison exists. Long-task sums are not a floor."
-  })
-);
-console.log(aborted ? "INVALID_ABORTED" : "INCOMPLETE", label, "wallMs", wallMs, "presses", presses);
-await c.send("Profiler.disable");
-c.close();
-process.exit(aborted ? 3 : summary.verdict === "INVALID" ? 1 : 2);
+    "presses",
+    presses
+  );
+  await c.send("Profiler.disable");
+  c.close();
+  process.exit(aborted ? 3 : summary.verdict === "INVALID" ? 1 : 2);
 }

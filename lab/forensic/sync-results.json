@@ -151,10 +151,7 @@
       "classification": "verified-behavior",
       "summary": "Upserts of different keys from two clients both remain. The mock follows the client contract that a push is not a full replace.",
       "evidence": {
-        "rows": [
-          "tt1000009",
-          "tt1000010"
-        ],
+        "rows": ["tt1000009", "tt1000010"],
         "divergence": "none after both pushes"
       }
     },
@@ -414,11 +411,7 @@
         ],
         "storeHasFresh": true,
         "notes": 1,
-        "rpc": [
-          "sync_pull_watched_items",
-          "sync_pull_library",
-          "sync_pull_watch_progress"
-        ]
+        "rpc": ["sync_pull_watched_items", "sync_pull_library", "sync_pull_watch_progress"]
       }
     },
     {

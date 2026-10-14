@@ -338,7 +338,9 @@ async function main() {
     function proxyStarted(search) {
       const proxy = bootProxy(search);
       const scripts = proxy.document.head.children.filter((node) => node.tagName === "SCRIPT");
-      const frames = (proxy.document.body?.children || []).filter((node) => node.tagName === "IFRAME");
+      const frames = (proxy.document.body?.children || []).filter(
+        (node) => node.tagName === "IFRAME"
+      );
       const apiReady =
         typeof proxy.context.onYouTubeIframeAPIReady === "function"
           ? proxy.context.onYouTubeIframeAPIReady()
@@ -569,8 +571,7 @@ async function main() {
       }
     );
     const frame = container.querySelector("iframe");
-    const post = (data) =>
-      globalThis.window.dispatchMessage({ source: frame.contentWindow, data });
+    const post = (data) => globalThis.window.dispatchMessage({ source: frame.contentWindow, data });
     post({
       source: "nuvio-youtube-proxy",
       type: "ready",

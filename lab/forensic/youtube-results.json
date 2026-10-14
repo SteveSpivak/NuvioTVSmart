@@ -21,10 +21,7 @@
       "classification": "verified-behavior",
       "summary": "onReady posts ready and calls playVideo. currentTime is still 0, so firstFrame is not posted. API ready is not a decoded frame.",
       "evidence": {
-        "types": [
-          "ready",
-          "state"
-        ],
+        "types": ["ready", "state"],
         "state": 1,
         "currentTime": 0
       }
@@ -36,9 +33,7 @@
       "classification": "verified-behavior",
       "summary": "playerState 3 (buffering) does not emit firstFrame.",
       "evidence": {
-        "types": [
-          "state"
-        ]
+        "types": ["state"]
       }
     },
     {
@@ -104,10 +99,7 @@
             "players": 0,
             "apiScripts": 0,
             "frames": 0,
-            "types": [
-              "error",
-              "error"
-            ],
+            "types": ["error", "error"],
             "messages": [
               {
                 "source": "nuvio-youtube-proxy",
@@ -127,10 +119,7 @@
             "players": 0,
             "apiScripts": 0,
             "frames": 0,
-            "types": [
-              "error",
-              "error"
-            ],
+            "types": ["error", "error"],
             "messages": [
               {
                 "source": "nuvio-youtube-proxy",
@@ -150,10 +139,7 @@
             "players": 0,
             "apiScripts": 0,
             "frames": 0,
-            "types": [
-              "error",
-              "error"
-            ],
+            "types": ["error", "error"],
             "messages": [
               {
                 "source": "nuvio-youtube-proxy",
@@ -173,10 +159,7 @@
             "players": 0,
             "apiScripts": 0,
             "frames": 0,
-            "types": [
-              "error",
-              "error"
-            ],
+            "types": ["error", "error"],
             "messages": [
               {
                 "source": "nuvio-youtube-proxy",
@@ -196,10 +179,7 @@
             "players": 0,
             "apiScripts": 0,
             "frames": 0,
-            "types": [
-              "error",
-              "error"
-            ],
+            "types": ["error", "error"],
             "messages": [
               {
                 "source": "nuvio-youtube-proxy",

@@ -39,9 +39,7 @@ assert.deepEqual(newFail.unexpected, ["new-bug"]);
 
 const staleAllowlist = decideExit({
   mode: "regression",
-  cases: known.map((entry) =>
-    entry.id === "known-bug" ? { ...entry, verdict: "PASS" } : entry
-  ),
+  cases: known.map((entry) => (entry.id === "known-bug" ? { ...entry, verdict: "PASS" } : entry)),
   repeatMatched: true,
   expectedFailureIds: ["known-bug"]
 });

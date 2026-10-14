@@ -5,7 +5,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { connect, drive, sleep, DEFAULT_SEQ, DEVICE, CDP_URL } from "./lib.mjs";
 
-export function classifyTrace({ events, complete = false, timedOut = false, disconnected = false } = {}) {
+export function classifyTrace({
+  events,
+  complete = false,
+  timedOut = false,
+  disconnected = false
+} = {}) {
   if (disconnected) return { verdict: "INCOMPLETE", reason: "cdp-disconnect" };
   if (timedOut) return { verdict: "INCOMPLETE", reason: "trace-timeout" };
   if (!Array.isArray(events)) return { verdict: "INVALID", reason: "malformed-events" };
@@ -13,10 +18,13 @@ export function classifyTrace({ events, complete = false, timedOut = false, disc
   if (!events.length) return { verdict: "INCOMPLETE", reason: "empty-trace" };
   let lastTs = null;
   for (const event of events) {
-    if (!event || typeof event.name !== "string") return { verdict: "INVALID", reason: "malformed-events" };
-    if (event.name === "navigationStart") return { verdict: "INVALID", reason: "navigation-during-capture" };
+    if (!event || typeof event.name !== "string")
+      return { verdict: "INVALID", reason: "malformed-events" };
+    if (event.name === "navigationStart")
+      return { verdict: "INVALID", reason: "navigation-during-capture" };
     if (typeof event.ts === "number") {
-      if (lastTs != null && event.ts < lastTs) return { verdict: "INVALID", reason: "unexpected-ordering" };
+      if (lastTs != null && event.ts < lastTs)
+        return { verdict: "INVALID", reason: "unexpected-ordering" };
       lastTs = event.ts;
     }
   }
@@ -38,7 +46,9 @@ if (isMain) {
     const complete = classifyTrace({ events: [{ name: "RunTask", ts: 1 }], complete: true });
     const missing = classifyTrace({ events: [{ name: "RunTask", ts: 1 }], complete: false });
     const ok = complete.verdict === "PASS" && missing.verdict === "INCOMPLETE";
-    console.log(JSON.stringify({ label: "SYNTHETIC", verdict: ok ? "PASS" : "FAIL", complete, missing }));
+    console.log(
+      JSON.stringify({ label: "SYNTHETIC", verdict: ok ? "PASS" : "FAIL", complete, missing })
+    );
     process.exit(ok ? 0 : 1);
   }
   const reach = await cdpReachable();
@@ -66,55 +76,64 @@ if (isMain) {
 }
 
 async function runLive(label, seq) {
-const c = await connect();
-const events = [];
-let done;
-const complete = new Promise((r) => (done = r));
-c.onEvent((m) => {
-  if (m.method === "Tracing.dataCollected") for (const x of m.params.value) events.push(x);
-  else if (m.method === "Tracing.tracingComplete") done();
-});
-const r = await c.send("Tracing.start", {
-  transferMode: "ReportEvents",
-  traceConfig: {
-    recordMode: "recordUntilFull",
-    includedCategories: [
-      "devtools.timeline",
-      "disabled-by-default-devtools.timeline",
-      "disabled-by-default-devtools.timeline.frame",
-      "v8.execute",
-      "blink.user_timing"
-    ]
+  const c = await connect();
+  const events = [];
+  let done;
+  const complete = new Promise((r) => (done = r));
+  c.onEvent((m) => {
+    if (m.method === "Tracing.dataCollected") for (const x of m.params.value) events.push(x);
+    else if (m.method === "Tracing.tracingComplete") done();
+  });
+  const r = await c.send("Tracing.start", {
+    transferMode: "ReportEvents",
+    traceConfig: {
+      recordMode: "recordUntilFull",
+      includedCategories: [
+        "devtools.timeline",
+        "disabled-by-default-devtools.timeline",
+        "disabled-by-default-devtools.timeline.frame",
+        "v8.execute",
+        "blink.user_timing"
+      ]
+    }
+  });
+  if (r.error) {
+    console.log("TRACING_START_ERROR", JSON.stringify(r.error));
+    process.exit(2);
   }
-});
-if (r.error) {
-  console.log("TRACING_START_ERROR", JSON.stringify(r.error));
-  process.exit(2);
-}
-const t0 = Date.now();
-const { presses, aborted } = await drive(c, seq);
-await sleep(1500);
-const wallMs = Date.now() - t0;
-await c.send("Tracing.end");
-const finished = await Promise.race([
-  complete.then(() => "complete"),
-  sleep(60000).then(() => "timeout")
-]);
-const classified = classifyTrace({
-  events,
-  complete: finished === "complete",
-  timedOut: finished === "timeout"
-});
-const payload = { wallMs, presses, seq, device: DEVICE, aborted, verdict: classified.verdict, reason: classified.reason, events };
-const text = JSON.stringify(payload);
-if (/[?&][^=\s]+=|api[_-]?key|access[_-]?token/i.test(text)) {
-  console.log("INVALID redaction-failure");
+  const t0 = Date.now();
+  const { presses, aborted } = await drive(c, seq);
+  await sleep(1500);
+  const wallMs = Date.now() - t0;
+  await c.send("Tracing.end");
+  const finished = await Promise.race([
+    complete.then(() => "complete"),
+    sleep(60000).then(() => "timeout")
+  ]);
+  const classified = classifyTrace({
+    events,
+    complete: finished === "complete",
+    timedOut: finished === "timeout"
+  });
+  const payload = {
+    wallMs,
+    presses,
+    seq,
+    device: DEVICE,
+    aborted,
+    verdict: classified.verdict,
+    reason: classified.reason,
+    events
+  };
+  const text = JSON.stringify(payload);
+  if (/[?&][^=\s]+=|api[_-]?key|access[_-]?token/i.test(text)) {
+    console.log("INVALID redaction-failure");
+    c.close();
+    process.exit(1);
+  }
+  fs.writeFileSync(`trace_${label}.json`, text);
+  const verdict = aborted ? "INVALID" : classified.verdict;
+  console.log(verdict, label, "wallMs", wallMs, "presses", presses, "events", events.length);
   c.close();
-  process.exit(1);
-}
-fs.writeFileSync(`trace_${label}.json`, text);
-const verdict = aborted ? "INVALID" : classified.verdict;
-console.log(verdict, label, "wallMs", wallMs, "presses", presses, "events", events.length);
-c.close();
-process.exit(aborted ? 3 : verdict === "PASS" ? 0 : verdict === "INVALID" ? 1 : 2);
+  process.exit(aborted ? 3 : verdict === "PASS" ? 0 : verdict === "INVALID" ? 1 : 2);
 }

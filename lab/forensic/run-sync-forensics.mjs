@@ -984,7 +984,8 @@ async function main() {
         pushed?.duration === 0 &&
         !Object.prototype.hasOwnProperty.call(pushed || {}, "position_ms") &&
         !Object.prototype.hasOwnProperty.call(pushed || {}, "duration_ms");
-      const preserved = item?.positionMs === 10000 && item?.durationMs === 0 && writerUsesLegacyColumns;
+      const preserved =
+        item?.positionMs === 10000 && item?.durationMs === 0 && writerUsesLegacyColumns;
       return caseResult(
         "short-position-duration-zero-roundtrip",
         preserved ? "PASS" : "FAIL",
@@ -1073,7 +1074,12 @@ async function main() {
         clientId: "nuvio-web-client-a"
       });
       const rows = [
-        { content_id: "dur-missing", position: 10000, last_watched: EPOCH + 32000, progress_key: "dur-missing" },
+        {
+          content_id: "dur-missing",
+          position: 10000,
+          last_watched: EPOCH + 32000,
+          progress_key: "dur-missing"
+        },
         {
           content_id: "dur-null",
           position: 10000,
@@ -1210,7 +1216,10 @@ async function main() {
         profileId: "1"
       });
       await clients.A.call("saveProgress", {
-        progress: movie("short-isolated", 10000, EPOCH + 34000, { durationMs: 0, title: "Isolated short" })
+        progress: movie("short-isolated", 10000, EPOCH + 34000, {
+          durationMs: 0,
+          title: "Isolated short"
+        })
       });
       await clients.A.call("push");
       const otherAccount = await clients.B.call("pull");

@@ -297,8 +297,7 @@ function mapProgressRow(row = {}) {
     legacyDuration <= 0;
   const legacyPairUsesMilliseconds =
     hasLegacyTimePair &&
-    (legacyDurationMissingOrNonPositive ||
-      legacyDuration > MAX_AMBIGUOUS_SECONDS_PROGRESS_VALUE);
+    (legacyDurationMissingOrNonPositive || legacyDuration > MAX_AMBIGUOUS_SECONDS_PROGRESS_VALUE);
   const positionMs = hasPositionMs
     ? toMilliseconds(positionMsRaw)
     : normalizeAmbiguousRemoteTime(positionMsRaw, legacyPairUsesMilliseconds);

@@ -17,13 +17,13 @@ No live Supabase, Trakt, or TV call. Verdicts come from the modules imported in 
 
 ## Counts
 
-| Verdict | Count |
-| --- | --- |
-| PASS | 49 |
-| FAIL | 0 |
-| EXPECTED_FAIL | 0 |
-| BLOCKED | 0 |
-| NOT_RUN | 1 |
+| Verdict       | Count |
+| ------------- | ----- |
+| PASS          | 49    |
+| FAIL          | 0     |
+| EXPECTED_FAIL | 0     |
+| BLOCKED       | 0     |
+| NOT_RUN       | 1     |
 
 Suite cases: 50. EXPECTED_FAIL is a subset of FAIL, not a pass. Existing plugin tests are not in this count; they are BLOCKED because `tests/` is absent.
 
@@ -249,10 +249,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ```json
 {
-  "rows": [
-    "tt1000009",
-    "tt1000010"
-  ],
+  "rows": ["tt1000009", "tt1000010"],
   "divergence": "none after both pushes"
 }
 ```
@@ -548,11 +545,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
   ],
   "storeHasFresh": true,
   "notes": 1,
-  "rpc": [
-    "sync_pull_watched_items",
-    "sync_pull_library",
-    "sync_pull_watch_progress"
-  ]
+  "rpc": ["sync_pull_watched_items", "sync_pull_library", "sync_pull_watch_progress"]
 }
 ```
 
@@ -921,10 +914,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ```json
 {
-  "types": [
-    "ready",
-    "state"
-  ],
+  "types": ["ready", "state"],
   "state": 1,
   "currentTime": 0
 }
@@ -939,9 +929,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
 
 ```json
 {
-  "types": [
-    "state"
-  ]
+  "types": ["state"]
 }
 ```
 
@@ -1022,10 +1010,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
       "players": 0,
       "apiScripts": 0,
       "frames": 0,
-      "types": [
-        "error",
-        "error"
-      ],
+      "types": ["error", "error"],
       "messages": [
         {
           "source": "nuvio-youtube-proxy",
@@ -1045,10 +1030,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
       "players": 0,
       "apiScripts": 0,
       "frames": 0,
-      "types": [
-        "error",
-        "error"
-      ],
+      "types": ["error", "error"],
       "messages": [
         {
           "source": "nuvio-youtube-proxy",
@@ -1068,10 +1050,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
       "players": 0,
       "apiScripts": 0,
       "frames": 0,
-      "types": [
-        "error",
-        "error"
-      ],
+      "types": ["error", "error"],
       "messages": [
         {
           "source": "nuvio-youtube-proxy",
@@ -1091,10 +1070,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
       "players": 0,
       "apiScripts": 0,
       "frames": 0,
-      "types": [
-        "error",
-        "error"
-      ],
+      "types": ["error", "error"],
       "messages": [
         {
           "source": "nuvio-youtube-proxy",
@@ -1114,10 +1090,7 @@ On the TV, log four timestamps for one known trailer id: proxy iframe `load`, `r
       "players": 0,
       "apiScripts": 0,
       "frames": 0,
-      "types": [
-        "error",
-        "error"
-      ],
+      "types": ["error", "error"],
       "messages": [
         {
           "source": "nuvio-youtube-proxy",
