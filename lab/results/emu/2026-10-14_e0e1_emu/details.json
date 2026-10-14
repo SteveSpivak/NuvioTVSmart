@@ -1,0 +1,1178 @@
+{
+ "schema": "nuvio-lab/details/2",
+ "device": "emu",
+ "order": "CCDDCCDD",
+ "dwellMs": 2000,
+ "waitMs": 12000,
+ "profile": "alt",
+ "stacks": "async",
+ "sampleUs": 1000,
+ "capabilities": {
+  "debuggerPausesResumed": 0,
+  "network": true,
+  "asyncStacks": true,
+  "throttle": 6.8,
+  "profiler": true
+ },
+ "aborted": null,
+ "results": [
+  {
+   "trial": 1,
+   "kind": "cold",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 51,
+   "loadingShellMs": 51,
+   "metaRenderedMs": 274,
+   "usableMs": 274,
+   "contentMs": 274,
+   "settledMs": 274,
+   "samples": 239,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 199,
+   "requests": 1,
+   "images": 1,
+   "longTasks": 1,
+   "longTaskMs": 50,
+   "longTaskUnionMs": 50,
+   "longTaskMaxOverlap": 1,
+   "worstLongTaskMs": 50,
+   "longTaskEntries": [
+    [
+     199,
+     50
+    ]
+   ],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 2,
+     "spreadMs": 0,
+     "offsetMs": -96915980.30250001
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": 199,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {
+     "local": 1
+    },
+    "categories": {
+     "local /{x}/meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 154,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "local",
+      "category": "/{x}/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 45,
+      "endMs": 199,
+      "durMs": 154,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 606,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "YO@app.bundle.js:0:63559",
+       "(anonymous)@app.bundle.js:0:65725",
+       "(anonymous)@app.bundle.js:0:62071",
+       "qc@app.bundle.js:0:62062",
+       "Ri@app.bundle.js:0:65601"
+      ]
+     },
+     {
+      "provider": "local",
+      "category": "image",
+      "resourceType": "Image",
+      "method": "GET",
+      "startMs": 246,
+      "endMs": 248,
+      "durMs": 1,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 4182,
+      "initiatorType": "other",
+      "owner": null,
+      "owners": [],
+      "phase": "unattributed",
+      "frames": []
+     }
+    ]
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     45,
+     "request",
+     "local /{x}/meta/movie/{x} before-render"
+    ],
+    [
+     51,
+     "marker",
+     "visible"
+    ],
+    [
+     51,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     199,
+     "response",
+     "local /{x}/meta/movie/{x} finished 200"
+    ],
+    [
+     199,
+     "longtask",
+     "50 ms"
+    ],
+    [
+     274,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     274,
+     "marker",
+     "usable"
+    ],
+    [
+     274,
+     "marker",
+     "content"
+    ],
+    [
+     274,
+     "marker",
+     "settled"
+    ]
+   ]
+  },
+  {
+   "trial": 2,
+   "kind": "cold",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 51,
+   "loadingShellMs": 51,
+   "metaRenderedMs": 204,
+   "usableMs": 204,
+   "contentMs": 204,
+   "settledMs": 204,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 176,
+   "requests": 1,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 1,
+     "spreadMs": 0,
+     "offsetMs": -96931047.509
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {
+     "local": 1
+    },
+    "categories": {
+     "local /{x}/meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "home"
+      ],
+      "owners": [
+       "enrichCurrentHeroAsync"
+      ],
+      "medianDurMs": 152,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "local",
+      "category": "/{x}/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 24,
+      "endMs": 176,
+      "durMs": 152,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 615,
+      "initiatorType": "script",
+      "owner": "enrichCurrentHeroAsync",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "enrichCurrentHeroAsync"
+      ],
+      "phase": "home",
+      "frames": [
+       "YO@app.bundle.js:0:63559",
+       "(anonymous)@app.bundle.js:0:65725",
+       "(anonymous)@app.bundle.js:0:62071",
+       "qc@app.bundle.js:0:62062",
+       "Ri@app.bundle.js:0:65601"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 7958,
+    "intervalUs": 1550,
+    "whole": {
+     "sampledMs": 12058.7,
+     "recorderMs": 39.5,
+     "self": [
+      [
+       "(idle)",
+       11803.7
+      ],
+      [
+       "(program)",
+       119.6
+      ],
+      [
+       "(garbage collector)",
+       44.9
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       14.2
+      ],
+      [
+       "__nuvioLabProfileAnchor@(eval):3:62",
+       6.5
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       11803.7
+      ],
+      [
+       "(program)",
+       119.6
+      ],
+      [
+       "(garbage collector)",
+       44.9
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       31.2
+      ],
+      [
+       "flags@(eval):7:14",
+       14.3
+      ]
+     ],
+     "owners": [
+      [
+       "enrichCurrentHeroAsync",
+       2.3
+      ],
+      [
+       "fetchTmdbCastFallback",
+       1.8
+      ],
+      [
+       "getMeta",
+       1.3
+      ]
+     ],
+     "heaviestPath": [
+      "(anonymous)@app.bundle.js:0:837387",
+      "applyHeroToDom@app.bundle.js:0:796031",
+      "scheduleHomeTruncationUpdate@app.bundle.js:0:860263",
+      "applyModernHeroDescriptionBounds@app.bundle.js:0:862125",
+      "(anonymous)@app.bundle.js:0:862362",
+      "(anonymous)@app.bundle.js:0:862820",
+      "getBoundingClientRect@(native)"
+     ]
+    },
+    "windows": []
+   },
+   "timeline": [
+    [
+     24,
+     "request",
+     "local /{x}/meta/movie/{x} home"
+    ],
+    [
+     51,
+     "marker",
+     "visible"
+    ],
+    [
+     51,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     176,
+     "response",
+     "local /{x}/meta/movie/{x} finished 200"
+    ],
+    [
+     204,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     204,
+     "marker",
+     "usable"
+    ],
+    [
+     204,
+     "marker",
+     "content"
+    ],
+    [
+     204,
+     "marker",
+     "settled"
+    ]
+   ]
+  },
+  {
+   "trial": 3,
+   "kind": "dwell",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 50,
+   "loadingShellMs": null,
+   "metaRenderedMs": 50,
+   "usableMs": 50,
+   "contentMs": 50,
+   "settledMs": null,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "unaligned",
+     "matches": 0,
+     "spreadMs": null,
+     "offsetMs": null
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {},
+    "categories": {},
+    "requests": []
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     50,
+     "marker",
+     "visible"
+    ],
+    [
+     50,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     50,
+     "marker",
+     "usable"
+    ],
+    [
+     50,
+     "marker",
+     "content"
+    ]
+   ]
+  },
+  {
+   "trial": 4,
+   "kind": "dwell",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 52,
+   "loadingShellMs": null,
+   "metaRenderedMs": 52,
+   "usableMs": 52,
+   "contentMs": 52,
+   "settledMs": null,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "unaligned",
+     "matches": 0,
+     "spreadMs": null,
+     "offsetMs": null
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {},
+    "categories": {},
+    "requests": []
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 8009,
+    "intervalUs": 1548,
+    "whole": {
+     "sampledMs": 12057.8,
+     "recorderMs": 54.5,
+     "self": [
+      [
+       "(idle)",
+       11915.6
+      ],
+      [
+       "(program)",
+       48.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       29
+      ],
+      [
+       "focus@(native)",
+       15.8
+      ],
+      [
+       "flags@(eval):7:14",
+       8.6
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       11915.6
+      ],
+      [
+       "(program)",
+       48.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       45.5
+      ],
+      [
+       "loadDetail@app.bundle.js:0:2142253",
+       27.7
+      ],
+      [
+       "renderMovieLayout@app.bundle.js:0:2187806",
+       21.3
+      ]
+     ],
+     "owners": [
+      [
+       "loadTraktComments",
+       2.2
+      ],
+      [
+       "loadMdbListRatings",
+       1.8
+      ],
+      [
+       "refreshLibraryMembership",
+       0.6
+      ]
+     ],
+     "heaviestPath": [
+      "loadDetail@app.bundle.js:0:2142253",
+      "render@app.bundle.js:0:2173424",
+      "renderMovieLayout@app.bundle.js:0:2187806",
+      "setInitialFocus@app.bundle.js:0:493916",
+      "focus@(native)"
+     ]
+    },
+    "windows": []
+   },
+   "timeline": [
+    [
+     52,
+     "marker",
+     "visible"
+    ],
+    [
+     52,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     52,
+     "marker",
+     "usable"
+    ],
+    [
+     52,
+     "marker",
+     "content"
+    ]
+   ]
+  },
+  {
+   "trial": 5,
+   "kind": "cold",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 53,
+   "loadingShellMs": 53,
+   "metaRenderedMs": 206,
+   "usableMs": 206,
+   "contentMs": 206,
+   "settledMs": 206,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 182,
+   "requests": 1,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 1,
+     "spreadMs": 0,
+     "offsetMs": -96979351.87900001
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": 182,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {
+     "local": 1
+    },
+    "categories": {
+     "local /{x}/meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "before-render"
+      ],
+      "owners": [
+       "getMeta"
+      ],
+      "medianDurMs": 153,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "local",
+      "category": "/{x}/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 29,
+      "endMs": 182,
+      "durMs": 153,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 615,
+      "initiatorType": "script",
+      "owner": "getMeta",
+      "owners": [
+       "getMeta"
+      ],
+      "phase": "before-render",
+      "frames": [
+       "YO@app.bundle.js:0:63559",
+       "(anonymous)@app.bundle.js:0:65725",
+       "(anonymous)@app.bundle.js:0:62071",
+       "qc@app.bundle.js:0:62062",
+       "Ri@app.bundle.js:0:65601"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     29,
+     "request",
+     "local /{x}/meta/movie/{x} before-render"
+    ],
+    [
+     53,
+     "marker",
+     "visible"
+    ],
+    [
+     53,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     182,
+     "response",
+     "local /{x}/meta/movie/{x} finished 200"
+    ],
+    [
+     206,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     206,
+     "marker",
+     "usable"
+    ],
+    [
+     206,
+     "marker",
+     "content"
+    ],
+    [
+     206,
+     "marker",
+     "settled"
+    ]
+   ]
+  },
+  {
+   "trial": 6,
+   "kind": "cold",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 52,
+   "loadingShellMs": 52,
+   "metaRenderedMs": 217,
+   "usableMs": 217,
+   "contentMs": 217,
+   "settledMs": 217,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": 192,
+   "requests": 1,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "resource-timing",
+     "matches": 1,
+     "spreadMs": 0,
+     "offsetMs": -96994396.972
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {
+     "local": 1
+    },
+    "categories": {
+     "local /{x}/meta/movie/{x}": {
+      "count": 1,
+      "finished": 1,
+      "failed": 0,
+      "canceled": 0,
+      "incomplete": 0,
+      "httpCacheHits": 0,
+      "phases": [
+       "home"
+      ],
+      "owners": [
+       "enrichCurrentHeroAsync"
+      ],
+      "medianDurMs": 153,
+      "repeated": false
+     }
+    },
+    "requests": [
+     {
+      "provider": "local",
+      "category": "/{x}/meta/movie/{x}",
+      "resourceType": "Fetch",
+      "method": "GET",
+      "startMs": 40,
+      "endMs": 193,
+      "durMs": 153,
+      "outcome": "finished",
+      "status": 200,
+      "errorText": null,
+      "cache": {
+       "memory": false,
+       "disk": false,
+       "serviceWorker": false,
+       "prefetch": false,
+       "revalidated": false
+      },
+      "redirects": 0,
+      "encodedBytes": 597,
+      "initiatorType": "script",
+      "owner": "enrichCurrentHeroAsync",
+      "owners": [
+       "getMeta",
+       "getMetaFromAllAddons",
+       "enrichCurrentHeroAsync"
+      ],
+      "phase": "home",
+      "frames": [
+       "YO@app.bundle.js:0:63559",
+       "(anonymous)@app.bundle.js:0:65725",
+       "(anonymous)@app.bundle.js:0:62071",
+       "qc@app.bundle.js:0:62062",
+       "Ri@app.bundle.js:0:65601"
+      ]
+     }
+    ]
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 8021,
+    "intervalUs": 1535,
+    "whole": {
+     "sampledMs": 12046.2,
+     "recorderMs": 53.9,
+     "self": [
+      [
+       "(idle)",
+       11900.7
+      ],
+      [
+       "(program)",
+       50.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       24.6
+      ],
+      [
+       "__nuvioLabProfileAnchor@(eval):3:62",
+       8
+      ],
+      [
+       "focus@(native)",
+       5.8
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       11900.7
+      ],
+      [
+       "(program)",
+       50.4
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       46
+      ],
+      [
+       "loadDetail@app.bundle.js:0:2142253",
+       15.3
+      ],
+      [
+       "flags@(eval):7:14",
+       12.4
+      ]
+     ],
+     "owners": [
+      [
+       "getMeta",
+       4.6
+      ],
+      [
+       "refreshLibraryMembership",
+       2.4
+      ],
+      [
+       "loadMdbListRatings",
+       1
+      ]
+     ],
+     "heaviestPath": [
+      "loadDetail@app.bundle.js:0:2142253",
+      "render@app.bundle.js:0:2173424",
+      "renderMovieLayout@app.bundle.js:0:2187806",
+      "setInitialFocus@app.bundle.js:0:493916",
+      "focus@(native)"
+     ]
+    },
+    "windows": []
+   },
+   "timeline": [
+    [
+     40,
+     "request",
+     "local /{x}/meta/movie/{x} home"
+    ],
+    [
+     52,
+     "marker",
+     "visible"
+    ],
+    [
+     52,
+     "marker",
+     "loadingShell"
+    ],
+    [
+     193,
+     "response",
+     "local /{x}/meta/movie/{x} finished 200"
+    ],
+    [
+     217,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     217,
+     "marker",
+     "usable"
+    ],
+    [
+     217,
+     "marker",
+     "content"
+    ],
+    [
+     217,
+     "marker",
+     "settled"
+    ]
+   ]
+  },
+  {
+   "trial": 7,
+   "kind": "dwell",
+   "profiled": false,
+   "noLongtask": false,
+   "visibleMs": 53,
+   "loadingShellMs": null,
+   "metaRenderedMs": 53,
+   "usableMs": 53,
+   "contentMs": 53,
+   "settledMs": null,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "unaligned",
+     "matches": 0,
+     "spreadMs": null,
+     "offsetMs": null
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {},
+    "categories": {},
+    "requests": []
+   },
+   "cpu": {
+    "status": "NOT_RUN"
+   },
+   "timeline": [
+    [
+     53,
+     "marker",
+     "visible"
+    ],
+    [
+     53,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     53,
+     "marker",
+     "usable"
+    ],
+    [
+     53,
+     "marker",
+     "content"
+    ]
+   ]
+  },
+  {
+   "trial": 8,
+   "kind": "dwell",
+   "profiled": true,
+   "noLongtask": false,
+   "visibleMs": 51,
+   "loadingShellMs": null,
+   "metaRenderedMs": 51,
+   "usableMs": 51,
+   "contentMs": 51,
+   "settledMs": null,
+   "samples": 240,
+   "staleHeroAtArm": 0,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "longTasks": 0,
+   "longTaskMs": 0,
+   "longTaskUnionMs": 0,
+   "longTaskMaxOverlap": 0,
+   "worstLongTaskMs": 0,
+   "longTaskEntries": [],
+   "network": {
+    "status": "ok",
+    "alignment": {
+     "method": "unaligned",
+     "matches": 0,
+     "spreadMs": null,
+     "offsetMs": null
+    },
+    "orphans": 0,
+    "malformed": 0,
+    "incomplete": 0,
+    "unattributed": 0,
+    "lastBeforeRenderEndMs": null,
+    "lastAfterRenderEndMs": null,
+    "endedAfterUsable": 0,
+    "providers": {},
+    "categories": {},
+    "requests": []
+   },
+   "cpu": {
+    "sampleUs": 1000,
+    "status": "ok",
+    "samples": 7953,
+    "intervalUs": 1556,
+    "whole": {
+     "sampledMs": 12058.7,
+     "recorderMs": 51,
+     "self": [
+      [
+       "(idle)",
+       11932.3
+      ],
+      [
+       "(program)",
+       41
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       23.8
+      ],
+      [
+       "focus@(native)",
+       15.6
+      ],
+      [
+       "__nuvioLabProfileAnchor@(eval):3:62",
+       8.8
+      ]
+     ],
+     "inclusive": [
+      [
+       "(idle)",
+       11932.3
+      ],
+      [
+       "(program)",
+       41
+      ],
+      [
+       "(anonymous)@(eval):13:63",
+       40.9
+      ],
+      [
+       "loadDetail@app.bundle.js:0:2142253",
+       26.8
+      ],
+      [
+       "renderMovieLayout@app.bundle.js:0:2187806",
+       21.9
+      ]
+     ],
+     "owners": [
+      [
+       "refreshLibraryMembership",
+       1.3
+      ]
+     ],
+     "heaviestPath": [
+      "loadDetail@app.bundle.js:0:2142253",
+      "render@app.bundle.js:0:2173424",
+      "renderMovieLayout@app.bundle.js:0:2187806",
+      "setInitialFocus@app.bundle.js:0:493916",
+      "focus@(native)"
+     ]
+    },
+    "windows": []
+   },
+   "timeline": [
+    [
+     51,
+     "marker",
+     "visible"
+    ],
+    [
+     51,
+     "marker",
+     "metaRendered"
+    ],
+    [
+     51,
+     "marker",
+     "usable"
+    ],
+    [
+     51,
+     "marker",
+     "content"
+    ]
+   ]
+  }
+ ]
+}
