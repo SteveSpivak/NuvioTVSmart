@@ -1,0 +1,78 @@
+{
+ "fix": "identityIndex",
+ "loadMs": 30000,
+ "results": [
+  {
+   "block": "1A",
+   "fix": "on",
+   "cards": 323,
+   "nodes": 3125,
+   "longTasks": 52,
+   "longTaskMs": 20611,
+   "worstLongTaskMs": 1170
+  },
+  {
+   "block": "2B",
+   "fix": "off",
+   "cards": 216,
+   "nodes": 1865,
+   "longTasks": 40,
+   "longTaskMs": 13672,
+   "worstLongTaskMs": 1143
+  },
+  {
+   "block": "3B",
+   "fix": "off",
+   "cards": 247,
+   "nodes": 2234,
+   "longTasks": 45,
+   "longTaskMs": 14975,
+   "worstLongTaskMs": 1144
+  },
+  {
+   "block": "4A",
+   "fix": "on",
+   "cards": 216,
+   "nodes": 1865,
+   "longTasks": 39,
+   "longTaskMs": 13333,
+   "worstLongTaskMs": 1163
+  },
+  {
+   "block": "5A",
+   "fix": "on",
+   "cards": 201,
+   "nodes": 1802,
+   "longTasks": 47,
+   "longTaskMs": 12659,
+   "worstLongTaskMs": 965
+  },
+  {
+   "block": "6B",
+   "fix": "off",
+   "cards": 186,
+   "nodes": 1638,
+   "longTasks": 48,
+   "longTaskMs": 12373,
+   "worstLongTaskMs": 1024
+  },
+  {
+   "block": "7B",
+   "fix": "off",
+   "cards": 186,
+   "nodes": 1637,
+   "longTasks": 52,
+   "longTaskMs": 12820,
+   "worstLongTaskMs": 1231
+  },
+  {
+   "block": "8A",
+   "fix": "on",
+   "cards": 201,
+   "nodes": 1693,
+   "longTasks": 44,
+   "longTaskMs": 12628,
+   "worstLongTaskMs": 1132
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+block	kind	visible	content	settled	longTaskMs	worst	task	script	watchedCpu	requests
+1A	cold	3750	5182	5745	1150	348	8267	416	202	98
+1A	dwell	1845	2805	2805	1927	452	3678	698	243	5
+1A	dwell	2067	4597	4597	2589	723	4184	379	489	12
+1A	cold	1714	2364	5559	2028	473	3285	510	262	8
+2B	cold	1328	2717	6226	1636	761	6613	416	338	109
+2B	dwell	1936	3311	3311	2109	593	3926	602	423	7
+2B	dwell	None	None	None	10598	997	11714	727	4357	3
+2B	cold	728	2493	5473	1543	556	2799	525	333	11
+3B	cold	1880	3544	6158	1158	363	6947	426	318	107
+3B	dwell	None	None	None	13060	1128	13792	73	5425	0
+3B	dwell	559	3212	3212	1390	846	2736	407	460	6
+3B	cold	1047	1598	5255	1125	443	2447	528	267	8
+4A	cold	1676	2982	5855	1428	610	6429	416	214	101
+4A	dwell	1827	2793	2793	1901	486	3388	657	250	7
+4A	dwell	1695	4050	4050	2447	740	3787	407	503	12
+4A	cold	1908	2653	4614	2071	480	3479	504	272	5
+
+median (n)	A fix on	B fix off
+visible	1836 (8)	1188 (6)
+visible cold	1811 (4)	1188 (4)
+visible dwell	1836 (4)	1248 (2)
+content	2894 (8)	2964 (6)
+content cold	2818 (4)	2605 (4)
+content dwell	3428 (4)	3262 (2)
+settled	4606 (8)	5364 (6)
+settled cold	5652 (4)	5816 (4)
+settled dwell	3428 (4)	3262 (2)
+longTaskMs	1978 (8)	1590 (8)
+longTaskMs cold	1728 (4)	1350 (4)
+longTaskMs dwell	2187 (4)	6354 (4)
+worst	483 (8)	677 (8)
+worst cold	476 (4)	500 (4)
+worst dwell	604 (4)	922 (4)
+task	3732 (8)	5270 (8)
+task cold	4954 (4)	4706 (4)
+task dwell	3732 (4)	7820 (4)
+script	460 (8)	476 (8)
+script cold	460 (4)	476 (4)
+script dwell	532 (4)	504 (4)
+watchedCpu	256 (8)	380 (8)
+watchedCpu cold	238 (4)	326 (4)
+watchedCpu dwell	370 (4)	2408 (4)
+requests	10 (8)	8 (8)
+requests cold	53 (4)	59 (4)
+requests dwell	10 (4)	4 (4)
