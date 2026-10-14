@@ -1,0 +1,5 @@
+device=emu throttle=6.8 when=2026-10-14T13:14:14Z
+MODE: {"constrained":true,"stored":"\"reduced\"","rows":20}
+saved unpromote94_20rows wallMs 18102 presses 38
+saved unpromote94_20rows wallMs 18067 presses 38 events 29364
+LAYERS: {"layers":8,"drawing":6,"megapixels":2,"approxMB":8,"biggest":["1920x1080","96x104","96x104","96x104","96x104","0x0"]}

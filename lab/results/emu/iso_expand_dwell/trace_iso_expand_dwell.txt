@@ -1,0 +1,39 @@
+TRACE iso_expand_dwell seq R*1@4500 presses 1 wall 6028 ms events 8510
+-- thread CrRendererMain (4580, 4580)  busy 219 ms
+         63 ms  x330    RunTask
+         39 ms  x242    FunctionCall
+         32 ms  x119    UpdateLayerTree
+         30 ms  x116    CompositeLayers
+         11 ms  x56     UpdateLayoutTree
+          9 ms  x21     Layout
+          7 ms  x113    Paint
+          6 ms  x232    IntersectionObserverController::computeIntersections
+          5 ms  x20     RunMicrotasks
+-- thread Compositor (4580, 4592)  busy 139 ms
+        139 ms  x1018   RunTask
+-- thread CompositorTileWorker1 (4580, 4594)  busy 277 ms
+        219 ms  x610    RasterTask
+         58 ms  x135    ImageDecodeTask
+-- thread VizCompositorThread (4553, 4584)  busy 574 ms
+        574 ms  x610    RunTask
+-- 20 longest single main-thread events
+        17 ms  EventDispatch        {"data": {"type": "keydown"}}
+        16 ms  FunctionCall         {"data": {"columnNumber": 3156209, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "handleKey", "lineNumber": 1, "scriptId": "9", "url": 
+         4 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 8686}}
+         4 ms  FunctionCall         {"data": {"columnNumber": 835384, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "", "lineNumber": 1, "scriptId": "9", "url": "http://12
+         3 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 8760}}
+         1 ms  FunctionCall         {"data": {"columnNumber": 881945, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "", "lineNumber": 1, "scriptId": "9", "url": "http://12
+         1 ms  TimerFire            {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "timerId": 2946}}
+         1 ms  TimerFire            {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "timerId": 2944}}
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  FunctionCall         {"data": {"columnNumber": 863798, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "", "lineNumber": 1, "scriptId": "9", "url": "http://12
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  CompositeLayers      {"layerTreeId": 1}
+         1 ms  UpdateLayerTree      {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C"}}
+         1 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 8657}}
+         1 ms  FunctionCall         {"data": {"columnNumber": 757608, "frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "functionName": "T", "lineNumber": 1, "scriptId": "9", "url": "http://1
+         1 ms  FireAnimationFrame   {"data": {"frame": "85BF0AAC030602B5D2B024B21F9A5C2C", "id": 8710}}

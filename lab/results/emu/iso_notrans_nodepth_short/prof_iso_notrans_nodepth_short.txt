@@ -1,0 +1,72 @@
+RUN iso_notrans_nodepth_short  seq R*6@300,D*4@600  presses 10  wall 5789 ms  sampled 5802 ms
+-- browser metrics, delta over the run
+  ScriptDuration                103 ms
+  LayoutDuration                  6 ms
+  RecalcStyleDuration            18 ms
+  TaskDuration                  683 ms
+  LayoutCount                       0 ->           16
+  RecalcStyleCount                  0 ->           51
+  JSHeapUsedSize              7738452 ->      8431404
+  Nodes                         54687 ->        54833
+  JSEventListeners                136 ->          149
+-- frames: 347  avg fps 58.5  median 17 ms  p90 17 ms  p99 17 ms  max 33 ms
+   frames over 50 ms: 0  over 100 ms: 0  over 200 ms: 0  time in frames over 50 ms: 0 ms
+-- long tasks: 0  total 0 ms  worst 0 ms
+-- top self time
+      5149 ms  88.7%  (idle)                                       :0:0
+       537 ms   9.2%  (program)                                    :0:0
+        19 ms   0.3%  getBoundingClientRect                        :0:0
+        18 ms   0.3%  T                                            app.bundle.js?v=20260531su:1:757608
+        11 ms   0.2%  requestAnimationFrame                        :0:0
+         9 ms   0.2%  (anonymous)                                  app.bundle.js?v=20260531su:1:934378
+         7 ms   0.1%  focus                                        :0:0
+         5 ms   0.1%  getModernTrackAlignedScrollTarget            app.bundle.js?v=20260531su:1:868763
+         5 ms   0.1%  querySelectorAll                             :0:0
+         4 ms   0.1%  stringify                                    core-js.bundle.js:1:66524
+         4 ms   0.1%  setTimeout                                   :0:0
+         3 ms   0.1%  parse                                        core-js.bundle.js:1:63741
+         3 ms   0.1%  querySelector                                :0:0
+         2 ms   0.0%  tN                                           app.bundle.js?v=20260531su:1:226
+         2 ms   0.0%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+         2 ms   0.0%  (anonymous)                                  app.bundle.js?v=20260531su:1:860359
+         2 ms   0.0%  sQ                                           app.bundle.js?v=20260531su:1:41579
+         1 ms   0.0%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+         1 ms   0.0%  $o                                           app.bundle.js?v=20260531su:1:701284
+         1 ms   0.0%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+         1 ms   0.0%  getNodeHeroSource                            app.bundle.js?v=20260531su:1:802114
+         1 ms   0.0%  remove                                       :0:0
+         1 ms   0.0%  rQ                                           app.bundle.js?v=20260531su:1:40756
+         1 ms   0.0%  nQ                                           app.bundle.js?v=20260531su:1:41795
+         1 ms   0.0%  handleHomeDpad                               app.bundle.js?v=20260531su:1:888128
+         1 ms   0.0%  scheduleModernTrackPaginationForFocus        app.bundle.js?v=20260531su:1:962392
+         1 ms   0.0%  t                                            app.bundle.js?v=20260531su:1:137344
+         1 ms   0.0%  scheduleHomeLazyImageHydration               app.bundle.js?v=20260531su:1:930255
+-- top inclusive time (app functions)
+        22 ms   0.4%  handleKey                                    app.bundle.js?v=20260531su:1:3156209
+        19 ms   0.3%  T                                            app.bundle.js?v=20260531su:1:757608
+        19 ms   0.3%  handleHomeDpad                               app.bundle.js?v=20260531su:1:888128
+        19 ms   0.3%  onKeyDown                                    app.bundle.js?v=20260531su:1:955116
+        18 ms   0.3%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+        10 ms   0.2%  getModernTrackAlignedScrollTarget            app.bundle.js?v=20260531su:1:868763
+        10 ms   0.2%  getForProfile                                app.bundle.js?v=20260531su:1:313055
+        10 ms   0.2%  get                                          app.bundle.js?v=20260531su:1:313105
+         9 ms   0.1%  S                                            app.bundle.js?v=20260531su:1:834555
+         8 ms   0.1%  boundHomeViewport.i.boundHomeViewportScrollH app.bundle.js?v=20260531su:1:894155
+         8 ms   0.1%  pm                                           app.bundle.js?v=20260531su:1:714349
+         8 ms   0.1%  vC                                           app.bundle.js?v=20260531su:1:311117
+         7 ms   0.1%  Bo                                           app.bundle.js?v=20260531su:1:667330
+         7 ms   0.1%  focusWithoutAutoScroll                       app.bundle.js?v=20260531su:1:800479
+         7 ms   0.1%  applyHeroToDom                               app.bundle.js?v=20260531su:1:794028
+         7 ms   0.1%  RV                                           app.bundle.js?v=20260531su:1:719264
+         7 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:39870
+         7 ms   0.1%  Zg                                           app.bundle.js?v=20260531su:1:712965
+         5 ms   0.1%  scheduleHomeLazyImageHydration               app.bundle.js?v=20260531su:1:930255
+         5 ms   0.1%  E                                            app.bundle.js?v=20260531su:1:837127
+         4 ms   0.1%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+         4 ms   0.1%  stringify                                    core-js.bundle.js:1:66524
+         4 ms   0.1%  collapseFocusedPoster                        app.bundle.js?v=20260531su:1:852077
+         4 ms   0.1%  scheduleFocusedPosterFlow                    app.bundle.js?v=20260531su:1:861766
+         4 ms   0.1%  applyModernHeroDescriptionBounds             app.bundle.js?v=20260531su:1:860122
+         4 ms   0.1%  scheduleHomeTruncationUpdate                 app.bundle.js?v=20260531su:1:858260
+         3 ms   0.1%  getNodeHeroSource                            app.bundle.js?v=20260531su:1:802114
+         3 ms   0.1%  scheduleModernHeroUpdate                     app.bundle.js?v=20260531su:1:833683

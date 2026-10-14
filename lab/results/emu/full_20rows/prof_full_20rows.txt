@@ -1,0 +1,72 @@
+RUN full_20rows  seq R*6@300,L*5@300,D*8@600,R*6@300,L*5@300,U*8@600  presses 38  wall 18011 ms  sampled 18027 ms
+-- browser metrics, delta over the run
+  ScriptDuration                409 ms
+  LayoutDuration                 17 ms
+  RecalcStyleDuration           216 ms
+  TaskDuration                 3290 ms
+  LayoutCount                       0 ->           51
+  RecalcStyleCount                  0 ->          453
+  JSHeapUsedSize              9318792 ->      8387604
+  Nodes                         52134 ->        53802
+  JSEventListeners                116 ->          119
+-- frames: 1062  avg fps 57.7  median 17 ms  p90 17 ms  p99 17 ms  max 67 ms
+   frames over 50 ms: 4  over 100 ms: 0  over 200 ms: 0  time in frames over 50 ms: 268 ms
+-- long tasks: 0  total 0 ms  worst 0 ms
+-- top self time
+     14854 ms  82.4%  (idle)                                       :0:0
+      2582 ms  14.3%  (program)                                    :0:0
+       202 ms   1.1%  T                                            app.bundle.js?v=20260531su:1:757608
+        56 ms   0.3%  (garbage collector)                          :0:0
+        51 ms   0.3%  focus                                        :0:0
+        37 ms   0.2%  getBoundingClientRect                        :0:0
+        34 ms   0.2%  requestAnimationFrame                        :0:0
+        13 ms   0.1%  (anonymous)                                  app.bundle.js?v=20260531su:1:934729
+        11 ms   0.1%  setTimeout                                   :0:0
+        11 ms   0.1%  N                                            app.bundle.js?v=20260531su:1:433
+        10 ms   0.1%  boundHomeViewport.i.boundHomeViewportScrollH app.bundle.js?v=20260531su:1:894155
+        10 ms   0.1%  (anonymous)                                  app.bundle.js?v=20260531su:1:934378
+         9 ms   0.1%  (anonymous)                                  app.bundle.js?v=20260531su:1:934528
+         8 ms   0.0%  querySelectorAll                             :0:0
+         8 ms   0.0%  querySelector                                :0:0
+         6 ms   0.0%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+         5 ms   0.0%  v                                            app.bundle.js?v=20260531su:1:311
+         5 ms   0.0%  (anonymous)                                  :0:0
+         4 ms   0.0%  getModernTrackAlignedScrollTarget            app.bundle.js?v=20260531su:1:868763
+         4 ms   0.0%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+         3 ms   0.0%  tN                                           app.bundle.js?v=20260531su:1:226
+         3 ms   0.0%  stringify                                    core-js.bundle.js:1:66524
+         3 ms   0.0%  collapseFocusedPoster                        app.bundle.js?v=20260531su:1:852077
+         3 ms   0.0%  set length                                   :0:0
+         3 ms   0.0%  Rv                                           app.bundle.js?v=20260531su:1:109153
+         3 ms   0.0%  OA                                           app.bundle.js?v=20260531su:1:790517
+         2 ms   0.0%  parse                                        core-js.bundle.js:1:63741
+         2 ms   0.0%  M                                            app.bundle.js?v=20260531su:1:964329
+-- top inclusive time (app functions)
+       206 ms   1.1%  T                                            app.bundle.js?v=20260531su:1:757608
+       103 ms   0.6%  handleKey                                    app.bundle.js?v=20260531su:1:3156209
+        96 ms   0.5%  onKeyDown                                    app.bundle.js?v=20260531su:1:955116
+        95 ms   0.5%  handleHomeDpad                               app.bundle.js?v=20260531su:1:888128
+        92 ms   0.5%  focusNode                                    app.bundle.js?v=20260531su:1:883670
+        76 ms   0.4%  hydrateHomeLazyImages                        app.bundle.js?v=20260531su:1:933466
+        52 ms   0.3%  focusWithoutAutoScroll                       app.bundle.js?v=20260531su:1:800479
+        51 ms   0.3%  Bo                                           app.bundle.js?v=20260531su:1:667330
+        40 ms   0.2%  boundHomeViewport.i.boundHomeViewportScrollH app.bundle.js?v=20260531su:1:894155
+        29 ms   0.2%  S                                            app.bundle.js?v=20260531su:1:834555
+        26 ms   0.1%  pm                                           app.bundle.js?v=20260531su:1:714349
+        26 ms   0.1%  RV                                           app.bundle.js?v=20260531su:1:719264
+        19 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:313105
+        18 ms   0.1%  getForProfile                                app.bundle.js?v=20260531su:1:313055
+        16 ms   0.1%  vC                                           app.bundle.js?v=20260531su:1:311117
+        15 ms   0.1%  collapseFocusedPoster                        app.bundle.js?v=20260531su:1:852077
+        15 ms   0.1%  scheduleFocusedPosterFlow                    app.bundle.js?v=20260531su:1:861766
+        14 ms   0.1%  $o                                           app.bundle.js?v=20260531su:1:701284
+        13 ms   0.1%  get                                          app.bundle.js?v=20260531su:1:39870
+        12 ms   0.1%  Zg                                           app.bundle.js?v=20260531su:1:712965
+        12 ms   0.1%  M                                            app.bundle.js?v=20260531su:1:964329
+        12 ms   0.1%  u                                            app.bundle.js?v=20260531su:1:963683
+        12 ms   0.1%  jte                                          app.bundle.js?v=20260531su:1:311007
+        11 ms   0.1%  N                                            app.bundle.js?v=20260531su:1:433
+        10 ms   0.1%  getModernTrackAlignedScrollTarget            app.bundle.js?v=20260531su:1:868763
+        10 ms   0.1%  scheduleModernHeroUpdate                     app.bundle.js?v=20260531su:1:833683
+         9 ms   0.1%  scheduleHomeLazyImageHydration               app.bundle.js?v=20260531su:1:930255
+         8 ms   0.0%  v                                            app.bundle.js?v=20260531su:1:311
