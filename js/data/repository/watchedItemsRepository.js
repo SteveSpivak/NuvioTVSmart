@@ -512,11 +512,24 @@ class WatchedItemsRepository {
         getTraktWatchedMovies(),
         getTraktWatchedShows()
       ]);
-      const remote = [
-        ...remoteMovies,
-        ...remoteShows.flatMap((show) => toTraktWatchedShowEpisodeItems(show))
-      ];
-      const remoteKeys = new Set(remote.flatMap(watchedIdentityKeys));
+      // Flattening every watched episode and building its identity keys costs
+      // hundreds of milliseconds on webOS, and details calls getAll twice per
+      // open. Reuse the result while the Trakt caches return the same arrays.
+      let derived = this._traktRemoteDerived;
+      if (!derived || derived.movies !== remoteMovies || derived.shows !== remoteShows) {
+        const items = [
+          ...remoteMovies,
+          ...remoteShows.flatMap((show) => toTraktWatchedShowEpisodeItems(show))
+        ];
+        derived = {
+          movies: remoteMovies,
+          shows: remoteShows,
+          remote: items,
+          remoteKeys: new Set(items.flatMap(watchedIdentityKeys))
+        };
+        this._traktRemoteDerived = derived;
+      }
+      const { remote, remoteKeys } = derived;
       return limitWatchedItems(
         [
           ...remote,
