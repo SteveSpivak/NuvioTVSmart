@@ -938,6 +938,9 @@ async function main() {
   } catch (e) {
     aborted = disconnected ? "DevTools connection closed" : String(e.message || e).slice(0, 120);
   }
+  // A run where every trial was skipped is incomplete, not a pass.
+  if (!aborted && results.length < ORDER.length)
+    aborted = `incomplete: ${results.length}/${ORDER.length} trials ran`;
   if (aborted) console.log("ABORT", aborted);
   for (const kind of ["cold", "dwell"])
     for (const profiled of [false, true]) {
