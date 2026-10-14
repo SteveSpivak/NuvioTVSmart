@@ -1,0 +1,84 @@
+{
+ "order": "CDDCCD",
+ "dwellMs": 5000,
+ "results": [
+  {
+   "visibleMs": 439,
+   "contentMs": 3659,
+   "settledMs": 5909,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 11,
+   "longTaskMs": 1832,
+   "worstLongTaskMs": 608,
+   "kind": "cold"
+  },
+  {
+   "visibleMs": 834,
+   "contentMs": 2078,
+   "settledMs": 2078,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 5,
+   "longTaskMs": 1166,
+   "worstLongTaskMs": 742,
+   "kind": "dwell"
+  },
+  {
+   "visibleMs": 715,
+   "contentMs": 1999,
+   "settledMs": 1999,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 6,
+   "longTaskMs": 1122,
+   "worstLongTaskMs": 611,
+   "kind": "dwell"
+  },
+  {
+   "visibleMs": 815,
+   "contentMs": 1811,
+   "settledMs": 5400,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 8,
+   "longTaskMs": 1332,
+   "worstLongTaskMs": 687,
+   "kind": "cold"
+  },
+  {
+   "visibleMs": 872,
+   "contentMs": 1614,
+   "settledMs": 5194,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 7,
+   "longTaskMs": 1336,
+   "worstLongTaskMs": 776,
+   "kind": "cold"
+  },
+  {
+   "visibleMs": 1058,
+   "contentMs": 2089,
+   "settledMs": 2089,
+   "lastRequestEndMs": null,
+   "requests": 0,
+   "images": 0,
+   "requestHosts": {},
+   "longTasks": 6,
+   "longTaskMs": 1474,
+   "worstLongTaskMs": 957,
+   "kind": "dwell"
+  }
+ ]
+}

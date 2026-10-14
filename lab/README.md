@@ -132,6 +132,7 @@ not, so a person using the remote cannot make it drive other screens.
 | `perf/layers.mjs`                    | Layer count, megapixels, Home element statistics                          |
 | `perf/calibrate.mjs`                 | Fixed CPU benchmark; on the emulator prints `suggestedThrottle`           |
 | `perf/probe.mjs`                     | Evaluate one read-only expression in the page                             |
+| `perf/details.mjs`                   | Details-open timing, cold versus resting on a card first (`DWELL_MS`)     |
 | `emu/start.mjs`                      | Launch the emulator and report `homeReadyMs` (startup time)               |
 | `emu/serve.mjs`                      | App files + fake addon + synthetic images                                 |
 
