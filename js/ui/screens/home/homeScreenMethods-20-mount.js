@@ -1,4 +1,5 @@
 import * as internals from "./homeScreenContext.js";
+import { shouldRenderWatchedTitleChange } from "./homeWatchedRenderSkip.js";
 
 export function createHomeScreenMethods20() {
   const {
@@ -287,8 +288,12 @@ export function createHomeScreenMethods20() {
         return;
       }
       this.watchedItems = Array.isArray(projectedItems) ? projectedItems : baseWatchedItems;
-      this.watchedTitleIds = buildWatchedTitleIdSet(this.watchedItems);
-      this.requestBackgroundRender();
+      const nextTitleIds = buildWatchedTitleIdSet(this.watchedItems);
+      const titlesChanged = shouldRenderWatchedTitleChange(this.watchedTitleIds, nextTitleIds);
+      this.watchedTitleIds = nextTitleIds;
+      if (titlesChanged) {
+        this.requestBackgroundRender();
+      }
     }
   };
 }
