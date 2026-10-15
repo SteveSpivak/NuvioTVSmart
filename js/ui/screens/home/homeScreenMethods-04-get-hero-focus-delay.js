@@ -1,6 +1,7 @@
 import * as internals from "./homeScreenContext.js";
 import { getTvRuntimePerformanceProfile } from "../../../platform/tvRuntimePerformance.js";
 import { startHomeContinueWatchingLoad } from "./homeContinueWatchingLoad.js";
+import { homeRouteStoreSignatureParts } from "./homeRouteStoreSignature.js";
 
 function catalogItemIdentity(item = {}) {
   const id = String(item?.id || item?.videoId || item?.contentId || "").trim();
@@ -464,8 +465,7 @@ export function createHomeScreenMethods04() {
         addonRepository.getInstalledAddonUrls(),
         addonRepository.getAddonEnabledStates(),
         addons,
-        HomeCatalogStore.get(),
-        CollectionsStore.get()
+        ...homeRouteStoreSignatureParts(ProfileManager.getActiveProfileId(), () => [HomeCatalogStore.get(), CollectionsStore.get()])
       ]);
     },
     async refreshHomeAfterRouteReturn({ preserveReturnState = true, reason = "route-return" } = {}) {
