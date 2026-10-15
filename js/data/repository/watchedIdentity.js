@@ -1,3 +1,5 @@
+import { labFixEnabled } from "../../core/labSwitch.js";
+
 function addIdentityValue(set, value) {
   const normalized = String(value ?? "").trim();
   if (!normalized) {
@@ -7,10 +9,28 @@ function addIdentityValue(set, value) {
   set.add(normalized.toLowerCase());
 }
 
+// Lab experiment "identityPrefixPattern": building a RegExp per call was ~120 ms of the
+// watched identity rebuild on Back on the TV. Reuse one pattern per prefix (no "g" flag, so
+// no state between calls). Read once at load: this runs per watched episode.
+export const identityPrefixPatternEnabled = labFixEnabled("identityPrefixPattern");
+const prefixPatterns = new Map();
+
+function prefixPattern(prefix) {
+  if (!identityPrefixPatternEnabled) {
+    return new RegExp(`^${prefix}:`, "i");
+  }
+  let pattern = prefixPatterns.get(prefix);
+  if (!pattern) {
+    pattern = new RegExp(`^${prefix}:`, "i");
+    prefixPatterns.set(prefix, pattern);
+  }
+  return pattern;
+}
+
 function addPrefixedIdentityValue(set, prefix, value) {
   const normalized = String(value ?? "")
     .trim()
-    .replace(new RegExp(`^${prefix}:`, "i"), "");
+    .replace(prefixPattern(prefix), "");
   if (!normalized) {
     return;
   }
