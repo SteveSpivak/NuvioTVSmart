@@ -244,6 +244,7 @@ export function createMetaDetailsScreenMethods08() {
       if (!this.container || !this.container.querySelector(".series-detail-shell")) {
         return;
       }
+      meta = this.stableHeroMeta(meta);
       const focusRestore = focusRestoreOverride || this.captureDetailFocus();
       this.captureRenderedChromeState();
       const isSeries = isSeriesDetailMeta(meta, this.episodes);

@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import * as internals from "./metaDetailsScreenContext.js";
 import { renderDetailTrailerLoading } from "./detailTrailerLoading.js";
+import { detailPreviewEnabled } from "./detailPreview.js";
+import { pinDetailHeroArt } from "./detailStableHero.js";
 
 export function createMetaDetailsScreenMethods07() {
   const {
@@ -63,7 +65,22 @@ export function createMetaDetailsScreenMethods07() {
       (incoming || []).forEach(push);
       return merged;
     },
+    // Hero art already on screen for this open of Details (Lab
+    // "detailStableHero"). When the preview is showing, it drew the Home
+    // card's fallback art, so that is the first pin.
+    stableHeroMeta(meta) {
+      const params = this.params || {};
+      const seed =
+        detailPreviewEnabled() && this.container?.querySelector(".detail-preview-shell")
+          ? { logo: params.fallbackLogo, background: params.fallbackBackground }
+          : {};
+      const key = `${this.detailLoadToken || 0}:${params.itemType || ""}:${params.itemId || ""}`;
+      const pinned = pinDetailHeroArt(meta, this._detailHeroPin, key, seed, resolveDetailBackdropUrl);
+      this._detailHeroPin = pinned.pin;
+      return pinned.meta;
+    },
     render(meta, focusRestore = undefined) {
+      meta = this.stableHeroMeta(meta);
       if (this._sectionsUpdateRaf) {
         const cancelRaf = typeof cancelAnimationFrame === "function" ? cancelAnimationFrame : clearTimeout;
         cancelRaf(this._sectionsUpdateRaf);
