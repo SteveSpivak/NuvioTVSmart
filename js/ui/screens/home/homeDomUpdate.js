@@ -1,3 +1,4 @@
+import { labFixEnabled } from "../../../core/labSwitch.js";
 import { getHomeFocusIdentity } from "./homeFocusPolicy.js";
 
 // Compare generated markup, rather than the live DOM: focus, image hydration,
@@ -105,10 +106,29 @@ function updateAttributes(node, previous, next) {
   if (
     node.tagName === "IMG" &&
     previous.getAttribute("data-src") !== next.getAttribute("data-src") &&
-    !next.hasAttribute("src")
+    !next.hasAttribute("src") &&
+    !hydrateFocusedCardImage(node)
   ) {
     node.removeAttribute("src");
   }
+}
+
+// Lab experiment "focusLogoHydrate": that hydration pass only runs when focus
+// moves, so a card that already has focus kept a blank logo after a row update
+// changed its source (addon and TMDB logos alternate after Back on the TV).
+// Load the new source in place for the focused or expanded card.
+function hydrateFocusedCardImage(img) {
+  const src = String(img.getAttribute("data-src") || "").trim();
+  if (
+    !src ||
+    !img.closest(".home-content-card.focused, .home-content-card.is-expanded") ||
+    !labFixEnabled("focusLogoHydrate")
+  ) {
+    return false;
+  }
+  img.setAttribute("src", src);
+  img.removeAttribute("data-src");
+  return true;
 }
 
 function updateNode(node, source, protectedNode) {
