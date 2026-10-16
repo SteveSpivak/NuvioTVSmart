@@ -10,10 +10,12 @@ export function createTraktAuthServiceMethods01() {
     TraktAuthStore,
     WATCHED_MOVIES_PAGE_LIMIT,
     WATCHED_SHOWS_PAGE_LIMIT,
+    WATCHLIST_PAGE_LIMIT,
     hasRequiredCredentials,
     normalizeAuthErrorMessage,
     sleep,
     fetchWatchedPages,
+    dedupeNormalizedWatchlist,
     requestJson,
     isTokenExpiredOrExpiring,
     fetchUserSettings,
@@ -244,26 +246,22 @@ export function createTraktAuthServiceMethods01() {
 
       return allItems.slice(0, limit);
     },
-    async fetchWatchlist({ limit = 100 } = {}) {
-      const token = await this.getValidAccessToken();
-      if (!token) return [];
-
-      const allItems = [];
-      let page = 1;
-      const perPage = Math.min(limit, 100);
-
-      while (allItems.length < limit) {
-        const { response, payload } = await requestJson(`/sync/watchlist?limit=${perPage}&page=${page}`, {
-          authorization: `Bearer ${token}`
-        });
-        if (!response.ok || !Array.isArray(payload)) break;
-
-        allItems.push(...payload.map(normalizeWatchlistItem).filter(Boolean));
-        if (payload.length < perPage) break;
-        page++;
+    async fetchWatchlist({ token = null } = {}) {
+      const accessToken = token || (await this.getValidAccessToken());
+      if (!accessToken) {
+        const error = new Error("Trakt is not connected");
+        error.status = 401;
+        throw error;
       }
 
-      return allItems.slice(0, limit);
+      const items = await fetchWatchedPages({
+        token: accessToken,
+        path: "/sync/watchlist",
+        pageLimit: WATCHLIST_PAGE_LIMIT,
+        normalize: normalizeWatchlistItem,
+        label: "watchlist"
+      });
+      return dedupeNormalizedWatchlist(items);
     },
     async fetchPlaybackState({ limit = 50 } = {}) {
       const token = await this.getValidAccessToken();

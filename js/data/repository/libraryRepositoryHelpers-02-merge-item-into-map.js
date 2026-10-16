@@ -217,5 +217,8 @@ export function removePersonalItem(state, listKey, item) {
 
 export function traktErrorMessage(payload, fallback, status) {
   const message = payload && typeof payload === "object" ? payload.message || payload.error_description || payload.error : null;
+  if (status === 420) {
+    return String(message || `Trakt account limit exceeded (${status})`);
+  }
   return String(message || `${fallback} (${status})`);
 }

@@ -815,8 +815,16 @@ export const SimklSyncService = {
   },
 
   async getLibraryEntries() {
-    await this.refresh().catch(() => false);
+    let refreshError = null;
+    try {
+      await this.refresh();
+    } catch (error) {
+      refreshError = error;
+    }
     const snapshot = getSnapshot();
+    if (!snapshotHasLoadedProgress(snapshot)) {
+      throw refreshError || new Error("Simkl library is unavailable");
+    }
     return snapshot.entries
       .map((entry) => toLibraryEntry(entry, snapshot))
       .filter(Boolean)

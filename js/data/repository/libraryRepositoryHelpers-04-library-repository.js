@@ -36,8 +36,14 @@ import {
   LibraryListPrivacy,
   toSavedItemFromTraktWatchlist,
   createEmptyRemoteState,
-  isMissingResourceError
+  isMissingResourceError,
+  captureTraktPublishContext,
+  claimTraktPublicationVersion,
+  publishTraktMutation,
+  publishTraktRefresh,
+  clearRemoteState
 } from "./libraryRepositoryHelpers-01-library-source-mode.js";
+import { TraktAuthStore } from "../local/traktAuthStore.js";
 import {
   getRemotePersonalTabs,
   hydrateEntries,
@@ -61,7 +67,12 @@ export class LibraryRepository {
 
   async ensureFreshTraktState() {
     const state = await readRemoteState();
-    if (Date.now() - state.syncedAt <= TRAKT_LIBRARY_CACHE_TTL_MS) {
+    const profileId = String(ProfileManager.getActiveProfileId() || "1");
+    const auth = TraktAuthStore.get(profileId);
+    const authRevision = Number(auth.authRevision || 0);
+    const traktUserId = auth.userSlug || auth.username || null;
+    const sameIdentity = Number(state.authRevision || 0) === authRevision && String(state.traktUserId || "") === String(traktUserId || "");
+    if (sameIdentity && Date.now() - state.syncedAt <= TRAKT_LIBRARY_CACHE_TTL_MS) {
       return;
     }
     if (!this.traktRefreshPromise) {
@@ -207,8 +218,11 @@ export class LibraryRepository {
     }
 
     const desiredMembership = changes?.desiredMembership || {};
-    const currentSnapshot = await this.getMembershipSnapshot(item, { sourceMode });
+    const context = await captureTraktPublishContext();
     let remoteState = await readRemoteState();
+    const entries = await getRemoteEntries({ hydrate: false });
+    const listTabs = [{ key: WATCHLIST_KEY }, ...(await getRemotePersonalTabs())];
+    const currentSnapshot = membershipMapFromEntries(entries, listTabs)(item);
 
     for (const [listKey, desired] of Object.entries(desiredMembership)) {
       const before = currentSnapshot.listMembership?.[listKey] === true;
@@ -252,10 +266,11 @@ export class LibraryRepository {
       remoteState = after ? upsertPersonalItem(remoteState, listKey, item) : removePersonalItem(remoteState, listKey, item);
     }
 
-    await writeRemoteState(remoteState);
+    publishTraktMutation(context, remoteState);
   }
 
   async createPersonalList(name, description, privacy) {
+    const context = await captureTraktPublishContext();
     const { payload } = await authorizedTraktRequest("/users/me/lists", {
       method: "POST",
       body: {
@@ -272,11 +287,12 @@ export class LibraryRepository {
     const state = await readRemoteState();
     state.lists = [...state.lists.filter((list) => list.key !== created.key), created];
     state.listItems[created.key] = state.listItems[created.key] || [];
-    await writeRemoteState(state);
+    publishTraktMutation(context, state);
     return created.key;
   }
 
   async updatePersonalList(listId, name, description, privacy) {
+    const context = await captureTraktPublishContext();
     const { payload } = await authorizedTraktRequest(`/users/me/lists/${encodeURIComponent(String(listId))}`, {
       method: "PUT",
       body: {
@@ -301,10 +317,11 @@ export class LibraryRepository {
         privacy: updated?.privacy || privacy || list.privacy || LibraryListPrivacy.PRIVATE
       };
     });
-    await writeRemoteState(state);
+    publishTraktMutation(context, state);
   }
 
   async deletePersonalList(listId) {
+    const context = await captureTraktPublishContext();
     await authorizedTraktRequest(`/users/me/lists/${encodeURIComponent(String(listId))}`, {
       method: "DELETE",
       errorMessage: "Could not delete Trakt list"
@@ -318,10 +335,11 @@ export class LibraryRepository {
     }
     state.lists = state.lists.filter((list) => list.key !== match.key);
     delete state.listItems[match.key];
-    await writeRemoteState(state);
+    publishTraktMutation(context, state);
   }
 
   async reorderPersonalLists(orderedListIds = []) {
+    const context = await captureTraktPublishContext();
     const rank = orderedListIds
       .map((id) => Number(String(id).replace(PERSONAL_KEY_PREFIX, "")))
       .filter((id) => Number.isFinite(id) && id > 0);
@@ -336,15 +354,30 @@ export class LibraryRepository {
     const reordered = orderedListIds.map((id) => byId.get(String(id).replace(PERSONAL_KEY_PREFIX, ""))).filter(Boolean);
     const untouched = state.lists.filter((list) => !reordered.some((entry) => entry.key === list.key));
     state.lists = [...reordered, ...untouched];
-    await writeRemoteState(state);
+    publishTraktMutation(context, state);
+  }
+
+  async clearCurrentProfile() {
+    await clearRemoteState();
   }
 
   async refreshNow() {
     const sourceMode = await this.getSourceMode();
     if (sourceMode === LibrarySourceMode.TRAKT) {
       if (!TraktAuthService.isAuthenticated()) return false;
+      const startedProfileId = String(ProfileManager.getActiveProfileId() || "1");
+      const token = await TraktAuthService.getValidAccessToken();
+      if (!token) return false;
+      const context = await captureTraktPublishContext();
+      if (context.profileId !== startedProfileId || context.accessToken !== token) {
+        return false;
+      }
+      const publicationId = claimTraktPublicationVersion();
       try {
-        const [watchlistItems, personal] = await Promise.all([TraktAuthService.fetchWatchlist({ limit: 200 }), fetchTraktPersonalState()]);
+        const [watchlistItems, personal] = await Promise.all([
+          TraktAuthService.fetchWatchlist({ token: context.accessToken }),
+          fetchTraktPersonalState({ token: context.accessToken })
+        ]);
         const rawItems = watchlistItems.map(toSavedItemFromTraktWatchlist).filter(Boolean);
         const state = createEmptyRemoteState();
         state.syncedAt = Date.now();
@@ -353,8 +386,7 @@ export class LibraryRepository {
         personal.lists.forEach((list, index) => {
           state.listItems[list.key] = personal.itemGroups[index] || [];
         });
-        await writeRemoteState(state);
-        return true;
+        return publishTraktRefresh(context, state, publicationId);
       } catch (error) {
         console.warn("[LIB] Trakt library fetch failed", error);
         return false;

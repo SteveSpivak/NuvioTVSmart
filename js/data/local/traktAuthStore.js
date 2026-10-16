@@ -29,7 +29,8 @@ function normalizeState(value = {}) {
     userCode: String(value.userCode || "") || null,
     verificationUrl: String(value.verificationUrl || "") || null,
     expiresAt: Number(value.expiresAt || 0) || null,
-    pollInterval: Number(value.pollInterval || 0) || null
+    pollInterval: Number(value.pollInterval || 0) || null,
+    authRevision: Number(value.authRevision || 0) || 0
   };
 }
 
@@ -100,6 +101,7 @@ export const TraktAuthStore = {
     const current = readProfileState(profileId);
     return writeProfileState(profileId, {
       ...current,
+      authRevision: Number(current.authRevision || 0) + 1,
       accessToken: data.access_token || data.accessToken || null,
       refreshToken: data.refresh_token || data.refreshToken || null,
       tokenType: data.token_type || data.tokenType || "bearer",
@@ -137,6 +139,9 @@ export const TraktAuthStore = {
   },
 
   clearAuth(profileId = activeProfileId()) {
-    return writeProfileState(profileId, {});
+    const current = readProfileState(profileId);
+    return writeProfileState(profileId, {
+      authRevision: Number(current.authRevision || 0) + 1
+    });
   }
 };

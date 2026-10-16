@@ -4,6 +4,7 @@ import { Platform } from "../../../platform/index.js";
 import { TraktAuthService } from "../../../data/repository/traktAuthService.js";
 import { SimklAuthService } from "../../../data/repository/simklAuthService.js";
 import { SimklSyncService } from "../../../data/repository/simklSyncService.js";
+import { libraryRepository } from "../../../data/repository/libraryRepository.js";
 import {
   SimklAnimeIdPreference,
   MoreLikeThisSourcePreference,
@@ -283,6 +284,7 @@ export const TraktScreen = Object.assign(Object.create(SettingsScreen), {
         onSelect: async (option) => {
           if (option.id !== "disconnect") return;
           await TraktAuthService.disconnect();
+          await libraryRepository.clearCurrentProfile();
           if (settings.watchProgressSource === WatchProgressSource.TRAKT) {
             TraktSettingsStore.setWatchProgressSource(WatchProgressSource.NUVIO_SYNC);
           }

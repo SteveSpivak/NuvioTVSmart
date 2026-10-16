@@ -568,15 +568,33 @@ export class LibraryController {
       this.onChange(this.getState());
     }
 
-    const sourceMode = await libraryRepository.getSourceMode();
-    if (this.disposed || reloadToken !== this.reloadToken) {
+    let sourceMode;
+    let listTabs;
+    let allItems;
+    let watchedItems;
+    try {
+      sourceMode = await libraryRepository.getSourceMode();
+      if (this.disposed || reloadToken !== this.reloadToken) {
+        return;
+      }
+      [listTabs, allItems, watchedItems] = await Promise.all([
+        libraryRepository.getListTabs({ sourceMode }),
+        libraryRepository.getItems({ hydrate: false, sourceMode }),
+        watchedItemsRepository.getAll(5000).catch(() => [])
+      ]);
+    } catch (error) {
+      if (this.disposed || reloadToken !== this.reloadToken) {
+        return;
+      }
+      this.state = {
+        ...this.state,
+        isLoading: false,
+        isSyncing: false,
+        errorMessage: error?.message || t("library_error_load_failed", {}, "Failed to load library")
+      };
+      this.onChange(this.getState(), { reason: "error" });
       return;
     }
-    const [listTabs, allItems, watchedItems] = await Promise.all([
-      libraryRepository.getListTabs({ sourceMode }),
-      libraryRepository.getItems({ hydrate: false, sourceMode }),
-      watchedItemsRepository.getAll(5000).catch(() => [])
-    ]);
     if (this.disposed || reloadToken !== this.reloadToken) {
       return;
     }

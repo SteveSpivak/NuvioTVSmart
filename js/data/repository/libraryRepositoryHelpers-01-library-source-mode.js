@@ -16,6 +16,8 @@ import { metaRepository } from "./metaRepository.js";
 
 import { requestJson, TraktAuthService } from "./traktAuthService.js";
 
+import { TraktAuthStore } from "../local/traktAuthStore.js";
+
 import { TraktLibrarySourceMode, TraktSettingsStore } from "../local/traktSettingsStore.js";
 
 import { SimklAuthService } from "./simklAuthService.js";
@@ -61,6 +63,8 @@ export const TRAKT_PAGE_LIMIT = 100;
 export const TRAKT_LIST_FETCH_CONCURRENCY = 3;
 
 export const TRAKT_LIBRARY_CACHE_TTL_MS = 60 * 1000;
+
+let traktPublicationVersion = 0;
 
 export const META_TIMEOUT_MS = 2200;
 
@@ -132,6 +136,9 @@ export function createEmptyRemoteState() {
   return {
     nextListId: 1,
     syncedAt: 0,
+    authRevision: 0,
+    traktUserId: null,
+    publicationVersion: 0,
     watchlist: [],
     lists: [],
     listItems: {}
@@ -142,6 +149,9 @@ export function cloneState(state) {
   return {
     nextListId: Number(state?.nextListId || 1),
     syncedAt: Number(state?.syncedAt || 0),
+    authRevision: Number(state?.authRevision || 0) || 0,
+    traktUserId: state?.traktUserId || null,
+    publicationVersion: Number(state?.publicationVersion || 0) || 0,
     watchlist: Array.isArray(state?.watchlist) ? state.watchlist.map((entry) => ({ ...entry })) : [],
     lists: Array.isArray(state?.lists) ? state.lists.map((entry) => ({ ...entry })) : [],
     listItems: Object.fromEntries(
@@ -159,6 +169,76 @@ export async function readRemoteState() {
 export async function writeRemoteState(state) {
   const key = await resolveRemoteStoreKey();
   LocalStore.set(key, cloneState(state));
+}
+
+export function claimTraktPublicationVersion() {
+  traktPublicationVersion += 1;
+  return traktPublicationVersion;
+}
+
+export function currentTraktPublicationVersion() {
+  return traktPublicationVersion;
+}
+
+export async function captureTraktPublishContext() {
+  const profileId = String(ProfileManager.getActiveProfileId() || "1");
+  const storeKey = await resolveRemoteStoreKey();
+  const auth = TraktAuthStore.get(profileId);
+  return {
+    profileId,
+    storeKey,
+    authRevision: Number(auth.authRevision || 0),
+    traktUserId: auth.userSlug || auth.username || null,
+    accessToken: auth.accessToken || null
+  };
+}
+
+export function readRemoteStateFromKey(storeKey) {
+  const stored = LocalStore.get(storeKey, null);
+  return cloneState(stored || createEmptyRemoteState());
+}
+
+export function publishTraktMutation(context, state) {
+  claimTraktPublicationVersion();
+  const latest = TraktAuthStore.get(context.profileId);
+  if (Number(latest.authRevision || 0) !== Number(context.authRevision || 0)) {
+    return false;
+  }
+  LocalStore.set(
+    context.storeKey,
+    cloneState({
+      ...state,
+      syncedAt: Date.now(),
+      authRevision: context.authRevision,
+      traktUserId: context.traktUserId || null
+    })
+  );
+  return true;
+}
+
+export function publishTraktRefresh(context, state, publicationId) {
+  if (publicationId !== traktPublicationVersion) {
+    return false;
+  }
+  const latest = TraktAuthStore.get(context.profileId);
+  if (Number(latest.authRevision || 0) !== Number(context.authRevision || 0)) {
+    return false;
+  }
+  LocalStore.set(
+    context.storeKey,
+    cloneState({
+      ...state,
+      authRevision: context.authRevision,
+      traktUserId: context.traktUserId || null,
+      publicationVersion: publicationId
+    })
+  );
+  return true;
+}
+
+export async function clearRemoteState() {
+  const key = await resolveRemoteStoreKey();
+  LocalStore.remove(key);
 }
 
 export function makeTypeLabel(type) {

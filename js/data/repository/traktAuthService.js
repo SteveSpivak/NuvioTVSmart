@@ -26,6 +26,10 @@ export {
   WATCHED_MAX_PAGES,
   WATCHED_MOVIES_PAGE_LIMIT,
   WATCHED_SHOWS_PAGE_LIMIT,
+  WATCHLIST_PAGE_LIMIT,
+  fetchTraktPagedPayload,
+  readTraktPaginationHeaders,
+  dedupeNormalizedWatchlist,
   apiBaseUrl,
   hasRequiredCredentials,
   normalizeAuthErrorMessage,
@@ -47,6 +51,7 @@ const API_VERSION = "2";
 const DEFAULT_API_URL = "https://api.trakt.tv";
 const REFRESH_LEEWAY_SECONDS = 60;
 const WATCHED_MAX_PAGES = 1000;
+const WATCHLIST_PAGE_LIMIT = 100;
 const WATCHED_MOVIES_PAGE_LIMIT = 250;
 // Trakt caps /sync/watched/shows?extended=progress at 100 items per page.
 const WATCHED_SHOWS_PAGE_LIMIT = 100;
@@ -99,41 +104,94 @@ function sleep(ms, signal = null) {
   });
 }
 
-async function fetchWatchedPages({ token, path, pageLimit, normalize, label }) {
+function readTraktPaginationHeaders(response) {
+  const page = Number(response.headers.get("X-Pagination-Page"));
+  const pageCount = Number(response.headers.get("X-Pagination-Page-Count"));
+  const appliedLimit = Number(response.headers.get("X-Pagination-Limit"));
+  const itemCount = Number(response.headers.get("X-Pagination-Item-Count"));
+  return {
+    page: Number.isFinite(page) && page > 0 ? page : 0,
+    pageCount: Number.isFinite(pageCount) && pageCount > 0 ? pageCount : 0,
+    appliedLimit: Number.isFinite(appliedLimit) && appliedLimit > 0 ? appliedLimit : 0,
+    itemCount: Number.isFinite(itemCount) && itemCount >= 0 ? itemCount : 0
+  };
+}
+
+async function fetchTraktPagedPayload({ requestPage, label, maxPages = WATCHED_MAX_PAGES }) {
   const items = [];
   let page = 1;
+  let previousFingerprint = null;
 
-  while (page <= WATCHED_MAX_PAGES) {
-    const separator = path.includes("?") ? "&" : "?";
-    const { response, payload } = await requestJson(
-      `${path}${separator}page=${page}&limit=${pageLimit}`,
-      { authorization: `Bearer ${token}` }
-    );
+  while (page <= maxPages) {
+    const { response, payload } = await requestPage(page);
     if (!response.ok || !Array.isArray(payload)) {
       const error = new Error(`Trakt ${label} lookup failed (${response.status})`);
       error.status = response.status;
       throw error;
     }
-
-    items.push(...payload.map(normalize).filter(Boolean));
     if (payload.length === 0) {
       break;
     }
 
-    const pageCount = Number(response.headers.get("X-Pagination-Page-Count") || 0);
-    if (Number.isFinite(pageCount) && pageCount > 0 && page >= pageCount) {
+    const fingerprint = JSON.stringify(payload);
+    if (previousFingerprint === fingerprint) {
+      const error = new Error(`Trakt ${label} lookup repeated a pagination page`);
+      error.status = response.status;
+      throw error;
+    }
+    previousFingerprint = fingerprint;
+    items.push(...payload);
+
+    const pagination = readTraktPaginationHeaders(response);
+    if (pagination.pageCount > 0 && page >= pagination.pageCount) {
       break;
     }
-    if (payload.length < pageLimit) {
+    if (pagination.appliedLimit > 0 && payload.length < pagination.appliedLimit) {
       break;
     }
     page += 1;
   }
 
-  if (page > WATCHED_MAX_PAGES) {
+  if (page > maxPages) {
     throw new Error(`Trakt ${label} lookup exceeded the pagination safety limit`);
   }
   return items;
+}
+
+function watchlistIdentityKey(item) {
+  if (!item) return null;
+  const id = item.imdbId
+    ? String(item.imdbId)
+    : item.tmdbId != null
+      ? `tmdb:${item.tmdbId}`
+      : item.traktId != null
+        ? `trakt:${item.traktId}`
+        : null;
+  if (!id) return null;
+  return `${item.type || "movie"}:${id}`;
+}
+
+function dedupeNormalizedWatchlist(items = []) {
+  const map = new Map();
+  for (const item of items) {
+    const key = watchlistIdentityKey(item);
+    if (!key) continue;
+    map.set(key, item);
+  }
+  return [...map.values()];
+}
+
+async function fetchWatchedPages({ token, path, pageLimit, normalize, label }) {
+  const payload = await fetchTraktPagedPayload({
+    label,
+    requestPage: (page) => {
+      const separator = path.includes("?") ? "&" : "?";
+      return requestJson(`${path}${separator}page=${page}&limit=${pageLimit}`, {
+        authorization: `Bearer ${token}`
+      });
+    }
+  });
+  return payload.map(normalize).filter(Boolean);
 }
 
 async function readResponseBody(response) {
@@ -171,16 +229,28 @@ export function requestJson(
         headers.Authorization = authorization;
       }
 
-      const response = await fetch(`${apiBaseUrl()}${path}`, {
-        method,
-        headers,
-        body: body == null ? undefined : JSON.stringify(body),
-        ...(requestSignal ? { signal: requestSignal } : {})
-      });
-      throwIfAborted(requestSignal);
-      const payload = await readResponseBody(response);
-      throwIfAborted(requestSignal);
-      return { response, payload };
+      const execute = async () => {
+        const response = await fetch(`${apiBaseUrl()}${path}`, {
+          method,
+          headers,
+          body: body == null ? undefined : JSON.stringify(body),
+          ...(requestSignal ? { signal: requestSignal } : {})
+        });
+        throwIfAborted(requestSignal);
+        const payload = await readResponseBody(response);
+        throwIfAborted(requestSignal);
+        return { response, payload };
+      };
+
+      let result = await execute();
+      if (result.response.status === 429 && String(method).toUpperCase() === "GET") {
+        const retryAfterSeconds = Number(result.response.headers.get("Retry-After") || 0);
+        if (retryAfterSeconds >= 1 && retryAfterSeconds <= 10) {
+          await sleep(retryAfterSeconds * 1000, requestSignal);
+          result = await execute();
+        }
+      }
+      return result;
     })()
   );
 }

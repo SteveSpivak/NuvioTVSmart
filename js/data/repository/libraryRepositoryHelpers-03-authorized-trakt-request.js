@@ -14,7 +14,7 @@ import { savedLibraryRepository } from "./savedLibraryRepository.js";
 
 import { metaRepository } from "./metaRepository.js";
 
-import { requestJson, TraktAuthService } from "./traktAuthService.js";
+import { fetchTraktPagedPayload, requestJson, TraktAuthService } from "./traktAuthService.js";
 
 import { TraktLibrarySourceMode, TraktSettingsStore } from "../local/traktSettingsStore.js";
 
@@ -40,7 +40,9 @@ export async function authorizedTraktRequest(path, options = {}) {
     authorization: `Bearer ${token}`
   });
   if (!response.ok) {
-    throw new Error(traktErrorMessage(payload, options.errorMessage || "Trakt request failed", response.status));
+    const error = new Error(traktErrorMessage(payload, options.errorMessage || "Trakt request failed", response.status));
+    error.status = response.status;
+    throw error;
   }
   return { response, payload };
 }
@@ -103,23 +105,21 @@ export function toSavedItemFromTraktList(entry) {
   };
 }
 
-export async function fetchAllTraktPages(pathForPage) {
-  const items = [];
-  let page = 1;
-  while (true) {
-    const { response, payload } = await authorizedTraktRequest(pathForPage(page), {
-      errorMessage: "Could not load Trakt list items"
-    });
-    if (!Array.isArray(payload)) break;
-    items.push(...payload);
-    const pageCount = Math.max(1, Number(response.headers.get("X-Pagination-Page-Count") || 1) || 1);
-    if (page >= pageCount) break;
-    page += 1;
+export async function fetchAllTraktPages(pathForPage, { token = null, label = "list items" } = {}) {
+  const accessToken = token || (await TraktAuthService.getValidAccessToken());
+  if (!accessToken) {
+    throw new Error("Trakt authentication required");
   }
-  return items;
+  return fetchTraktPagedPayload({
+    label,
+    requestPage: (page) =>
+      requestJson(pathForPage(page), {
+        authorization: `Bearer ${accessToken}`
+      })
+  });
 }
 
-export async function fetchTraktListItems(list) {
+export async function fetchTraktListItems(list, token = null) {
   const listId = list.traktListId || list.slug || list.key.replace(PERSONAL_KEY_PREFIX, "");
   const query = (page) => {
     const params = new URLSearchParams({
@@ -133,7 +133,10 @@ export async function fetchTraktListItems(list) {
   };
   const [movies, shows] = await Promise.all(
     ["movie", "show"].map((type) =>
-      fetchAllTraktPages((page) => `/users/me/lists/${encodeURIComponent(listId)}/items/${type}?${query(page)}`)
+      fetchAllTraktPages((page) => `/users/me/lists/${encodeURIComponent(listId)}/items/${type}?${query(page)}`, {
+        token,
+        label: "personal list items"
+      })
     )
   );
   return [...movies, ...shows].map(toSavedItemFromTraktList).filter(Boolean);
@@ -153,15 +156,24 @@ export async function mapWithConcurrency(items, concurrency, mapper) {
   return results;
 }
 
-export async function fetchTraktPersonalState() {
-  const { payload } = await authorizedTraktRequest("/users/me/lists", {
-    errorMessage: "Could not load Trakt personal lists"
+export async function fetchTraktPersonalState({ token = null } = {}) {
+  const accessToken = token || (await TraktAuthService.getValidAccessToken());
+  if (!accessToken) {
+    throw new Error("Trakt authentication required");
+  }
+  const { response, payload } = await requestJson("/users/me/lists", {
+    authorization: `Bearer ${accessToken}`
   });
+  if (!response.ok) {
+    const error = new Error(traktErrorMessage(payload, "Could not load Trakt personal lists", response.status));
+    error.status = response.status;
+    throw error;
+  }
   const lists = (Array.isArray(payload) ? payload : [])
     .filter((list) => String(list?.type || "personal").toLowerCase() === "personal")
     .map(toPersonalList)
     .filter(Boolean);
-  const itemGroups = await mapWithConcurrency(lists, TRAKT_LIST_FETCH_CONCURRENCY, fetchTraktListItems);
+  const itemGroups = await mapWithConcurrency(lists, TRAKT_LIST_FETCH_CONCURRENCY, (list) => fetchTraktListItems(list, accessToken));
   return { lists, itemGroups };
 }
 
